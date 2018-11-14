@@ -1,0 +1,428 @@
+[MY_LOG_srv_1:] 2018-11-08 15:22:22 INFO s.b.s.Service1Application [main] Starting Service1Application on KPBS-THINK with PID 71876 (C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1\target\classes started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 15:22:22 INFO s.b.s.Service1Application [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 15:22:26 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$6fd69fe2] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 15:22:26 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$ef56ed14] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8083 (http)
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.w.c.ContextLoader [main] Root WebApplicationContext: initialization completed in 4647 ms
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'characterEncodingFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'formContentFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'requestContextFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.s.DelegatingFilterProxyRegistrationBean [main] Mapping filter: 'springSecurityFilterChain' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 15:22:27 INFO o.s.b.w.s.ServletRegistrationBean [main] Servlet dispatcherServlet mapped to [/]
+[MY_LOG_srv_1:] 2018-11-08 15:22:28 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 15:22:28 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 15:22:28 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 15:22:29 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 15:22:29 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 15:22:29 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 15:22:29 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@62aeddc8
+[MY_LOG_srv_1:] 2018-11-08 15:22:30 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 15:22:32 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 15:22:32 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 15:22:34 INFO o.s.b.a.s.s.UserDetailsServiceAutoConfiguration [main] 
+
+Using generated security password: 911b10bf-e802-4b17-893c-932f6b5ec9bd
+
+[MY_LOG_srv_1:] 2018-11-08 15:22:34 INFO o.s.s.w.DefaultSecurityFilterChain [main] Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42edde25, org.springframework.security.web.context.SecurityContextPersistenceFilter@54496c2d, org.springframework.security.web.header.HeaderWriterFilter@356f20b7, org.springframework.security.web.csrf.CsrfFilter@398f0516, org.springframework.security.web.authentication.logout.LogoutFilter@3ec7eb5, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@67f8f5a6, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@4c13ca07, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@6fe5da76, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@7037a680, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@236b4a44, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4e10a320, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@77d95e5a, org.springframework.security.web.session.SessionManagementFilter@69de72ec, org.springframework.security.web.access.ExceptionTranslationFilter@6e668322, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5bf523e3]
+[MY_LOG_srv_1:] 2018-11-08 15:22:35 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port(s): 8083 (http) with context path ''
+[MY_LOG_srv_1:] 2018-11-08 15:22:35 INFO s.b.s.Service1Application [main] Started Service1Application in 13.69 seconds (JVM running for 15.18)
+[MY_LOG_srv_1:] 2018-11-08 15:24:57 INFO o.s.w.s.DispatcherServlet [http-nio-8083-exec-1] Initializing Servlet 'dispatcherServlet'
+[MY_LOG_srv_1:] 2018-11-08 15:24:57 INFO o.s.w.s.DispatcherServlet [http-nio-8083-exec-1] Completed initialization in 41 ms
+[MY_LOG_srv_1:] 2018-11-08 16:19:29 INFO s.b.s.Service1Application [main] Starting Service1Application on KPBS-THINK with PID 73660 (C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1\target\classes started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 16:19:29 INFO s.b.s.Service1Application [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 16:19:31 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-08 16:19:31 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 194ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-08 16:19:32 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$7093339] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:19:32 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$8689806b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:19:33 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8083 (http)
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO o.s.w.c.ContextLoader [main] Root WebApplicationContext: initialization completed in 5075 ms
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO o.s.b.w.s.ServletRegistrationBean [main] Servlet dispatcherServlet mapped to [/]
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'characterEncodingFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'formContentFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'requestContextFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-08 16:19:34 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-08 16:19:35 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 16:19:35 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:19:35 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 16:19:35 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:19:36 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 16:19:36 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 16:19:36 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@679dd234
+[MY_LOG_srv_1:] 2018-11-08 16:19:37 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:19:39 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:19:39 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 16:19:40 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port(s): 8083 (http) with context path ''
+[MY_LOG_srv_1:] 2018-11-08 16:19:40 INFO s.b.s.Service1Application [main] Started Service1Application in 13.092 seconds (JVM running for 14.472)
+[MY_LOG_srv_1:] 2018-11-08 16:20:06 INFO o.s.w.s.DispatcherServlet [http-nio-8083-exec-1] Initializing Servlet 'dispatcherServlet'
+[MY_LOG_srv_1:] 2018-11-08 16:20:06 INFO o.s.w.s.DispatcherServlet [http-nio-8083-exec-1] Completed initialization in 45 ms
+[MY_LOG_srv_1:] 2018-11-08 16:20:06 WARN o.s.w.s.m.s.DefaultHandlerExceptionResolver [http-nio-8083-exec-1] Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; nested exception is java.lang.NumberFormatException: For input string: "all-paginated"]
+[MY_LOG_srv_1:] 2018-11-08 16:20:12 INFO s.b.s.w.LingVarController [http-nio-8083-exec-2] findAllLingVarPaginated() - START
+page param: 1
+sizeLimit param: 10
+[MY_LOG_srv_1:] 2018-11-08 16:20:12 INFO o.h.h.i.QueryTranslatorFactoryInitiator [http-nio-8083-exec-2] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-08 16:20:15 INFO s.b.s.w.LingVarController [http-nio-8083-exec-5] findAllLingVarPaginated() - START
+page param: 0
+sizeLimit param: 10
+[MY_LOG_srv_1:] 2018-11-08 16:21:12 INFO s.b.s.w.LingVarController [http-nio-8083-exec-9] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-08 16:36:20 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 64784 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 16:36:20 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 16:36:22 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-08 16:36:23 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 177ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-08 16:36:24 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$13bec197] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:36:24 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$933f0ec9] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:36:25 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-08 16:36:25 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-08 16:36:25 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 16:36:25 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:36:25 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 16:36:26 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:36:26 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 16:36:26 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 16:36:26 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@6042d663
+[MY_LOG_srv_1:] 2018-11-08 16:36:27 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:36:30 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:36:30 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 16:36:31 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-08 16:36:31 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-08 16:36:31 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 35 ms
+[MY_LOG_srv_1:] 2018-11-08 16:36:31 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 11.966 seconds (JVM running for 14.837)
+[MY_LOG_srv_1:] 2018-11-08 16:36:32 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-08 16:36:32 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-08 16:36:33 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:36:33 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:36:33 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-08 16:36:33 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-08 16:38:16 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 73668 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 16:38:16 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 16:38:18 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-08 16:38:18 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 144ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-08 16:38:19 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c4235534] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:38:19 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$43a3a266] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:38:20 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-08 16:38:20 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-08 16:38:20 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 16:38:20 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:38:20 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 16:38:21 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:38:21 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 16:38:21 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 16:38:21 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@38f981b6
+[MY_LOG_srv_1:] 2018-11-08 16:38:22 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:38:25 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:38:25 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 16:38:26 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-08 16:38:26 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-08 16:38:26 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 35 ms
+[MY_LOG_srv_1:] 2018-11-08 16:38:26 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 11.163 seconds (JVM running for 13.764)
+[MY_LOG_srv_1:] 2018-11-08 16:38:26 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-08 16:38:27 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-08 16:38:27 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:38:27 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:38:27 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-08 16:38:27 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-08 16:40:32 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 70176 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 16:40:32 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 16:40:34 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-08 16:40:34 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 143ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-08 16:40:35 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c4235534] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:40:35 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$43a3a266] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 16:40:36 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-08 16:40:36 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-08 16:40:36 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 16:40:36 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:40:36 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 16:40:37 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 16:40:37 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 16:40:37 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 16:40:37 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@38f981b6
+[MY_LOG_srv_1:] 2018-11-08 16:40:38 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:40:41 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:40:41 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 16:40:42 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-08 16:40:42 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-08 16:40:42 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 31 ms
+[MY_LOG_srv_1:] 2018-11-08 16:40:42 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 11.459 seconds (JVM running for 13.932)
+[MY_LOG_srv_1:] 2018-11-08 16:40:43 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-08 16:40:43 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-08 16:40:43 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 16:40:43 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 16:40:43 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-08 16:40:44 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-08 19:16:02 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 75548 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 19:16:02 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 19:16:04 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-08 19:16:04 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 119ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-08 19:16:05 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$bb051c25] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 19:16:05 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$3a856957] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 19:16:06 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-08 19:16:06 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-08 19:16:06 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 19:16:06 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 19:16:06 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 19:16:06 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 19:16:07 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 19:16:07 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 19:16:07 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@4bb147ec
+[MY_LOG_srv_1:] 2018-11-08 19:16:09 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 19:16:11 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 19:16:12 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 19:16:13 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-08 19:16:13 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-08 19:16:13 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 20 ms
+[MY_LOG_srv_1:] 2018-11-08 19:16:13 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 11.895 seconds (JVM running for 15.271)
+[MY_LOG_srv_1:] 2018-11-08 19:16:14 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-08 19:16:14 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-08 19:16:14 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 19:16:14 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 19:16:14 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-08 19:16:14 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-08 19:17:15 INFO s.b.s.Service1Application [main] Starting Service1Application on KPBS-THINK with PID 74016 (C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1\target\classes started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_1\service_1)
+[MY_LOG_srv_1:] 2018-11-08 19:17:15 INFO s.b.s.Service1Application [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-08 19:17:17 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-08 19:17:17 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 140ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-08 19:17:18 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c897573c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 19:17:18 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$4817a46e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-08 19:17:19 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8083 (http)
+[MY_LOG_srv_1:] 2018-11-08 19:17:19 INFO o.s.w.c.ContextLoader [main] Root WebApplicationContext: initialization completed in 4336 ms
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.s.b.w.s.ServletRegistrationBean [main] Servlet dispatcherServlet mapped to [/]
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'characterEncodingFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'formContentFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.s.b.w.s.FilterRegistrationBean [main] Mapping filter: 'requestContextFilter' to: [/*]
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-08 19:17:20 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-08 19:17:21 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-08 19:17:21 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-08 19:17:21 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-08 19:17:21 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@41a849c9
+[MY_LOG_srv_1:] 2018-11-08 19:17:22 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-08 19:17:24 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-08 19:17:24 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-08 19:17:25 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port(s): 8083 (http) with context path ''
+[MY_LOG_srv_1:] 2018-11-08 19:17:25 INFO s.b.s.Service1Application [main] Started Service1Application in 11.213 seconds (JVM running for 19.163)
+[MY_LOG_srv_1:] 2018-11-08 19:17:53 INFO o.s.w.s.DispatcherServlet [http-nio-8083-exec-1] Initializing Servlet 'dispatcherServlet'
+[MY_LOG_srv_1:] 2018-11-08 19:17:53 INFO o.s.w.s.DispatcherServlet [http-nio-8083-exec-1] Completed initialization in 47 ms
+[MY_LOG_srv_1:] 2018-11-12 12:37:17 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 114244 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_2\old,other\before-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-12 12:37:17 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-12 12:37:19 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-12 12:37:19 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 171ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-12 12:37:21 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$7eb6cdb5] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 12:37:21 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$fe371ae7] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 12:37:21 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-12 12:37:22 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-12 12:37:22 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-12 12:37:22 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-12 12:37:22 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-12 12:37:22 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-12 12:37:23 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-12 12:37:23 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-12 12:37:23 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@59c500f7
+[MY_LOG_srv_1:] 2018-11-12 12:37:25 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 12:37:31 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 12:37:31 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-12 12:37:32 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-12 12:37:32 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-12 12:37:33 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 1627 ms
+[MY_LOG_srv_1:] 2018-11-12 12:37:34 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 17.601 seconds (JVM running for 19.847)
+[MY_LOG_srv_1:] 2018-11-12 20:54:32 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on BorisTheBot with PID 14524 (started by MashBor1 in C:\Users\MashBor1\Desktop\Boris_folder\Проекты\второе высшее(магистратура)-ВШЭ-с 10.09.14\Второе_высшее_с_06_18\НИЯУ_МИФИ\Обучение_1_курс_ИУ7_12М\РСОИ\Lab2_v2\Proj_2\as-of-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-12 20:54:32 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-12 20:54:33 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-12 20:54:33 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 103ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-12 20:54:34 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$e557e4d6] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 20:54:34 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$64d83208] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 20:54:35 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-12 20:54:35 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-12 20:54:35 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-12 20:54:35 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-12 20:54:35 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-12 20:54:36 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-12 20:54:36 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-12 20:54:37 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-12 20:54:37 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@310b2b6f
+[MY_LOG_srv_1:] 2018-11-12 20:54:39 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 20:54:42 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 20:54:42 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-12 20:54:43 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-12 20:54:43 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-12 20:54:43 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 26 ms
+[MY_LOG_srv_1:] 2018-11-12 20:54:44 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 12.105 seconds (JVM running for 13.708)
+[MY_LOG_srv_1:] 2018-11-12 20:54:44 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-12 20:54:44 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-12 20:54:45 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 20:54:45 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 20:54:45 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-12 20:54:45 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-12 22:46:13 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on BorisTheBot with PID 9324 (started by MashBor1 in C:\Users\MashBor1\Desktop\Boris_folder\Проекты\второе высшее(магистратура)-ВШЭ-с 10.09.14\Второе_высшее_с_06_18\НИЯУ_МИФИ\Обучение_1_курс_ИУ7_12М\РСОИ\Lab2_v2\Proj_2\as-of-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-12 22:46:13 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-12 22:46:15 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-12 22:46:15 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 142ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-12 22:46:15 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$6be9fc] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 22:46:15 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$7fec372e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 22:46:16 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-12 22:46:16 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-12 22:46:17 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-12 22:46:17 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-12 22:46:17 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-12 22:46:17 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-12 22:46:18 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-12 22:46:18 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-12 22:46:18 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@73c48264
+[MY_LOG_srv_1:] 2018-11-12 22:46:20 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 22:46:23 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 22:46:23 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-12 22:46:24 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-12 22:46:24 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-12 22:46:24 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 239 ms
+[MY_LOG_srv_1:] 2018-11-12 22:46:25 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 12.161 seconds (JVM running for 13.915)
+[MY_LOG_srv_1:] 2018-11-12 22:46:25 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-12 22:46:26 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-12 22:46:30 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 22:46:30 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 22:46:30 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-12 22:46:30 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-12 22:48:37 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on BorisTheBot with PID 14232 (started by MashBor1 in C:\Users\MashBor1\Desktop\Boris_folder\Проекты\второе высшее(магистратура)-ВШЭ-с 10.09.14\Второе_высшее_с_06_18\НИЯУ_МИФИ\Обучение_1_курс_ИУ7_12М\РСОИ\Lab2_v2\Proj_2\as-of-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-12 22:48:37 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-12 22:48:38 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-12 22:48:38 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 82ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-12 22:48:39 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$8020b2a3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 22:48:39 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$ffa0ffd5] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 22:48:40 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-12 22:48:40 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-12 22:48:40 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-12 22:48:40 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-12 22:48:40 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-12 22:48:40 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-12 22:48:41 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-12 22:48:41 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-12 22:48:41 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@4db77402
+[MY_LOG_srv_1:] 2018-11-12 22:48:42 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 22:48:44 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 22:48:44 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-12 22:48:44 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-12 22:48:44 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 185 ms
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 7.932 seconds (JVM running for 9.358)
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-12 22:48:45 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-12 22:50:45 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on BorisTheBot with PID 5368 (started by MashBor1 in C:\Users\MashBor1\Desktop\Boris_folder\Проекты\второе высшее(магистратура)-ВШЭ-с 10.09.14\Второе_высшее_с_06_18\НИЯУ_МИФИ\Обучение_1_курс_ИУ7_12М\РСОИ\Lab2_v2\Proj_2\as-of-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-12 22:50:45 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-12 22:50:47 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-12 22:50:47 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 85ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$131239d4] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$92928706] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-12 22:50:48 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-12 22:50:49 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-12 22:50:49 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-12 22:50:49 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-12 22:50:49 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@6909f6be
+[MY_LOG_srv_1:] 2018-11-12 22:50:50 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 22:50:53 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 22:50:54 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-12 22:50:54 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-12 22:50:54 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 245 ms
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 9.808 seconds (JVM running for 11.242)
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-12 22:50:55 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-13 09:54:20 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 122680 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_2\as-of-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-13 09:54:20 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-13 09:54:23 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-13 09:54:23 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 242ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-13 09:54:24 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$e557e4d6] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-13 09:54:24 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$64d83208] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-13 09:54:25 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-13 09:54:26 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-13 09:54:26 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-13 09:54:27 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-13 09:54:27 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-13 09:54:28 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-13 09:54:29 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-13 09:54:30 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-13 09:54:30 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@310b2b6f
+[MY_LOG_srv_1:] 2018-11-13 09:54:33 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-13 09:54:37 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-13 09:54:37 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-13 09:54:39 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-13 09:54:39 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-13 09:54:39 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 37 ms
+[MY_LOG_srv_1:] 2018-11-13 09:54:39 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 19.502 seconds (JVM running for 22.142)
+[MY_LOG_srv_1:] 2018-11-13 09:54:39 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-13 09:54:40 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-13 09:54:40 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-13 09:54:40 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-13 09:54:40 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-13 09:54:40 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.
+[MY_LOG_srv_1:] 2018-11-13 10:27:39 INFO s.b.s.Service1ApplicationTests [main] Starting Service1ApplicationTests on KPBS-THINK with PID 123036 (started by KPBS in C:\Users\KPBS\Desktop\My_datum\old,other,trash\LabWork_2_v2\Proj_2\as-of-12-11-18\service_1)
+[MY_LOG_srv_1:] 2018-11-13 10:27:39 INFO s.b.s.Service1ApplicationTests [main] No active profile set, falling back to default profiles: default
+[MY_LOG_srv_1:] 2018-11-13 10:27:41 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data repositories in DEFAULT mode.
+[MY_LOG_srv_1:] 2018-11-13 10:27:41 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 156ms. Found 1 repository interfaces.
+[MY_LOG_srv_1:] 2018-11-13 10:27:42 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c6a35c46] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-13 10:27:42 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$4623a978] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[MY_LOG_srv_1:] 2018-11-13 10:27:43 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[MY_LOG_srv_1:] 2018-11-13 10:27:43 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[MY_LOG_srv_1:] 2018-11-13 10:27:43 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[MY_LOG_srv_1:] 2018-11-13 10:27:43 INFO o.h.Version [main] HHH000412: Hibernate Core {5.3.7.Final}
+[MY_LOG_srv_1:] 2018-11-13 10:27:43 INFO o.h.c.Environment [main] HHH000206: hibernate.properties not found
+[MY_LOG_srv_1:] 2018-11-13 10:27:44 INFO o.h.a.c.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[MY_LOG_srv_1:] 2018-11-13 10:27:44 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+[MY_LOG_srv_1:] 2018-11-13 10:27:45 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [main] HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+[MY_LOG_srv_1:] 2018-11-13 10:27:45 INFO o.h.t.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@19e21f89
+[MY_LOG_srv_1:] 2018-11-13 10:27:46 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-13 10:27:49 INFO o.s.s.c.ThreadPoolTaskExecutor [main] Initializing ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-13 10:27:49 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[MY_LOG_srv_1:] 2018-11-13 10:27:50 INFO o.s.b.t.m.w.SpringBootMockServletContext [main] Initializing Spring TestDispatcherServlet ''
+[MY_LOG_srv_1:] 2018-11-13 10:27:50 INFO o.s.t.w.s.TestDispatcherServlet [main] Initializing Servlet ''
+[MY_LOG_srv_1:] 2018-11-13 10:27:50 INFO o.s.t.w.s.TestDispatcherServlet [main] Completed initialization in 34 ms
+[MY_LOG_srv_1:] 2018-11-13 10:27:50 INFO s.b.s.Service1ApplicationTests [main] Started Service1ApplicationTests in 12.518 seconds (JVM running for 14.519)
+[MY_LOG_srv_1:] 2018-11-13 10:27:51 INFO s.b.s.w.LingVarController [main] findAllLingVars() - START
+[MY_LOG_srv_1:] 2018-11-13 10:27:51 INFO o.h.h.i.QueryTranslatorFactoryInitiator [main] HHH000397: Using ASTQueryTranslatorFactory
+[MY_LOG_srv_1:] 2018-11-13 10:27:52 INFO o.s.s.c.ThreadPoolTaskExecutor [Thread-4] Shutting down ExecutorService 'applicationTaskExecutor'
+[MY_LOG_srv_1:] 2018-11-13 10:27:52 INFO o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-4] Closing JPA EntityManagerFactory for persistence unit 'default'
+[MY_LOG_srv_1:] 2018-11-13 10:27:52 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown initiated...
+[MY_LOG_srv_1:] 2018-11-13 10:27:52 INFO c.z.h.HikariDataSource [Thread-4] HikariPool-1 - Shutdown completed.

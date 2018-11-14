@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" name="api-gateway_log_config" packages="">
+    <Appenders>
+        <File name="api-gateway_toFileLog" fileName="logs/api-gateway.log">
+            <PatternLayout>
+                <Pattern>[MY_LOG_api-gtw:] %d{yyyy-MM-dd HH:mm:ss} %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Console name="api-gateway_toConsoleLog" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %p %c{1.} [%t] %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="api-gateway_toFileLog"/>
+            <AppenderRef ref="api-gateway_toConsoleLog"/>
+        </Root>
+    </Loggers>
+</Configuration>

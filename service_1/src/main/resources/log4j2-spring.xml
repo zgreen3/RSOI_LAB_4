@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" name="service_1_log_config" packages="">
+    <Appenders>
+        <File name="service_1_toFileLog" fileName="logs/service_1.log">
+            <PatternLayout>
+                <Pattern>[MY_LOG_srv_1:] %d{yyyy-MM-dd HH:mm:ss} %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Console name="service_1_toConsoleLog" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %p %c{1.} [%t] %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="service_1_toFileLog"/>
+            <AppenderRef ref="service_1_toConsoleLog"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" name="service_2_log_config" packages="">
+    <Appenders>
+        <File name="service_2_toFileLog" fileName="logs/service_2.log">
+            <PatternLayout>
+                <Pattern>[MY_LOG_srv_2:] %d{yyyy-MM-dd HH:mm:ss} %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="service_2_toFileLog"/>
+        </Root>
+    </Loggers>
+</Configuration>
