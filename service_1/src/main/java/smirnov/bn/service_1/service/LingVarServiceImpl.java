@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Collectors;
 
@@ -24,7 +22,6 @@ public class LingVarServiceImpl implements LingVarService {
     @Autowired
     private LingVarRepository lingVarRepository;
 
-    @Nonnull
     private LingVarInfo buildlingVarInfo(LingVar lingVar) {
         LingVarInfo info = new LingVarInfo();
         info.setLingVarName(lingVar.getLingVarName());
@@ -77,20 +74,20 @@ public class LingVarServiceImpl implements LingVarService {
     @Nullable
     @Override
     @Transactional(readOnly = true)
-    public LingVarInfo findLingVarById(@Nonnull Integer lingVarId) {
+    public LingVarInfo findLingVarById(Integer lingVarId) {
         return this.buildlingVarInfo(lingVarRepository.findLingVarById(lingVarId));
     }
 
     @Override
     @Transactional
-    public void updateLingVar(@Nonnull LingVarInfo lingVarInfo) {
+    public void updateLingVar(LingVarInfo lingVarInfo) {
         lingVarRepository.updateLingVar(lingVarInfo.getLingVarId(), lingVarInfo.getLingVarName(), lingVarInfo.getLingVarTermLowVal(),
                 lingVarInfo.getLingVarTermMedVal(), lingVarInfo.getLingVarTermHighVal(), lingVarInfo.getEmployeeUuid());
     }
 
     @Override
     @Transactional
-    public void deleteLingVarById(@Nonnull Integer lingVarId) {
+    public void deleteLingVarById(Integer lingVarId) {
         lingVarRepository.deleteById(lingVarId);
     }
 

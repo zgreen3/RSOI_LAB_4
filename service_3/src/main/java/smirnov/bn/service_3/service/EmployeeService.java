@@ -1,10 +1,8 @@
 package smirnov.bn.service_3.service;
 
 
-import smirnov.bn.service_3.entity.Employee;
 import smirnov.bn.service_3.model.EmployeeInfo;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
@@ -14,11 +12,11 @@ public interface EmployeeService {
 
     /*
     @Nullable
-    void createEmployee(@Nonnull String employeeName, @Nonnull String employeeEmail, @Nonnull String employeeLogin);
+    void createEmployee(String employeeName, String employeeEmail, String employeeLogin);
     //*/
-    UUID createEmployee(@Nonnull EmployeeInfo employeeInfo);
+    UUID createEmployee(EmployeeInfo employeeInfo);
 
-    @Nullable //@Nonnull
+    @Nullable
     List<EmployeeInfo> findAllEmployees();
 
     @Nullable
@@ -30,13 +28,13 @@ public interface EmployeeService {
     //*/
 
     @Nullable
-    EmployeeInfo findEmployeeByUuid(@Nonnull UUID uuid);
+    EmployeeInfo findEmployeeByUuid(UUID uuid);
 
-    //void updateEmployee(@Nonnull String employeeName, @Nonnull String employeeEmail, @Nonnull String employeeLogin, @Nonnull UUID employeeUuid);
+    //void updateEmployee(String employeeName, String employeeEmail, String employeeLogin, UUID employeeUuid);
 
-    void updateEmployee(@Nonnull EmployeeInfo employeeInfo);
+    void updateEmployee(EmployeeInfo employeeInfo);
 
-    //void deleteEmployeeById(@Nonnull Integer employeeId);
+    //void deleteEmployeeById(Integer employeeId);
 
-    void deleteEmployeeByUuid(@Nonnull UUID employeeUuid);
+    void deleteEmployeeByUuid(UUID employeeUuid);
 }
