@@ -1,5 +1,6 @@
 package smirnov.bn.service_1;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,12 +11,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import smirnov.bn.service_1.model.LingVarInfo;
 
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,61 +36,113 @@ public class Service1ApplicationTests {
 	@Autowired
 	private MockMvc mvc;
 
-	/*
+    private String lingVarIdStr;
+    private String employeeUuidStr;
+
+    private static final String CREATE_EMP_POST_URI_TMPLT = "http://localhost:8193/employees/create-employee";
+    private static final String DELETE_EMP_DELETE_URI_TMPLT = "http://localhost:8193/employees/delete-";
+
+    private static final String CREATE_LNG_VR_POST_URI_TMPLT = "http://localhost:8191/ling_var_dict/create-ling_var";
+    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = "http://localhost:8191/ling_var_dict//delete-";
+    private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = "http://localhost:8191/ling_var_dict/read-";
+    private static final String READ_ALL_LNG_VR_GET_URI_TMPLT = "http://localhost:8191/ling_var_dict/employees/read-all";
+    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = "http://localhost:8191/ling_var_dict/read-all-paginated";
+    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = "http://localhost:8191/ling_var_dict/update-ling_var";
+
+    @Before
+    public void beforeTestSettingUp() throws Exception {
+        //create-employee (:)
+        MvcResult result_emp =
+                mvc.perform(post(CREATE_EMP_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
+                        content("{\n" +
+                                "\t\"employeeId\" : \"\",\n" +
+                                "\t\"employeeName\" : \"Employee_0\",\n" +
+                                "\t\"employeeEmail\" : \"myEmail_0@example.com\",\n" +
+                                "\t\"employeeLogin\" : \"MyName_0\",\n" +
+                                "\t\"employeeUuid\" : \"\"\n" +
+                                "}")).andDo(print())
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        employeeUuidStr = result_emp.getResponse().getContentAsString();
+
+        //create-lingVar [Linguistic Variable] (:)
+        MvcResult result_lngvr =
+                mvc.perform(post(CREATE_LNG_VR_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
+                        content("{\n" +
+                                "\t\"lingVarId\" : \"\",\n" +
+                                "\t\"lingVarName\" : \"Employee_0\",\n" +
+                                "\t\"lingVarTermLowVal\" : \"myEmail_0@example.com\",\n" +
+                                "\t\"lingVarTermMedVal\" : \"MyName_0\",\n" +
+                                "\t\"lingVarTermHighVal\" : \"\"\n" +
+                                "\t\"employeeUuid\" : \"" + employeeUuidStr + "\",\n" +
+                                "}")).andDo(print())
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        lingVarIdStr = result_lngvr.getResponse().getContentAsString();
+    }
+
+    @After
+    public void afterTestCompletion() throws Exception {
+        mvc.perform(delete(DELETE_LNG_VR_DELETE_URI_TMPLT + lingVarIdStr).
+                param("lingVarId", lingVarIdStr)).andDo(print())
+                .andExpect(status().isOk());
+
+        mvc.perform(delete(DELETE_EMP_DELETE_URI_TMPLT + employeeUuidStr).
+                param("employeeUuid", employeeUuidStr)).andDo(print())
+                .andExpect(status().isOk());
+    }
+
     @Test
-	public void contextLoads() {
-	}
-    //*/
+    public void testFindLingVarById() throws Exception {
+        mvc.perform(get(READ_BY_ID_LNG_VR_GET_URI_TMPLT + lingVarIdStr).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lingVarId", is(lingVarIdStr)));
+    }
 
     @Test
     public void testFindAllLingVars() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/ling_var_dict/all").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get(READ_ALL_LNG_VR_GET_URI_TMPLT).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[*]").isArray())
-                ;//.andReturn();
-                //.andExpect(content().string(containsString("[]")));
-    }
-
-    /*
-    private LingVarInfo lingVarInfo;
-    private LingVar lingVar;
-    @MockBean
-    private LingVarRepository lingVarRepository;
-
-    @Before
-    private void setupLingVarInfo() {
-        lingVarInfo = new LingVarInfo();
-        lingVarInfo.setLingVarName(lingVar.getLingVarName());
-        lingVarInfo.setLingVarTermLowVal(lingVar.getLingVarTermLowVal());
-        lingVarInfo.setLingVarTermMedVal(lingVar.getLingVarTermMedVal());
-        lingVarInfo.setLingVarTermHighVal(lingVar.getLingVarTermHighVal());
+                .andExpect(jsonPath("$.[*]").isArray());
     }
 
     @Test
-    public void lingVarByIdReturnsCorrectResponse() throws Exception {
-        given(lingVarRepository.findAll()).willReturn(Arrays.asList(person));
-        final ResultActions result = mockMvc.perform(get(BASE_PATH));
-        result.andExpect(status().isOk());
-        result
-                .andExpect(jsonPath("links[0].rel", is("self")))
-                .andExpect(jsonPath("links[0].href", is(BASE_PATH)))
-                .andExpect(jsonPath("content[0].person.id", is(person.getId().intValue())))
-                .andExpect(jsonPath("content[0].person.id", is(person.getId().intValue())))
-                .andExpect(jsonPath("content[0].person.firstName", is(person.getFirstName())))
-                .andExpect(jsonPath("content[0].person.secondName", is(person.getSecondName())))
-                .andExpect(
-                        jsonPath(
-                                "content[0].person.dateOfBirth", is(person.getDateOfBirth().format(formatter))))
-                .andExpect(jsonPath("content[0].person.profession", is(person.getProfession())))
-                .andExpect(jsonPath("content[0].person.salary", is(person.getSalary())))
-                .andExpect(jsonPath("content[0].links[0].rel", is("people")))
-                .andExpect(jsonPath("content[0].links[0].href", is(BASE_PATH)))
-                .andExpect(jsonPath("content[0].links[1].rel", is("memberships")))
-                .andExpect(
-                        jsonPath("content[0].links[1].href", is(BASE_PATH + "/" + ID + MEMBERSHIPS_PATH)))
-                .andExpect(jsonPath("content[0].links[2].rel", is("self")))
-                .andExpect(jsonPath("content[0].links[2].href", is(BASE_PATH + "/" + ID)));
-    }
-    //*/
+    public void testFindAllLingVarPaginated() throws Exception {
+        mvc.perform(get(READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT + "?page=0&sizeLimit=2").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
 
+        mvc.perform(get(READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT + "?page=1&sizeLimit=2").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
+
+        mvc.perform(get(READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT + "?page=100&sizeLimit=100").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testUpdateLingVar() throws Exception {
+        mvc.perform(put(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT).contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "\t\"lingVarId\" : \"" + lingVarIdStr + "\"\n" +
+                        "\t\"lingVarName\" : \"Tester_0_0_1\",\n" +
+                        "\t\"lingVarTermLowVal\" : \"1\",\n" +
+                        "\t\"lingVarTermMedVal\" : \"2\",\n" +
+                        "\t\"lingVarTermHighVal\" : \"3\",\n" +
+                        "\t\"employeeUuid\" : \"" + employeeUuidStr + "\"\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        mvc.perform(get(READ_BY_ID_LNG_VR_GET_URI_TMPLT + lingVarIdStr).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lingVarId", is(lingVarIdStr)))
+                .andExpect(jsonPath("$.lingVarName", is("Tester_0_0_1")));
+    }
 }

@@ -31,12 +31,12 @@ public class Service3ApplicationTests {
     private static final String CREATE_EMP_POST_URI_TMPLT = "http://localhost:8193/employees/create-employee";
     private static final String DELETE_EMP_DELETE_URI_TMPLT = "http://localhost:8193/employees/delete-";
     private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = "http://localhost:8193/employees/read-";
-    private static final String READ_ALL_EMP_GET_URI_TMPLT = "/employees/read-all";
+    private static final String READ_ALL_EMP_GET_URI_TMPLT = "http://localhost:8193/employees/read-all";
     private static final String READ_ALL_PGNTD_EMP_GET_URI_TMPLT = "http://localhost:8193/employees/read-all-paginated";
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = "http://localhost:8193/employees/update-employee";
 
     @Before
-    public void beforeTest() throws Exception {
+    public void beforeTestSettingUp() throws Exception {
         //create-employee (:)
         MvcResult result =
                 mvc.perform(post(CREATE_EMP_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
@@ -53,7 +53,7 @@ public class Service3ApplicationTests {
     }
 
     @After
-    public void AfterTest() throws Exception {
+    public void afterTestCompletion() throws Exception {
         mvc.perform(delete(DELETE_EMP_DELETE_URI_TMPLT + employeeUuidStr).
                 param("employeeUuid", employeeUuidStr)).andDo(print())
                 .andExpect(status().isOk());
