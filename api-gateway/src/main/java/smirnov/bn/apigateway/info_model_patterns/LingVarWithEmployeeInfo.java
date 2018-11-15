@@ -9,10 +9,11 @@ public class LingVarWithEmployeeInfo {
     private Integer lingVarTermLowVal;
     private Integer lingVarTermMedVal;
     private Integer lingVarTermHighVal;
-    private String employeeUuid;
     private Integer employeeId;
     private String employeeName;
     private String employeeEmail;
+    private String employeeLogin;
+    private String employeeUuid;
 
     public LingVarWithEmployeeInfo(LingVarInfo lingVarInfo, EmployeeInfo employeeInfo) {
         this.lingVarId = lingVarInfo.getLingVarId();
@@ -20,10 +21,11 @@ public class LingVarWithEmployeeInfo {
         this.lingVarTermLowVal = lingVarInfo.getLingVarTermLowVal();
         this.lingVarTermMedVal = lingVarInfo.getLingVarTermMedVal();
         this.lingVarTermHighVal = lingVarInfo.getLingVarTermHighVal();
-        this.employeeUuid = employeeInfo.getEmployeeUuid().toString();
         this.employeeId = employeeInfo.getEmployeeId();
         this.employeeName = employeeInfo.getEmployeeName();
         this.employeeEmail = employeeInfo.getEmployeeEmail();
+        this.employeeLogin = employeeInfo.getEmployeeLogin();
+        this.employeeUuid = employeeInfo.getEmployeeUuid().toString();
     }
 
     public Integer getLingVarId() {
@@ -66,14 +68,6 @@ public class LingVarWithEmployeeInfo {
         this.lingVarTermHighVal = lingVarTermHighVal;
     }
 
-    public String getEmployeeUuid() {
-        return employeeUuid;
-    }
-
-    public void setEmployeeUuid(String employeeUuid) {
-        this.employeeUuid = employeeUuid;
-    }
-
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -106,6 +100,11 @@ public class LingVarWithEmployeeInfo {
         this.employeeLogin = employeeLogin;
     }
 
-    private String employeeLogin;
+    public String getEmployeeUuid() {
+        return employeeUuid;
+    }
 
+    public void setEmployeeUuid(String employeeUuid) {
+        this.employeeUuid = employeeUuid;
+    }
 }

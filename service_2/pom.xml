@@ -16,11 +16,11 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
-        <!--
-		<artifactId>microservices-multi-module-sample</artifactId>
-		<groupId>smirnov.bn</groupId>
-		<version>0.0.1-SNAPSHOT</version>
-		-->
+		<!--
+        <artifactId>microservices-multi-module-sample</artifactId>
+        <groupId>smirnov.bn</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+        -->
 	</parent>
 
 	<properties>
@@ -54,6 +54,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- https://lankydanblog.com/2017/09/18/testing-a-hateoas-service/ -->
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -71,6 +72,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>
