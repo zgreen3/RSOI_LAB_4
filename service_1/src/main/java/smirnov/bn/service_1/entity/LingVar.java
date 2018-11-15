@@ -11,7 +11,7 @@ public class LingVar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer lingVarId;
 
-    @Column(name = "ling_var_name", length = 255)
+    @Column(name = "ling_var_name")
     private String lingVarName;
 
     @Column(name = "ling_var_trm_low_val")
@@ -23,9 +23,8 @@ public class LingVar {
     @Column(name = "ling_var_trm_high_val")
     private Integer lingVarTermHighVal;
 
-    //N.B.: используем здесь тип String, а не UUID,
-    //чтобы можно было хранить
-    //дубликаты этих ID в разных сторках:
+    //N.B.: используем здесь тип String, а не UUID, для упрощения работы с ним,
+    //т.к. это справочное ссылочное поле, которому не нужны качества типа данных UUID:
     @Column(name = "employee_uuid")
     private String employeeUuid;
 

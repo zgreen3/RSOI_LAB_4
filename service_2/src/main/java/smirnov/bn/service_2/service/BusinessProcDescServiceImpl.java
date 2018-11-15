@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,32 @@ public class BusinessProcDescServiceImpl implements BusinessProcDescService {
     @Autowired
     private BusinessProcDescRepository businessProcDescRepository;
 
+    private BusinessProcDescInfo buildlingBusinessProcDescInfo(BusinessProcDesc businessProcDesc) {
+        BusinessProcDescInfo info = new BusinessProcDescInfo();
+        info.setBizProcId(businessProcDesc.getBizProcId());
+        info.setBizProcName(businessProcDesc.getBizProcName());
+        info.setBizProcDescStr(businessProcDesc.getBizProcDescStr());
+        info.setEmployeeUuid(businessProcDesc.getEmployeeUuid());
+        return info;
+    }
+
+    @Nullable
+    @Override
+    @Transactional
+    public Integer createBusinessProcDesc(BusinessProcDescInfo businessProcDescInfo) {
+        BusinessProcDesc businessProcDesc = new BusinessProcDesc();
+        businessProcDesc.setBizProcId(businessProcDescInfo.getBizProcId());
+        businessProcDesc.setBizProcName(businessProcDescInfo.getBizProcName());
+        businessProcDesc.setBizProcDescStr(businessProcDescInfo.getBizProcDescStr());
+        businessProcDesc.setEmployeeUuid(businessProcDescInfo.getEmployeeUuid());
+        businessProcDescRepository.saveAndFlush(businessProcDesc);
+        return businessProcDesc.getBizProcId();
+    }
+
     @Nullable
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessProcDescInfo> findAllBusinessProcDesc() {
+    public List<BusinessProcDescInfo> findAllBusinessProcDescs() {
         return businessProcDescRepository.findAll()
                 .stream()
                 .map(this::buildlingBusinessProcDescInfo)
@@ -35,39 +56,34 @@ public class BusinessProcDescServiceImpl implements BusinessProcDescService {
     @Nullable
     @Override
     @Transactional(readOnly = true)
-    public List<BusinessProcDescInfo> findAllBusinessProcDescPaginated(int page, int sizeLimit) {
-        List<BusinessProcDescInfo> businessProcDescInfoList = new ArrayList<>();
+    public List<BusinessProcDescInfo> findAllBusinessProcDescsPaginated(int page, int sizeLimit) {
+        List<BusinessProcDescInfo> businessProcDescInfo = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, sizeLimit);
         Page<BusinessProcDesc> businessProcDescsPage = businessProcDescRepository.findAll(pageableRequest);
         List<BusinessProcDesc> businessProcDescs = businessProcDescsPage.getContent();
         for (BusinessProcDesc businessProcDesc : businessProcDescs) {
-            businessProcDescInfoList.add(this.buildlingBusinessProcDescInfo(businessProcDesc));
+            businessProcDescInfo.add(this.buildlingBusinessProcDescInfo(businessProcDesc));
         }
-        return businessProcDescInfoList;
+        return businessProcDescInfo;
     }
 
     @Nullable
     @Override
     @Transactional(readOnly = true)
-    public BusinessProcDescInfo findBusinessProcDescById(@Nonnull Integer businessProcDescId) {
-        return businessProcDescRepository.findById(businessProcDescId).map(this::buildlingBusinessProcDescInfo).orElse(null);
+    public BusinessProcDescInfo findBusinessProcDescById(Integer businessProcDescId) {
+        return this.buildlingBusinessProcDescInfo(businessProcDescRepository.findBusinessProcDescById(businessProcDescId));
     }
 
-    @Nonnull
-    private BusinessProcDescInfo buildlingBusinessProcDescInfo(BusinessProcDesc businessProcDesc) {
-        BusinessProcDescInfo info = new BusinessProcDescInfo();
-        info.setBizProcName(businessProcDesc.getBizProcName());
-        info.setBizProcDescStr(businessProcDesc.getBizProcDescStr());
-        return info;
-    }
-
-    @Nullable
     @Override
     @Transactional
-    public BusinessProcDescInfo createBusinessProcDesc(@Nonnull String businessProcDescName, @Nonnull String businessProcDescStr) {
-        BusinessProcDesc businessProcDesc = new BusinessProcDesc();
-        businessProcDesc.setBizProcName(businessProcDescName);
-        businessProcDesc.setBizProcDescStr(businessProcDescStr);
-        return this.buildlingBusinessProcDescInfo(businessProcDescRepository.saveAndFlush(businessProcDesc));
+    public void updateBusinessProcDesc(BusinessProcDescInfo businessProcDescInfo) {
+        businessProcDescRepository.updateBusinessProcDesc(businessProcDescInfo.getBizProcId(), businessProcDescInfo.getBizProcName(),
+                businessProcDescInfo.getBizProcDescStr(), businessProcDescInfo.getEmployeeUuid());
+    }
+
+    @Override
+    @Transactional
+    public void deleteBusinessProcDescById(Integer bizProcId) {
+        businessProcDescRepository.deleteById(bizProcId);
     }
 }

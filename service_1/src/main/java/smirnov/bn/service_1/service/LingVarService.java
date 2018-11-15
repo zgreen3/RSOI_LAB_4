@@ -1,9 +1,9 @@
 package smirnov.bn.service_1.service;
 
-import smirnov.bn.service_1.model.LingVarInfo;
-
 import javax.annotation.Nullable;
 import java.util.List;
+
+import smirnov.bn.service_1.model.LingVarInfo;
 
 public interface LingVarService {
 

@@ -11,11 +11,16 @@ public class BusinessProcDesc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bizProcId;
 
-    @Column(name = "biz_proc_name", length = 255)
+    @Column(name = "biz_proc_name")
     private String bizProcName;
 
     @Column(name = "biz_proc_desc_str", length = 4000)
     private String bizProcDescStr;
+
+    //N.B.: используем здесь тип String, а не UUID, для упрощения работы с ним,
+    //т.к. это справочное ссылочное поле, которому не нужны качества типа данных UUID:
+    @Column(name = "employee_uuid")
+    private String employeeUuid;
 
     public Integer getBizProcId() {
         return bizProcId;
@@ -41,6 +46,14 @@ public class BusinessProcDesc {
         this.bizProcDescStr = bizProcDescStr;
     }
 
+    public String getEmployeeUuid() {
+        return employeeUuid;
+    }
+
+    public void setEmployeeUuid(String employeeUuid) {
+        this.employeeUuid = employeeUuid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,20 +61,22 @@ public class BusinessProcDesc {
         BusinessProcDesc that = (BusinessProcDesc) o;
         return Objects.equals(bizProcId, that.bizProcId) &&
                 Objects.equals(bizProcName, that.bizProcName) &&
-                Objects.equals(bizProcDescStr, that.bizProcDescStr);
+                Objects.equals(bizProcDescStr, that.bizProcDescStr) &&
+                Objects.equals(employeeUuid, that.employeeUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bizProcId, bizProcName, bizProcDescStr);
+        return Objects.hash(bizProcId, bizProcName, bizProcDescStr, employeeUuid);
     }
 
     @Override
     public String toString() {
-        return "BizProcDesc{" +
+        return "BusinessProcDesc{" +
                 "bizProcId=" + bizProcId +
                 ", bizProcName='" + bizProcName + '\'' +
                 ", bizProcDescStr='" + bizProcDescStr + '\'' +
+                ", employeeUuid='" + employeeUuid + '\'' +
                 '}';
     }
 }

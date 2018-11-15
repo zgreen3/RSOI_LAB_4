@@ -4,6 +4,7 @@ public class BusinessProcDescInfo {
     private Integer bizProcId;
     private String bizProcName;
     private String bizProcDescStr;
+    private String employeeUuid;
 
     public Integer getBizProcId() {
         return bizProcId;
@@ -27,5 +28,13 @@ public class BusinessProcDescInfo {
 
     public void setBizProcDescStr(String bizProcDescStr) {
         this.bizProcDescStr = bizProcDescStr;
+    }
+
+    public String getEmployeeUuid() {
+        return employeeUuid;
+    }
+
+    public void setEmployeeUuid(String employeeUuid) {
+        this.employeeUuid = employeeUuid;
     }
 }

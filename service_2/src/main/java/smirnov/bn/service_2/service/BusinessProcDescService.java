@@ -1,7 +1,6 @@
 package smirnov.bn.service_2.service;
 
-import org.springframework.lang.Nullable;
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import smirnov.bn.service_2.model.BusinessProcDescInfo;
@@ -9,14 +8,18 @@ import smirnov.bn.service_2.model.BusinessProcDescInfo;
 public interface BusinessProcDescService {
 
     @Nullable
-    BusinessProcDescInfo createBusinessProcDesc(@Nonnull String businessProcDescName, @Nonnull String businessProcDescStr);
-
-    @Nullable //@Nonnull
-    List<BusinessProcDescInfo> findAllBusinessProcDesc();
+    Integer createBusinessProcDesc(BusinessProcDescInfo businessProcDescInfo);
 
     @Nullable
-    List<BusinessProcDescInfo> findAllBusinessProcDescPaginated(int page, int sizeLimit);
+    List<BusinessProcDescInfo> findAllBusinessProcDescs();
 
     @Nullable
-    BusinessProcDescInfo findBusinessProcDescById(@Nonnull Integer businessProcDescId);
+    List<BusinessProcDescInfo> findAllBusinessProcDescsPaginated(int page, int sizeLimit);
+
+    @Nullable
+    BusinessProcDescInfo findBusinessProcDescById(Integer bizProcId);
+
+    void updateBusinessProcDesc(BusinessProcDescInfo businessProcDescInfo);
+
+    void deleteBusinessProcDescById(Integer bizProcId);
 }

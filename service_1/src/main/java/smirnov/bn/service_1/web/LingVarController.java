@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import smirnov.bn.service_1.model.LingVarInfo;
 import smirnov.bn.service_1.service.LingVarService;
-
-import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/ling_var_dict")
@@ -117,7 +116,7 @@ public class LingVarController {
         }
     }
 
-    //curl -X DELETE http://localhost:8193/ling_var_dict/delete-{lingVarId}
+    //curl -X DELETE http://localhost:8191/ling_var_dict/delete-{lingVarId}
     @DeleteMapping("/delete-{lingVarId}")
     public ResponseEntity<String> deleteLingVarById(@PathVariable Integer lingVarId) {
         try {

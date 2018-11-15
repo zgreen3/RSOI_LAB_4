@@ -28,7 +28,7 @@ public class ApiGatewayController {
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
-    RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
 
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
 
@@ -55,8 +55,6 @@ public class ApiGatewayController {
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<EmployeeInfo>>() {
                             });
             List<EmployeeInfo> employeeInfoList = employeeInfoResponse.getBody();
-
-            //
 
             //Наконец, для каждой Лингвистической переменной получаем информацию об использовавшем её Сотруднике,
             //технчески осуществляя INNER JOIN Лингвистических переменных и Сотрудниках
@@ -86,10 +84,10 @@ public class ApiGatewayController {
             }
             //*/
 
-            return new ResponseEntity<List<LingVarWithEmployeeInfo>>(lingVarWithEmployeeInfoList, HttpStatus.OK);
+            return new ResponseEntity<>(lingVarWithEmployeeInfoList, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in findAllLingVarWithEmployeeData(...)", e);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
