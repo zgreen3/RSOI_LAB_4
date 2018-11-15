@@ -28,13 +28,13 @@ public class EmployeeController {
 //curl -X POST --data "{\"employeeName\":\"Employee_3\",\"employeeEmail\":\"myEmail_3@example.com\",\"employeeLogin\":\"MyName_3\"}" http://localhost:8193/employees/create-employee --header "Content-Type:application/json"
 //curl -X POST --data "{\"employeeName\":\"Employee_4\",\"employeeEmail\":\"myEmail_4@example.com\",\"employeeLogin\":\"MyName_4\"}" http://localhost:8193/employees/create-employee --header "Content-Type:application/json"
     @PostMapping("/create-employee")
-    public ResponseEntity createEmployee(@RequestBody EmployeeInfo employeeInfo) {
+    public ResponseEntity<String> createEmployee(@RequestBody EmployeeInfo employeeInfo) {
         try {
             UUID newEmployeeUuid = employeeService.createEmployee(employeeInfo);
-            return new ResponseEntity(newEmployeeUuid.toString(), HttpStatus.CREATED);
+            return new ResponseEntity<>(newEmployeeUuid.toString(), HttpStatus.CREATED);
         } catch (Exception e) {
             logger.error("Error in createEmployee(...)", e);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -53,10 +53,10 @@ public class EmployeeController {
     @GetMapping("/read-{employeeUuid}")
     public ResponseEntity<EmployeeInfo> findEmployeeByUuid(@PathVariable UUID employeeUuid) {
         try {
-            return new ResponseEntity(employeeService.findEmployeeByUuid(employeeUuid), HttpStatus.OK);
+            return new ResponseEntity<>(employeeService.findEmployeeByUuid(employeeUuid), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in findEmployeeByUuid(...)", e);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -65,41 +65,37 @@ public class EmployeeController {
         try {
             List<EmployeeInfo> employeesInfo = employeeService.findAllEmployees();
 
-            if (employeesInfo.isEmpty()) {
-
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            if (employeesInfo != null && employeesInfo.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-
-                return new ResponseEntity<List<EmployeeInfo>>(employeesInfo, HttpStatus.OK);
+                return new ResponseEntity<>(employeesInfo, HttpStatus.OK);
             }
         } catch (Exception e) {
             logger.error("Error in findAllEmployees(...)", e);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @RequestMapping(value = "/read-all-paginated", params = {"page", "sizeLimit"}, method = GET)
     @ResponseBody
-    public ResponseEntity<List<EmployeeInfo>>findAllEmployeesPaginated(@RequestParam(value = "page", defaultValue = "0", required = true) int page,
-                                                                       @RequestParam(value = "sizeLimit", defaultValue = "100", required = true)
+    public ResponseEntity<List<EmployeeInfo>>findAllEmployeesPaginated(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(value = "sizeLimit", defaultValue = "100")
                                                                                int sizeLimit) {
         try {
             List<EmployeeInfo> employeesInfo = employeeService.findAllEmployeesPaginated(page, sizeLimit);
 
-            if (employeesInfo.isEmpty()) {
-
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            if (employeesInfo != null && employeesInfo.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-
-                return new ResponseEntity<List<EmployeeInfo>>(employeesInfo, HttpStatus.OK);
+                return new ResponseEntity<>(employeesInfo, HttpStatus.OK);
             }
         } catch (Exception e) {
             logger.error("Error in findAllEmployeesPaginated(...)", e);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
-//curl -X PUT --data "{\"employeeName\":\"Employee_2\",\"employeeEmail\":\"myEmail_2_3@example.com\",\"employeeLogin\":\"MyName_2_3\"\"employeeUuid\":\"9cbc6e2a-417d-4313-955c-fb58c2da7dc8\"}" http://localhost:8193/employees/update-employee
+//curl -i -X PUT -H "Content-Type: application/json;charset=UTF-8" --data "{\"employeeId\":\"\",\"employeeName\":\"Employee_2\",\"employeeEmail\":\"myEmail_2_3@example.com\",\"employeeLogin\":\"MyName_2_3\",\"employeeUuid\":\"9cbc6e2a-417d-4313-955c-fb58c2da7dc8\"}" http://localhost:8193/employees/update-employee
     @PutMapping("/update-employee")
     public ResponseEntity updateEmployee(@RequestBody EmployeeInfo employeeInfo) {
         try {

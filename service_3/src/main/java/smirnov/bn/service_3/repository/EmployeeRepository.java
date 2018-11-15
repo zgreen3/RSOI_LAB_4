@@ -19,7 +19,7 @@ public interface EmployeeRepository
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE employees e SET e.employee_name = :employeeName, e.employee_email = :employeeEmail, e.employee_login = :employeeLogin WHERE e.employee_uuid = :employeeUuid",
+    @Query(value = "UPDATE employees SET employee_name = :employeeName, employee_email = :employeeEmail, employee_login = :employeeLogin WHERE employee_uuid = :employeeUuid",
             nativeQuery = true)
     void updateEmployee(@Param("employeeName") String employeeName, @Param("employeeEmail") String employeeEmail,
                         @Param("employeeLogin") String employeeLogin, @Param("employeeUuid") UUID employeeUuid);
