@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.is;
@@ -29,18 +28,24 @@ public class Service3ApplicationTests {
     private MockMvc mvc;
     private String employeeUuidStr;
 
+    private static final String CREATE_EMP_POST_URI_TMPLT = "http://localhost:8193/employees/create-employee";
+    private static final String DELETE_EMP_DELETE_URI_TMPLT = "http://localhost:8193/employees/delete-";
+    private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = "http://localhost:8193/employees/read-";
+    private static final String READ_ALL_EMP_GET_URI_TMPLT = "/employees/read-all";
+    private static final String READ_ALL_PGNTD_EMP_GET_URI_TMPLT = "http://localhost:8193/employees/read-all-paginated";
+    private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = "http://localhost:8193/employees/update-employee";
+
     @Before
     public void beforeTest() throws Exception {
         //create-employee (:)
         MvcResult result =
-                mvc.perform(post("http://localhost:8193/employees/create-employee").contentType(MediaType.APPLICATION_JSON).
+                mvc.perform(post(CREATE_EMP_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
                         content("{\n" +
                                 "\t\"employeeId\" : \"\",\n" +
                                 "\t\"employeeName\" : \"Employee_0\",\n" +
                                 "\t\"employeeEmail\" : \"myEmail_0@example.com\",\n" +
                                 "\t\"employeeLogin\" : \"MyName_0\",\n" +
                                 "\t\"employeeUuid\" : \"\"\n" +
-                                //"\t\"employeeUuid\" : \"1c2106bc-6cab-4452-8431-b102ca03fc50\"\n" +
                                 "}")).andDo(print())
                         .andExpect(status().isCreated())
                         .andReturn();
@@ -49,31 +54,63 @@ public class Service3ApplicationTests {
 
     @After
     public void AfterTest() throws Exception {
-        mvc.perform(delete("http://localhost:8193/employees/delete-" + employeeUuidStr).
+        mvc.perform(delete(DELETE_EMP_DELETE_URI_TMPLT + employeeUuidStr).
                 param("employeeUuid", employeeUuidStr)).andDo(print())
                 .andExpect(status().isOk());
     }
-
-    ///*
-    @Test
-    //@WithMockUser(roles = "postgre_srvc_3_usr")
-    public void testFindAllEmployees() throws Exception {
-        mvc.perform(get("/employees/read-all").accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[*]").isArray())
-        ;//.andReturn();
-        //.andExpect(content().string(containsString("[]")));
-    }
-    //*/
 
     //https://stackoverflow.com/questions/18336277/how-to-check-string-in-response-body-with-mockmvc
     //+ https://stackoverflow.com/questions/30482934/how-to-check-json-in-response-body-with-mockmvc (:)
     @Test
     public void testFindEmployeeByUuid() throws Exception {
-        mvc.perform(get("http://localhost:8193/employees/read-" + employeeUuidStr).accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get(READ_BY_UUID_EMP_GET_URI_TMPLT + employeeUuidStr).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.employeeUuid", is(employeeUuidStr)));
+    }
+
+    @Test
+    public void testFindAllEmployees() throws Exception {
+        mvc.perform(get(READ_ALL_EMP_GET_URI_TMPLT).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
+    }
+
+    @Test
+    public void testFindAllEmployeesPaginated() throws Exception {
+        mvc.perform(get(READ_ALL_PGNTD_EMP_GET_URI_TMPLT + "?page=0&sizeLimit=2").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
+
+        mvc.perform(get(READ_ALL_PGNTD_EMP_GET_URI_TMPLT + "?page=1&sizeLimit=2").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
+
+        mvc.perform(get(READ_ALL_PGNTD_EMP_GET_URI_TMPLT + "?page=100&sizeLimit=100").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testUpdateEmployee() throws Exception {
+        mvc.perform(put(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT).contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "\t\"employeeId\" : \"\",\n" +
+                        "\t\"employeeName\" : \"Employee_0_0_1\",\n" +
+                        "\t\"employeeEmail\" : \"myEmail_0_0_1@example.com\",\n" +
+                        "\t\"employeeLogin\" : \"MyName_0_0_1\",\n" +
+                        "\t\"employeeUuid\" : \"" + employeeUuidStr + "\"\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        mvc.perform(get(READ_BY_UUID_EMP_GET_URI_TMPLT + employeeUuidStr).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.employeeUuid", is(employeeUuidStr)))
+                .andExpect(jsonPath("$.employeeName", is("Employee_0_0_1")));
     }
 }
