@@ -2,18 +2,14 @@ package smirnov.bn.apigateway.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -68,28 +64,31 @@ public class ApiGatewayController {
                             employeeInfoListMappedById.get(lingVarInfo.getEmployeeUuid())))
                     .collect(Collectors.toList());
 
-            /*
-            List<LingVarWithEmployeeInfo> lingVarWithEmployeeInfoList = new ArrayList<>();
-            for (LingVarInfo lingVarInfo : lingVarInfoList) {
-                LingVarWithEmployeeInfo lingVarWithEmployeeInfo = new LingVarWithEmployeeInfo();
-                lingVarWithEmployeeInfo.setLingVarId(lingVarInfo.getLingVarId());
-                lingVarWithEmployeeInfo.setLingVarName(lingVarInfo.getLingVarName());
-                lingVarWithEmployeeInfo.setLingVarTermLowVal(lingVarInfo.getLingVarTermLowVal());
-                lingVarWithEmployeeInfo.setLingVarTermMedVal(lingVarInfo.getLingVarTermMedVal());
-                lingVarWithEmployeeInfo.setLingVarTermHighVal(lingVarInfo.getLingVarTermHighVal());
-
-                //...
-
-                lingVarWithEmployeeInfoList.add(lingVarWithEmployeeInfo);
-            }
-            //*/
-
             return new ResponseEntity<>(lingVarWithEmployeeInfoList, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in findAllLingVarWithEmployeeData(...)", e);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    //http://localhost:8193/employees/create-employee
+    /*  //https://stackoverflow.com/questions/14726082/spring-mvc-rest-service-redirect-forward-proxy (:)
+        private String server = "localhost";
+        private int port = 8080;
+
+        @RequestMapping("/**")
+        @ResponseBody
+        public String mirrorRest(@RequestBody String body, HttpMethod method, HttpServletRequest request) throws URISyntaxException
+        {
+            URI uri = new URI("http", null, server, port, request.getRequestURI(), request.getQueryString(), null);
+
+            ResponseEntity<String> responseEntity =
+                restTemplate.exchange(uri, method, new HttpEntity<String>(body), String.class);
+
+            return responseEntity.getBody();
+        }
+    //*/
+
 
     //N.B.: for Angular and authentication:
     //https://github.com/z17/GamePro100/blob/master/lesson-service/src/test/java/lesson/service/LessonsServiceTest.java
