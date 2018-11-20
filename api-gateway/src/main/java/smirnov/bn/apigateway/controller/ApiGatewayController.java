@@ -28,28 +28,21 @@ public class ApiGatewayController {
 
     private static final String SERVICE_1_PORT_STRING = "8191";
     private static final String SERVICE_1_URI_COMMON_DIR_STRING = "/ling_var_dict";
-    private static final String SERVICE_1_ABS_URI_COMMON_STRING =
-            new StringBuilder().append(MAIN_WEB_SERVER_STRING).append(SERVICE_1_PORT_STRING).append(SERVICE_1_URI_COMMON_DIR_STRING).toString();
+    private static final String SERVICE_1_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_STRING + SERVICE_1_PORT_STRING + SERVICE_1_URI_COMMON_DIR_STRING;
 
     private static final String CREATE_LNG_VR_POST_URI_STRING = "/create-ling_var";
-    private static final String DELETE_LNG_VR_DELETE_URI_STRING = "/delete-";
     private static final String READ_BY_ID_LNG_VR_GET_URI_STRING = "/read-";
     private static final String READ_ALL_LNG_VR_GET_URI_STRING = "/read-all";
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_STRING = "/read-all-paginated";
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_STRING = "/update-ling_var";
+    private static final String DELETE_LNG_VR_DELETE_URI_STRING = "/delete-";
 
-    private static final String CREATE_LNG_VR_POST_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(CREATE_LNG_VR_POST_URI_STRING).toString();
-    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(DELETE_LNG_VR_DELETE_URI_STRING).toString();
-    private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_BY_ID_LNG_VR_GET_URI_STRING).toString();
-    private static final String READ_ALL_LNG_VR_GET_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_ALL_LNG_VR_GET_URI_STRING).toString();
-    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_ALL_PGNTD_LNG_VR_GET_URI_STRING).toString();
-    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(UPDATE_BY_ID_LNG_VR_PUT_URI_STRING).toString();
+    private static final String CREATE_LNG_VR_POST_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + CREATE_LNG_VR_POST_URI_STRING;
+    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + DELETE_LNG_VR_DELETE_URI_STRING;
+    private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_ID_LNG_VR_GET_URI_STRING;
+    private static final String READ_ALL_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_LNG_VR_GET_URI_STRING;
+    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_LNG_VR_GET_URI_STRING;
+    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + UPDATE_BY_ID_LNG_VR_PUT_URI_STRING;
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
