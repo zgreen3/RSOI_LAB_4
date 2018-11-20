@@ -375,7 +375,13 @@ public class ApiGatewayController {
             employeeInfo.setEmployeeEmail(lingVarWithEmployeeInfo.getEmployeeEmail());
             employeeInfo.setEmployeeLogin(lingVarWithEmployeeInfo.getEmployeeLogin());
             employeeInfo.setEmployeeUuid(UUID.fromString(lingVarWithEmployeeInfo.getEmployeeUuid()));
-            this.updateEmployee(request, employeeInfo);
+            // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+            HttpHeaders employeeInfoHeaders = new HttpHeaders();
+            employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfo, employeeInfoHeaders);
+            restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
+                    HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                    });
 
             //Затем получаем и потом изменяем данные по всем Лингвистическим переменным (на одинаковые данные, передаваемые в lingVarWithEmployeeInfo),
             //связанным с данным сотрудником по UUID, который также передаётся в lingVarWithEmployeeInfo (:)
@@ -387,12 +393,11 @@ public class ApiGatewayController {
             List<LingVarInfo> lingVarInfoList = lingVarInfoResponse.getBody();
             for (LingVarInfo lingVarInfo : lingVarInfoList) {
                 // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-                HttpEntity<LingVarInfo> requestLingVarInfoEntity = new HttpEntity<>(lingVarInfo, headers);
-                restTemplate.exchange(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT + "{"
-                                + employeeInfo.getEmployeeUuid().toString() + "}", //"http://localhost:8191/ling_var_dict//read-by-emp-uuid-{employeeUuid}",
-                        HttpMethod.GET, requestLingVarInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
+                HttpHeaders lingVarInfoHeaders = new HttpHeaders();
+                lingVarInfoHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+                HttpEntity<LingVarInfo> requestLingVarInfoEntity = new HttpEntity<>(lingVarInfo, lingVarInfoHeaders);
+                restTemplate.exchange(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT,
+                        HttpMethod.PUT, requestLingVarInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
                         });
             }
             return new ResponseEntity<>(HttpStatus.OK);
