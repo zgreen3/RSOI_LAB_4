@@ -370,7 +370,8 @@ public class ApiGatewayController {
 
             //Сначала изменяем данные по сотруднику (:)
             EmployeeInfo employeeInfo = new EmployeeInfo();
-            employeeInfo.setEmployeeId(lingVarWithEmployeeInfo.getEmployeeId());
+            //N.B.: employeeId никак не будет затронут в процессе обновления, поэтому можем передать сюда null:
+            employeeInfo.setEmployeeId(null); //lingVarWithEmployeeInfo.getEmployeeId());
             employeeInfo.setEmployeeName(lingVarWithEmployeeInfo.getEmployeeName());
             employeeInfo.setEmployeeEmail(lingVarWithEmployeeInfo.getEmployeeEmail());
             employeeInfo.setEmployeeLogin(lingVarWithEmployeeInfo.getEmployeeLogin());
