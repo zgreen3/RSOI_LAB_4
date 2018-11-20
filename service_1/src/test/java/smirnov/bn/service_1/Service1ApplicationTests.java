@@ -42,12 +42,25 @@ public class Service1ApplicationTests {
     private static final String CREATE_EMP_POST_URI_TMPLT = "http://localhost:8193/employees/create-employee";
     private static final String DELETE_EMP_DELETE_URI_TMPLT = "http://localhost:8193/employees/delete-";
 
-    private static final String CREATE_LNG_VR_POST_URI_TMPLT = "http://localhost:8191/ling_var_dict/create-ling_var";
-    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = "http://localhost:8191/ling_var_dict//delete-";
-    private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = "http://localhost:8191/ling_var_dict/read-";
-    private static final String READ_ALL_LNG_VR_GET_URI_TMPLT = "http://localhost:8191/ling_var_dict/employees/read-all";
-    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = "http://localhost:8191/ling_var_dict/read-all-paginated";
-    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = "http://localhost:8191/ling_var_dict/update-ling_var";
+    private static final String SERVICE_1_ABS_URI_COMMON_STRING = "http://localhost:8191/ling_var_dict/";
+    private static final String CREATE_LNG_VR_POST_URI_STRING = "create-ling_var";
+    private static final String DELETE_LNG_VR_DELETE_URI_STRING = "delete-";
+    private static final String READ_BY_ID_LNG_VR_GET_URI_STRING = "read-";
+    private static final String READ_ALL_LNG_VR_GET_URI_STRING = "read-all";
+    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_STRING = "read-all-paginated";
+    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_STRING = "update-ling_var";
+    private static final String CREATE_LNG_VR_POST_URI_TMPLT =
+            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(CREATE_LNG_VR_POST_URI_STRING).toString();
+    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT =
+            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(DELETE_LNG_VR_DELETE_URI_STRING).toString();
+    private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT =
+            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_BY_ID_LNG_VR_GET_URI_STRING).toString();
+    private static final String READ_ALL_LNG_VR_GET_URI_TMPLT =
+            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_ALL_LNG_VR_GET_URI_STRING).toString();
+    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT =
+            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_ALL_PGNTD_LNG_VR_GET_URI_STRING).toString();
+    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT =
+            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(UPDATE_BY_ID_LNG_VR_PUT_URI_STRING).toString();
 
     @Before
     public void beforeTestSettingUp() throws Exception {
