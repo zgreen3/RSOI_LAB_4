@@ -59,6 +59,17 @@ public class LingVarController {
         }
     }
 
+    @GetMapping("/read-by-emp-uuid-{employeeUuid}")
+    public ResponseEntity<List<LingVarInfo>> findLingVarsByEmployeeUuid(@PathVariable Integer employeeUuid) {
+        try {
+            logger.info("findLingVarsByEmployeeUuid() - START" + "\n" + "id param: " + String.valueOf(employeeUuid));
+            return new ResponseEntity<>(lingVarService.findLingVarsByEmployeeUuid(employeeUuid), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error in findLingVarsByEmployeeUuid(...)", e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping("/read-all")
     public ResponseEntity<List<LingVarInfo>> findAllLingVars() {
         try {

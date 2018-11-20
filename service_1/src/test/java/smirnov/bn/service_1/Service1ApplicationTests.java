@@ -7,16 +7,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import smirnov.bn.service_1.model.LingVarInfo;
-
-import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -24,9 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import smirnov.bn.service_1.entity.LingVar;
-import smirnov.bn.service_1.repository.LingVarRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -53,26 +44,13 @@ public class Service1ApplicationTests {
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_STRING = "update-ling_var";
     private static final String DELETE_LNG_VR_DELETE_URI_STRING = "delete-";
-    /*
-    private static final String CREATE_LNG_VR_POST_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(CREATE_LNG_VR_POST_URI_STRING).toString();
-    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(DELETE_LNG_VR_DELETE_URI_STRING).toString();
-    private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_BY_ID_LNG_VR_GET_URI_STRING).toString();
-    private static final String READ_ALL_LNG_VR_GET_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_ALL_LNG_VR_GET_URI_STRING).toString();
-    private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(READ_ALL_PGNTD_LNG_VR_GET_URI_STRING).toString();
-    private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT =
-            new StringBuilder().append(SERVICE_1_ABS_URI_COMMON_STRING).append(UPDATE_BY_ID_LNG_VR_PUT_URI_STRING).toString();
-    //*/
+
     private static final String CREATE_LNG_VR_POST_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + CREATE_LNG_VR_POST_URI_STRING;
-    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + DELETE_LNG_VR_DELETE_URI_STRING;
     private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_ID_LNG_VR_GET_URI_STRING;
     private static final String READ_ALL_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_LNG_VR_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_LNG_VR_GET_URI_STRING;
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + UPDATE_BY_ID_LNG_VR_PUT_URI_STRING;
+    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + DELETE_LNG_VR_DELETE_URI_STRING;
 
     @Before
     public void beforeTestSettingUp() throws Exception {

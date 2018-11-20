@@ -19,6 +19,9 @@ public interface LingVarService {
     @Nullable
     LingVarInfo findLingVarById(Integer lingVarId);
 
+    @Nullable
+    List<LingVarInfo> findLingVarsByEmployeeUuid(Integer employeeUuid);
+
     void updateLingVar(LingVarInfo lingVarInfo);
 
     void deleteLingVarById(Integer lingVarId);

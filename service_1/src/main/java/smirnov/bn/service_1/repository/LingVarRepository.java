@@ -8,11 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import smirnov.bn.service_1.entity.LingVar;
 
+import java.util.List;
+
 public interface LingVarRepository
         extends JpaRepository<LingVar, Integer> {
     @Query(value = "SELECT lv.* FROM linguistic_variables lv WHERE lv.ling_var_id = :lingVarId",
             nativeQuery = true)
     LingVar findLingVarById(@Param("lingVarId") Integer lingVarId);
+
+    @Query(value = "SELECT lv.* FROM linguistic_variables lv WHERE lv.employee_uuid = :employeeUuid",
+            nativeQuery = true)
+    List<LingVar> findLingVarsByEmployeeUuid(Integer employeeUuid);
 
     @Transactional
     @Modifying
