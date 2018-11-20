@@ -31,10 +31,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/gateway_API")
 public class ApiGatewayController {
 
-    // https://stackoverflow.com/questions/30528255/how-to-access-a-value-defined-in-the-application-properties-file-in-spring-boot (:)
-    @Value("${server.port}")
-    private int port;
-    private String server = "localhost";
+    //// https://stackoverflow.com/questions/30528255/how-to-access-a-value-defined-in-the-application-properties-file-in-spring-boot (:)
+    //@Value("${server.port}")
+    //private int port;
+    //private String server = "localhost";
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
@@ -88,23 +88,29 @@ public class ApiGatewayController {
     @PostMapping("/create-ling_var")
     public ResponseEntity<String> createLingVar(HttpServletRequest request, @RequestBody LingVarInfo lingVarInfo)
             throws URISyntaxException {
-        return this.proxingExternalRequests(lingVarInfo.toString(), HttpMethod.POST, request);
+        return this.proxingExternalRequests(lingVarInfo, HttpMethod.POST, request,
+                "http://localhost:8191/ling_var_dict/create-ling_var");
     }
 
     //http://localhost:8193/employees/create-employee
     ///*
     //https://stackoverflow.com/questions/14726082/spring-mvc-rest-service-redirect-forward-proxy (:)
     //@RequestMapping("/**")
-    @RequestMapping(value = {"/ling_var_dict/**", "/biz_proc_desc/**", "/employees/**"}, method = {GET, POST, PUT, DELETE})
+    //@RequestMapping(value = {"/ling_var_dict/**", "/biz_proc_desc/**", "/employees/**"}, method = {GET, POST, PUT, DELETE})
     @ResponseBody
-    public ResponseEntity<String> proxingExternalRequests(@RequestBody(required = false) String body,
-                                                  HttpMethod method, HttpServletRequest request) //, HttpServletResponse response)
+    public <T> ResponseEntity<String> proxingExternalRequests(@RequestBody(required = false) T body,
+                                                  HttpMethod method, HttpServletRequest request,
+                                                              String microServiceURIString) //, HttpServletResponse response)
             throws URISyntaxException {
+
+        /*
         URI uri = new URI("http", null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri)
                 .path(request.getRequestURI())
                 .query(request.getQueryString())
                 .build(true).toUri();
+        //*/
+        URI uri = new URI(microServiceURIString);
 
         HttpHeaders headers = new HttpHeaders();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -113,7 +119,7 @@ public class ApiGatewayController {
             headers.set(headerName, request.getHeader(headerName));
         }
 
-        HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
+        HttpEntity<T> httpEntity = new HttpEntity<T>(body, headers);
         RestTemplate restTemplate = new RestTemplate();
         try {
             return restTemplate.exchange(uri, method, httpEntity, String.class);
