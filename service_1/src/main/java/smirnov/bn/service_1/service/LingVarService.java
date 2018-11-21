@@ -20,7 +20,7 @@ public interface LingVarService {
     LingVarInfo findLingVarById(Integer lingVarId);
 
     @Nullable
-    List<LingVarInfo> findLingVarsByEmployeeUuid(Integer employeeUuid);
+    List<LingVarInfo> findLingVarsByEmployeeUuid(String employeeUuid);
 
     void updateLingVar(LingVarInfo lingVarInfo);
 

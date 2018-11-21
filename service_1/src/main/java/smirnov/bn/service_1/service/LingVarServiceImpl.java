@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -24,6 +23,7 @@ public class LingVarServiceImpl implements LingVarService {
 
     private LingVarInfo buildlingVarInfo(LingVar lingVar) {
         LingVarInfo info = new LingVarInfo();
+        info.setLingVarId(lingVar.getLingVarId());
         info.setLingVarName(lingVar.getLingVarName());
         info.setLingVarTermLowVal(lingVar.getLingVarTermLowVal());
         info.setLingVarTermMedVal(lingVar.getLingVarTermMedVal());
@@ -81,7 +81,7 @@ public class LingVarServiceImpl implements LingVarService {
     @Nullable
     @Override
     @Transactional(readOnly = true)
-    public List<LingVarInfo> findLingVarsByEmployeeUuid(Integer employeeUuid) {
+    public List<LingVarInfo> findLingVarsByEmployeeUuid(String employeeUuid) {
         return lingVarRepository.findLingVarsByEmployeeUuid(employeeUuid)
                 .stream()
                 .map(this::buildlingVarInfo)

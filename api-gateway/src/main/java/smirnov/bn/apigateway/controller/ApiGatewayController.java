@@ -119,7 +119,7 @@ public class ApiGatewayController {
         }
     }
 
-    //**********************************************************************************************************************
+//**********************************************************************************************************************
 //*******************************SERVICE_1_API_PROXING******************************************************************
 //**********************************************************************************************************************
     //"/ling_var_dict/create-ling_var" (:)
@@ -137,16 +137,16 @@ public class ApiGatewayController {
             throws URISyntaxException {
         logger.info("API_Gateway_controller findLingVarById() - START" + "\n" + "id param: " + String.valueOf(id));
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
-                READ_BY_ID_LNG_VR_GET_URI_TMPLT + '{' + String.valueOf(id) + '}');
+                READ_BY_ID_LNG_VR_GET_URI_TMPLT + String.valueOf(id));
     }
 
     //"/ling_var_dict/read-by-emp-uuid-{employeeUuid}" (:)
     @GetMapping(SERVICE_1_URI_COMMON_DIR_STRING + READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING + "{employeeUuid}")
-    public ResponseEntity<String> findLingVarsByEmployeeUuid(HttpServletRequest request, @PathVariable Integer employeeUuid)
+    public ResponseEntity<String> findLingVarsByEmployeeUuid(HttpServletRequest request, @PathVariable String employeeUuid)
             throws URISyntaxException {
-        logger.info("API_Gateway_controller findLingVarsByEmployeeUuid() - START" + "\n" + "id param: " + String.valueOf(employeeUuid));
+        logger.info("API_Gateway_controller findLingVarsByEmployeeUuid() - START" + "\n" + "id param: " + employeeUuid);
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
-                READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT + '{' + String.valueOf(employeeUuid) + '}');
+                READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT + employeeUuid);
     }
 
     //"/ling_var_dict/read-all" (:)
@@ -187,7 +187,7 @@ public class ApiGatewayController {
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteLingVarById() - START" + "\n" + "id param: " + String.valueOf(lingVarId));
         return this.proxingExternalRequests(null, HttpMethod.DELETE, request,
-                DELETE_LNG_VR_DELETE_URI_TMPLT + '{' + String.valueOf(lingVarId) + '}');
+                DELETE_LNG_VR_DELETE_URI_TMPLT + String.valueOf(lingVarId));
     }
 
     //**********************************************************************************************************************
@@ -208,7 +208,7 @@ public class ApiGatewayController {
             throws URISyntaxException {
         logger.info("API_Gateway_controller findBusinessProcDescById() - START");
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
-                READ_BY_ID_BP_DSC_GET_URI_TMPLT + '{' + String.valueOf(id) + '}');
+                READ_BY_ID_BP_DSC_GET_URI_TMPLT + String.valueOf(id));
     }
 
     //"/biz_proc_desc/read-all" (:)
@@ -250,7 +250,7 @@ public class ApiGatewayController {
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteBusinessProcDescById() - START" + "\n" + "id param: " + String.valueOf(bizProcId));
         return this.proxingExternalRequests(null, HttpMethod.DELETE, request,
-                DELETE_BP_DSC_DELETE_URI_TMPLT + '{' + String.valueOf(bizProcId) + '}');
+                DELETE_BP_DSC_DELETE_URI_TMPLT + String.valueOf(bizProcId));
     }
 
     //**********************************************************************************************************************
@@ -271,7 +271,7 @@ public class ApiGatewayController {
             throws URISyntaxException {
         logger.info("API_Gateway_controller findEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
-                READ_BY_UUID_EMP_GET_URI_TMPLT + '{' + employeeUuid.toString() + '}');
+                READ_BY_UUID_EMP_GET_URI_TMPLT + employeeUuid.toString());
     }
 
     //"/employees/read-all" (:)
@@ -312,7 +312,7 @@ public class ApiGatewayController {
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));
         return this.proxingExternalRequests(null, HttpMethod.DELETE, request,
-                DELETE_EMP_DELETE_URI_TMPLT + '{' + employeeUuid.toString() + '}');
+                DELETE_EMP_DELETE_URI_TMPLT + employeeUuid.toString());
     }
 
     //**********************************************************************************************************************
@@ -378,7 +378,7 @@ public class ApiGatewayController {
             employeeInfo.setEmployeeUuid(UUID.fromString(lingVarWithEmployeeInfo.getEmployeeUuid()));
             // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
             HttpHeaders employeeInfoHeaders = new HttpHeaders();
-            employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfo, employeeInfoHeaders);
             restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
                     HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
@@ -386,20 +386,40 @@ public class ApiGatewayController {
 
             //Затем получаем и потом изменяем данные по всем Лингвистическим переменным (на одинаковые данные, передаваемые в lingVarWithEmployeeInfo),
             //связанным с данным сотрудником по UUID, который также передаётся в lingVarWithEmployeeInfo (:)
+            // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+            //HttpHeaders lingVarInfoHeaders = new HttpHeaders();
+            //employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+            //HttpEntity<EmployeeInfo> requestLingVarInfoEntity = new HttpEntity<>(lingVarInfo, lingVarInfoHeaders);
             ResponseEntity<List<LingVarInfo>> lingVarInfoResponse =
-                    restTemplate.exchange(READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT + "{"
-                                    + employeeInfo.getEmployeeUuid().toString() + "}", //"http://localhost:8191/ling_var_dict//read-by-emp-uuid-{employeeUuid}",
+                    restTemplate.exchange(READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT
+                                    + String.valueOf(employeeInfo.getEmployeeUuid()), //"http://localhost:8191/ling_var_dict/read-by-emp-uuid-{employeeUuid}",
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<LingVarInfo>>() {
                             });
             List<LingVarInfo> lingVarInfoList = lingVarInfoResponse.getBody();
+
             for (LingVarInfo lingVarInfo : lingVarInfoList) {
+                logger.info("Another lingVarInfo in lingVarInfoList in updateEmployeeWithLingVarData() params"
+                        + "\n" + "Id param: " + String.valueOf(lingVarInfo.getLingVarId())
+                        + "\n" + "LingVarName param: " + lingVarInfo.getLingVarName()
+                        + "\n" + "EmployeeUuid param: " + lingVarInfo.getEmployeeUuid()
+                        + "\n" + "LingVarTermLowVal param: " + String.valueOf(lingVarInfo.getLingVarTermLowVal())
+                        + "\n" + "LingVarTermMedVal param: " + String.valueOf(lingVarInfo.getLingVarTermMedVal())
+                        + "\n" + "LingVarTermHighVal param: " + String.valueOf(lingVarInfo.getLingVarTermHighVal()));
+
+                lingVarInfo.setLingVarName(lingVarWithEmployeeInfo.getLingVarName());
+                lingVarInfo.setLingVarTermLowVal(lingVarWithEmployeeInfo.getLingVarTermLowVal());
+                lingVarInfo.setLingVarTermMedVal(lingVarWithEmployeeInfo.getLingVarTermMedVal());
+                lingVarInfo.setLingVarTermHighVal(lingVarWithEmployeeInfo.getLingVarTermHighVal());
+
                 // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
                 HttpHeaders lingVarInfoHeaders = new HttpHeaders();
-                lingVarInfoHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+                lingVarInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<LingVarInfo> requestLingVarInfoEntity = new HttpEntity<>(lingVarInfo, lingVarInfoHeaders);
                 restTemplate.exchange(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT,
                         HttpMethod.PUT, requestLingVarInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
                         });
+
+                logger.info("Another lingVarInfo in lingVarInfoList in updateEmployeeWithLingVarData() UPDATED");
             }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

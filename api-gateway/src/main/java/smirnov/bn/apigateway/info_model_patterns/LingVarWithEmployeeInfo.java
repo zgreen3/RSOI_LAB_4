@@ -15,6 +15,9 @@ public class LingVarWithEmployeeInfo {
     private String employeeLogin;
     private String employeeUuid;
 
+    //"default" constructor:
+    public LingVarWithEmployeeInfo() {}
+
     public LingVarWithEmployeeInfo(LingVarInfo lingVarInfo, EmployeeInfo employeeInfo) {
         this.lingVarId = lingVarInfo.getLingVarId();
         this.lingVarName = lingVarInfo.getLingVarName();

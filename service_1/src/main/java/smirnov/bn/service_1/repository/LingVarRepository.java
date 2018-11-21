@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import javax.annotation.Nonnull;
 
 import smirnov.bn.service_1.entity.LingVar;
 
-import java.util.List;
 
 public interface LingVarRepository
         extends JpaRepository<LingVar, Integer> {
@@ -18,7 +19,7 @@ public interface LingVarRepository
 
     @Query(value = "SELECT lv.* FROM linguistic_variables lv WHERE lv.employee_uuid = :employeeUuid",
             nativeQuery = true)
-    List<LingVar> findLingVarsByEmployeeUuid(Integer employeeUuid);
+    List<LingVar> findLingVarsByEmployeeUuid(@Param("employeeUuid") String employeeUuid);
 
     @Transactional
     @Modifying
@@ -32,5 +33,5 @@ public interface LingVarRepository
     @Modifying
     @Query(value = "DELETE FROM linguistic_variables lv WHERE lv.ling_var_id = :lingVarId",
             nativeQuery = true)
-    void deleteById(@Param("lingVarId") Integer lingVarId);
+    void deleteById(@Nonnull @Param("lingVarId") Integer lingVarId);
 }
