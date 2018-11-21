@@ -50,7 +50,7 @@ public class Service3ApplicationTests {
     @Before
     public void beforeTestSettingUp() throws Exception {
         //create-employee (:)
-        MvcResult result =
+        MvcResult result_emp =
                 mvc.perform(post(CREATE_EMP_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
                         content("{\n" +
                                 "\t\"employeeId\" : \"\",\n" +
@@ -61,7 +61,7 @@ public class Service3ApplicationTests {
                                 "}")).andDo(print())
                         .andExpect(status().isCreated())
                         .andReturn();
-        employeeUuidStr = result.getResponse().getContentAsString();
+        employeeUuidStr = result_emp.getResponse().getContentAsString();
     }
 
     @After

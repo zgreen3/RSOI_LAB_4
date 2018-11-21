@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -73,10 +72,10 @@ public class Service1ApplicationTests {
                 mvc.perform(post(CREATE_LNG_VR_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
                         content("{\n" +
                                 "\t\"lingVarId\" : \"\",\n" +
-                                "\t\"lingVarName\" : \"Employee_0\",\n" +
-                                "\t\"lingVarTermLowVal\" : \"myEmail_0@example.com\",\n" +
-                                "\t\"lingVarTermMedVal\" : \"MyName_0\",\n" +
-                                "\t\"lingVarTermHighVal\" : \"\"\n" +
+                                "\t\"lingVarName\" : \"Tester_0\",\n" +
+                                "\t\"lingVarTermLowVal\" : \"0\",\n" +
+                                "\t\"lingVarTermMedVal\" : \"1\",\n" +
+                                "\t\"lingVarTermHighVal\" : \"2\"\n" +
                                 "\t\"employeeUuid\" : \"" + employeeUuidStr + "\",\n" +
                                 "}")).andDo(print())
                         .andExpect(status().isCreated())
