@@ -26,31 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class Service2ApplicationTests {
 
-	/*
-	@Autowired
-	private MockMvc mvc;
-
-    @Test
-	public void contextLoads() {
-	}
-    //*/
-
-	/*
-	@Test
-	public void testFindAllLingVars() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/biz_proc_desc/all").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.[*]").isArray())
-		;//.andReturn();
-		//.andExpect(content().string(containsString("[]")));
-	}
-    //*/
-
     @Autowired
     private MockMvc mvc;
 
     private String bizProcIdStr;
-    private String employeeUuidStr;
+    private String employeeUuidStr = "d1833bb4-e453-4333-b784-8262fdbcdef8";
 
     private static final String CREATE_EMP_POST_URI_TMPLT = "http://localhost:8193/employees/create-employee";
     private static final String DELETE_EMP_DELETE_URI_TMPLT = "http://localhost:8193/employees/delete-";
@@ -76,6 +56,7 @@ public class Service2ApplicationTests {
 
     @Before
     public void beforeTestSettingUp() throws Exception {
+        /*
         //create-employee (:)
         MvcResult result_emp =
                 mvc.perform(post(CREATE_EMP_POST_URI_TMPLT).contentType(MediaType.APPLICATION_JSON).
@@ -89,6 +70,7 @@ public class Service2ApplicationTests {
                         .andExpect(status().isCreated())
                         .andReturn();
         employeeUuidStr = result_emp.getResponse().getContentAsString();
+        //*/
 
         //create-biz_proc_desc [Business Process Description] (:)
         MvcResult result_bpDsc =
@@ -109,10 +91,11 @@ public class Service2ApplicationTests {
         mvc.perform(delete(DELETE_BP_DSC_DELETE_URI_TMPLT + bizProcIdStr).
                 param("bizProcId", bizProcIdStr)).andDo(print())
                 .andExpect(status().isOk());
-
+        /*
         mvc.perform(delete(DELETE_EMP_DELETE_URI_TMPLT + employeeUuidStr).
                 param("employeeUuid", employeeUuidStr)).andDo(print())
                 .andExpect(status().isOk());
+        //*/
     }
 
     @Test
@@ -152,7 +135,7 @@ public class Service2ApplicationTests {
     public void testUpdateBusinessProcDesc() throws Exception {
         mvc.perform(put(UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT).contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "\t\"bizProcId\" : \"" + bizProcIdStr + "\"\n" +
+                        "\t\"bizProcId\" : \"" + bizProcIdStr + "\",\n" +
                         "\t\"bizProcName\" : \"BizProc_0_0_1\",\n" +
                         "\t\"bizProcDescStr\" : \"This is new business process description # 1\",\n" +
                         "\t\"employeeUuid\" : \"" + employeeUuidStr + "\"\n" +

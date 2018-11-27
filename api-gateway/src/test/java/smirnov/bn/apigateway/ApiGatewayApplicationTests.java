@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+//import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -21,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@RunWith(SpringJUnit4ClassRunner.class)//(SpringRunner.class)
+@SpringBootTest//(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class ApiGatewayApplicationTests {
 
@@ -153,6 +154,7 @@ public class ApiGatewayApplicationTests {
                 .andExpect(status().isOk());
     }
 
+
     //*****************************SERVICE_1_TESTS**************************************************************************
     @Test
     public void testFindLingVarById() throws Exception {
@@ -161,7 +163,7 @@ public class ApiGatewayApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lingVarId", is(lingVarIdStr)));
     }
-
+    /*
     @Test
     public void testFindAllLingVars() throws Exception {
         mvc.perform(get(READ_ALL_LNG_VR_GET_URI_TMPLT).accept(MediaType.APPLICATION_JSON))
@@ -317,4 +319,5 @@ public class ApiGatewayApplicationTests {
                 .andExpect(jsonPath("$.employeeUuid", is(employeeUuidStr)))
                 .andExpect(jsonPath("$.employeeName", is("Employee_0_0_1")));
     }
+    //*/
 }
