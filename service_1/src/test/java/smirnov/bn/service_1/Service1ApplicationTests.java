@@ -55,11 +55,11 @@ class EmployeeInfo {
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 //https://stackoverflow.com/questions/29669393/override-default-spring-boot-application-properties-settings-in-junit-test (:)
-@TestPropertySource(locations="classpath:test.properties")
+@TestPropertySource(locations = "classpath:test.properties")
 public class Service1ApplicationTests {
 
-	@Autowired
-	private MockMvc mvc;
+    @Autowired
+    private MockMvc mvc;
     private static final Logger logger = LoggerFactory.getLogger(Service1ApplicationTests.class);
     private Gson gson = new GsonBuilder().create();
 
@@ -90,6 +90,7 @@ public class Service1ApplicationTests {
 
     @Before
     public void beforeTestSettingUp() throws Exception {
+        logger.info("beforeTestSettingUp() - START");
         //create-employee (:)
         /*
         EmployeeInfo empInfoObj = new EmployeeInfo("0", "Employee_0", "emp_mail_0@example.com", "My_login_0", UUID.fromString("d1833bb4-e453-4333-b784-8262fdbcdef8"));
@@ -140,6 +141,7 @@ public class Service1ApplicationTests {
 
     @After
     public void afterTestCompletion() throws Exception {
+        logger.info("afterTestCompletion() - START");
         mvc.perform(delete(DELETE_LNG_VR_DELETE_URI_TMPLT + lingVarIdStr).
                 param("lingVarId", lingVarIdStr)).andDo(print())
                 .andExpect(status().isOk());
@@ -153,6 +155,7 @@ public class Service1ApplicationTests {
 
     @Test
     public void testFindLingVarById() throws Exception {
+        logger.info("testFindLingVarById() - START");
         mvc.perform(get(READ_BY_ID_LNG_VR_GET_URI_TMPLT + lingVarIdStr).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -161,6 +164,7 @@ public class Service1ApplicationTests {
 
     @Test
     public void testFindAllLingVars() throws Exception {
+        logger.info("testFindAllLingVars() - START");
         mvc.perform(get(READ_ALL_LNG_VR_GET_URI_TMPLT).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -169,6 +173,7 @@ public class Service1ApplicationTests {
 
     @Test
     public void testFindAllLingVarPaginated() throws Exception {
+        logger.info("testFindAllLingVarPaginated() - START");
         mvc.perform(get(READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT + "?page=0&sizeLimit=2").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -182,20 +187,31 @@ public class Service1ApplicationTests {
         mvc.perform(get(READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT + "?page=100&sizeLimit=100").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+        logger.info("testFindAllLingVarPaginated() - END");
     }
 
     @Test
     public void testUpdateLingVar() throws Exception {
+        logger.info("testUpdateLingVar() - START");
+        LingVarInfo lngVarInfoObj = new LingVarInfo();
+        lngVarInfoObj.setLingVarId(Integer.valueOf(lingVarIdStr));
+        lngVarInfoObj.setLingVarName("Tester_0_0_1");
+        lngVarInfoObj.setLingVarTermLowVal(1);
+        lngVarInfoObj.setLingVarTermMedVal(2);
+        lngVarInfoObj.setLingVarTermHighVal(3);
+        lngVarInfoObj.setEmployeeUuid(employeeUuidStr);
+        String lngVarInfoJsonObj = gson.toJson(lngVarInfoObj);
         mvc.perform(put(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT).contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "\t\"lingVarId\" : \"" + lingVarIdStr + "\",\n" +
-                        "\t\"lingVarName\" : \"Tester_0_0_1\",\n" +
-                        "\t\"lingVarTermLowVal\" : \"1\",\n" +
-                        "\t\"lingVarTermMedVal\" : \"2\",\n" +
-                        "\t\"lingVarTermHighVal\" : \"3\",\n" +
-                        "\t\"employeeUuid\" : \"" + employeeUuidStr + "\"\n" +
-                        "}"))
-                .andDo(print())
+                .content(//"{\n" +
+                        //"\t\"lingVarId\" : \"" + lingVarIdStr + "\",\n" +
+                        //"\t\"lingVarName\" : \"Tester_0_0_1\",\n" +
+                        //"\t\"lingVarTermLowVal\" : \"1\",\n" +
+                        //"\t\"lingVarTermMedVal\" : \"2\",\n" +
+                        //"\t\"lingVarTermHighVal\" : \"3\",\n" +
+                        //"\t\"employeeUuid\" : \"" + employeeUuidStr + "\"\n" +
+                        //"}"
+                        lngVarInfoJsonObj
+                )).andDo(print())
                 .andExpect(status().isOk());
 
         mvc.perform(get(READ_BY_ID_LNG_VR_GET_URI_TMPLT + lingVarIdStr).accept(MediaType.APPLICATION_JSON))
@@ -203,5 +219,6 @@ public class Service1ApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lingVarId", is(Integer.parseInt(lingVarIdStr))))
                 .andExpect(jsonPath("$.lingVarName", is("Tester_0_0_1")));
+        logger.info("testUpdateLingVar() - END");
     }
 }

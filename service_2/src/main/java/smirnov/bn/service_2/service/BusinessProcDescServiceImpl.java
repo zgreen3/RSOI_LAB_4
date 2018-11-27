@@ -35,7 +35,7 @@ public class BusinessProcDescServiceImpl implements BusinessProcDescService {
     @Transactional
     public Integer createBusinessProcDesc(BusinessProcDescInfo businessProcDescInfo) {
         BusinessProcDesc businessProcDesc = new BusinessProcDesc();
-        businessProcDesc.setBizProcId(businessProcDescInfo.getBizProcId());
+        //businessProcDesc.setBizProcId(businessProcDescInfo.getBizProcId());
         businessProcDesc.setBizProcName(businessProcDescInfo.getBizProcName());
         businessProcDesc.setBizProcDescStr(businessProcDescInfo.getBizProcDescStr());
         businessProcDesc.setEmployeeUuid(businessProcDescInfo.getEmployeeUuid());
