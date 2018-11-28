@@ -2,6 +2,9 @@ package smirnov.bn.apigateway;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.hamcrest.Matchers;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -13,14 +16,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import smirnov.bn.apigateway.info_model_patterns.BizDescWithEmployeeInfo;
 import smirnov.bn.apigateway.info_model_patterns.LingVarWithEmployeeInfo;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -45,6 +53,23 @@ public class ApiGatewayApplicationTests {
     private static final String READ_ALL_1_GATEWAY_API_GET_URI_STRING = "/ling_var_and_employee/read-all";
     private static final String UPDATE_ALL_1_GATEWAY_API_PUT_URI_STRING = "/ling_var_and_employee/update-ling_var_and_employee";
     private static final String UPDATE_ALL_2_GATEWAY_API_PUT_URI_STRING = "/biz_proc_desc/update-/biz_proc_desc_and_employee";
+
+    @Before
+    public void beforeTestSettingUp() throws Exception {
+        logger.info("beforeTestSettingUp() - START");
+        boolean connectionIsASuccess;
+        try {
+            //проверка, что ключевой сервис 3 (с информацией по сотрудникам) запущен:
+            URL url = new URL("http://localhost:8193");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            //int stubbedConnectionResponse = connection.getResponseCode();
+            connectionIsASuccess = true;
+        } catch (Exception e) {
+            connectionIsASuccess = false;
+        }
+        Assume.assumeTrue(connectionIsASuccess);
+    }
 
     //*****************************API_GATEWAY_[MULTI_API]_TESTS**************************************************************************
     @Test
