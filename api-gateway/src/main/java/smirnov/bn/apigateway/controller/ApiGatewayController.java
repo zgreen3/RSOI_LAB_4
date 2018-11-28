@@ -376,6 +376,7 @@ public class ApiGatewayController {
             employeeInfo.setEmployeeEmail(lingVarWithEmployeeInfo.getEmployeeEmail());
             employeeInfo.setEmployeeLogin(lingVarWithEmployeeInfo.getEmployeeLogin());
             employeeInfo.setEmployeeUuid(UUID.fromString(lingVarWithEmployeeInfo.getEmployeeUuid()));
+
             // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
             HttpHeaders employeeInfoHeaders = new HttpHeaders();
             employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
