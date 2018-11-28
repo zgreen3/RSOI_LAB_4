@@ -19,6 +19,9 @@ public interface BusinessProcDescService {
     @Nullable
     BusinessProcDescInfo findBusinessProcDescById(Integer bizProcId);
 
+    @Nullable
+    List<BusinessProcDescInfo> findBusinessProcDescByEmployeeUuid(String employeeUuid);
+
     void updateBusinessProcDesc(BusinessProcDescInfo businessProcDescInfo);
 
     void deleteBusinessProcDescById(Integer bizProcId);

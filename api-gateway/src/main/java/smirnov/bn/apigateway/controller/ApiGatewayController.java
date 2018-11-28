@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import smirnov.bn.apigateway.info_model_patterns.EmployeeInfo;
-import smirnov.bn.apigateway.info_model_patterns.LingVarInfo;
-import smirnov.bn.apigateway.info_model_patterns.LingVarWithEmployeeInfo;
-import smirnov.bn.apigateway.info_model_patterns.BusinessProcDescInfo;
+import smirnov.bn.apigateway.info_model_patterns.*;
 
 @RestController
 @RequestMapping("/gateway_API")
@@ -56,6 +53,7 @@ public class ApiGatewayController {
 
     private static final String CREATE_BP_DSC_POST_URI_STRING = "create-biz_proc_desc";
     private static final String READ_BY_ID_BP_DSC_GET_URI_STRING = "read-";
+    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "/read-by-emp-uuid-";
     private static final String READ_ALL_BP_DSC_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_STRING = "update-biz_proc_desc";
@@ -63,6 +61,7 @@ public class ApiGatewayController {
 
     private static final String CREATE_BP_DSC_POST_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + CREATE_BP_DSC_POST_URI_STRING;
     private static final String READ_BY_ID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_ID_BP_DSC_GET_URI_STRING;
+    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING;
     private static final String READ_ALL_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_BP_DSC_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_BP_DSC_GET_URI_STRING;
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + UPDATE_BY_ID_BP_DSC_PUT_URI_STRING;
@@ -429,6 +428,69 @@ public class ApiGatewayController {
         }
     }
 
-    //N.B.: for Angular and authentication:
-    //https://github.com/z17/GamePro100/blob/master/lesson-service/src/test/java/lesson/service/LessonsServiceTest.java
+    ///ling_var AND employee's info update (:)
+    @PutMapping("/biz_proc_desc/update-/biz_proc_desc_and_employee")
+    public ResponseEntity<String> updateEmployeeWithBizDescData(HttpServletRequest request, @RequestBody BizDescWithEmployeeInfo bizDescWithEmployeeInfo) {
+        try {
+            logger.info("updateEmployeeWithBizDescData() - START");
+
+            //Сначала изменяем данные по сотруднику (:)
+            EmployeeInfo employeeInfo = new EmployeeInfo();
+            //N.B.: employeeId никак не будет затронут в процессе обновления, поэтому можем передать сюда null:
+            employeeInfo.setEmployeeId(null); //BizDescWithEmployeeInfo.getEmployeeId());
+            employeeInfo.setEmployeeName(bizDescWithEmployeeInfo.getEmployeeName());
+            employeeInfo.setEmployeeEmail(bizDescWithEmployeeInfo.getEmployeeEmail());
+            employeeInfo.setEmployeeLogin(bizDescWithEmployeeInfo.getEmployeeLogin());
+            employeeInfo.setEmployeeUuid(UUID.fromString(bizDescWithEmployeeInfo.getEmployeeUuid()));
+
+            // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+            HttpHeaders employeeInfoHeaders = new HttpHeaders();
+            employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfo, employeeInfoHeaders);
+            restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
+                    HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                    });
+
+            //Затем получаем и потом изменяем данные по всем Описаниям Бизнес-процессов
+            //(на одинаковые данные, передаваемые в businessProcDescInfo),
+            //связанным с данным сотрудником по UUID, который также передаётся в businessProcDescInfo (:)
+            // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+            //HttpHeaders businessProcDescInfoHeaders = new HttpHeaders();
+            //employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+            //HttpEntity<EmployeeInfo> requestBusinessProcDescInfoEntity = new HttpEntity<>(businessProcDescInfo, businessProcDescInfoHeaders);
+            ResponseEntity<List<BusinessProcDescInfo>> businessProcDescInfoResponse =
+                    restTemplate.exchange(READ_BY_EMP_UUID_BP_DSC_GET_URI_TMPLT
+                                    + String.valueOf(employeeInfo.getEmployeeUuid()),
+                            //"http://localhost:8191/ling_var_dict/read-by-emp-uuid-{employeeUuid}",
+                            HttpMethod.GET, null, new ParameterizedTypeReference<List<BusinessProcDescInfo>>() {
+                            });
+            List<BusinessProcDescInfo> businessProcDescInfoList = businessProcDescInfoResponse.getBody();
+
+            for (BusinessProcDescInfo businessProcDescInfo : businessProcDescInfoList) {
+                logger.info("Another businessProcDescInfo in businessProcDescInfoList in updateEmployeeWithBizDescData() params"
+                        + "\n" + "Id param: " + String.valueOf(businessProcDescInfo.getBizProcId())
+                        + "\n" + "BizProcName param: " + businessProcDescInfo.getBizProcName()
+                        + "\n" + "EmployeeUuid param: " + businessProcDescInfo.getEmployeeUuid()
+                        + "\n" + "BizProcDescStr param: " + String.valueOf(businessProcDescInfo.getBizProcDescStr()));
+
+                businessProcDescInfo.setBizProcName(bizDescWithEmployeeInfo.getBizProcName());
+                businessProcDescInfo.setBizProcDescStr(bizDescWithEmployeeInfo.getBizProcDescStr());
+
+                // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+                HttpHeaders businessProcDescInfoHeaders = new HttpHeaders();
+                businessProcDescInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<BusinessProcDescInfo> requestBusinessProcDescInfoEntity =
+                        new HttpEntity<>(businessProcDescInfo, businessProcDescInfoHeaders);
+                restTemplate.exchange(UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT,
+                        HttpMethod.PUT, requestBusinessProcDescInfoEntity, new ParameterizedTypeReference<List<BusinessProcDescInfo>>() {
+                        });
+
+                logger.info("Another businessProcDescInfo in businessProcDescInfoList in updateEmployeeWithBizDescData() UPDATED");
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error in updateEmployeeWithBizDescData(...)", e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }

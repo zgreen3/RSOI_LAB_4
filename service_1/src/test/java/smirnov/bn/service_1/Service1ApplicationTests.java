@@ -76,6 +76,7 @@ public class Service1ApplicationTests {
 
     private static final String CREATE_LNG_VR_POST_URI_STRING = "create-ling_var";
     private static final String READ_BY_ID_LNG_VR_GET_URI_STRING = "read-";
+    private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_LNG_VR_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_STRING = "update-ling_var";
@@ -83,6 +84,7 @@ public class Service1ApplicationTests {
 
     private static final String CREATE_LNG_VR_POST_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + CREATE_LNG_VR_POST_URI_STRING;
     private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_ID_LNG_VR_GET_URI_STRING;
+    private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING;
     private static final String READ_ALL_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_LNG_VR_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_LNG_VR_GET_URI_STRING;
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + UPDATE_BY_ID_LNG_VR_PUT_URI_STRING;
@@ -160,6 +162,18 @@ public class Service1ApplicationTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lingVarId", is(Integer.parseInt(lingVarIdStr))));
+        logger.info("testFindLingVarById() - END");
+    }
+
+    @Test
+    public void testFindLingVarByEmployeeUuid() throws Exception {
+        logger.info("testFindLingVarByEmployeeUuid() - START");
+        //String employeeUuidStr = "9cbc6e2a-417d-4313-955c-fb58c2da7dc8";
+        mvc.perform(get(READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT + employeeUuidStr).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
+        logger.info("testFindLingVarByEmployeeUuid() - END");
     }
 
     @Test

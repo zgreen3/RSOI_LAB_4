@@ -54,6 +54,17 @@ public class BusinessProcDescController {
         }
     }
 
+    @GetMapping("/read-by-emp-uuid-{employeeUuid}")
+    public ResponseEntity<List<BusinessProcDescInfo>> findBusinessProcDescByEmployeeUuid(@PathVariable String employeeUuid) {
+        try {
+            logger.info("findBusinessProcDescByEmployeeUuid() - START" + "\n" + "employeeUuid param: " + employeeUuid);
+            return new ResponseEntity<>(businessProcDescService.findBusinessProcDescByEmployeeUuid(employeeUuid), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error in findBusinessProcDescByEmployeeUuid(...)", e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping("/read-all")
     public ResponseEntity<List<BusinessProcDescInfo>> findAllBusinessProcDescs() {
         try {

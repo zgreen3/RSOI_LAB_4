@@ -50,6 +50,7 @@ public class Service2ApplicationTests {
 
     private static final String CREATE_BP_DSC_POST_URI_STRING = "create-biz_proc_desc";
     private static final String READ_BY_ID_BP_DSC_GET_URI_STRING = "read-";
+    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_BP_DSC_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_STRING = "update-biz_proc_desc";
@@ -57,6 +58,7 @@ public class Service2ApplicationTests {
 
     private static final String CREATE_BP_DSC_POST_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + CREATE_BP_DSC_POST_URI_STRING;
     private static final String READ_BY_ID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_ID_BP_DSC_GET_URI_STRING;
+    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING;
     private static final String READ_ALL_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_BP_DSC_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_BP_DSC_GET_URI_STRING;
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + UPDATE_BY_ID_BP_DSC_PUT_URI_STRING;
@@ -123,6 +125,17 @@ public class Service2ApplicationTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bizProcId", is(Integer.parseInt(bizProcIdStr))));
+    }
+
+    @Test
+    public void testFindBusinessProcDescByUuid() throws Exception {
+        logger.info("testFindBusinessProcDescByUuid() - START");
+        //String employeeUuidStr = "d1833bb4-e453-4333-b784-8262fdbcdef8";
+        mvc.perform(get(READ_BY_EMP_UUID_BP_DSC_GET_URI_TMPLT + employeeUuidStr).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray());
+        logger.info("testFindBusinessProcDescByUuid() - END");
     }
 
     @Test

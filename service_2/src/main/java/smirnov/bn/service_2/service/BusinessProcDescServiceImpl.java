@@ -70,6 +70,16 @@ public class BusinessProcDescServiceImpl implements BusinessProcDescService {
     @Nullable
     @Override
     @Transactional(readOnly = true)
+    public List<BusinessProcDescInfo> findBusinessProcDescByEmployeeUuid(String employeeUuid) {
+        return businessProcDescRepository.findBusinessProcDescByEmployeeUuid(employeeUuid)
+                .stream()
+                .map(this::buildlingBusinessProcDescInfo)
+                .collect(Collectors.toList());
+    }
+
+    @Nullable
+    @Override
+    @Transactional(readOnly = true)
     public BusinessProcDescInfo findBusinessProcDescById(Integer businessProcDescId) {
         return this.buildlingBusinessProcDescInfo(businessProcDescRepository.findBusinessProcDescById(businessProcDescId));
     }

@@ -8,11 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import smirnov.bn.service_2.entity.BusinessProcDesc;
 
+import java.util.List;
+
 public interface BusinessProcDescRepository
         extends JpaRepository<BusinessProcDesc, Integer> {
     @Query(value = "SELECT bpd.* FROM business_proc_desc bpd WHERE bpd.biz_proc_id = :bizProcId",
             nativeQuery = true)
     BusinessProcDesc findBusinessProcDescById(@Param("bizProcId") Integer bizProcId);
+
+    @Query(value = "SELECT bpd.* FROM business_proc_desc bpd WHERE bpd.employee_uuid = :employeeUuid",
+            nativeQuery = true)
+    List<BusinessProcDesc> findBusinessProcDescByEmployeeUuid(@Param("employeeUuid") String employeeUuid);
 
     @Transactional
     @Modifying
