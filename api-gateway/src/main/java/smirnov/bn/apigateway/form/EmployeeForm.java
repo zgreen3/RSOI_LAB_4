@@ -4,7 +4,7 @@ import java.util.UUID;
 
 
 //https://o7planning.org/en/11545/spring-boot-and-thymeleaf-tutorial
-public class EmployeeInfoForm {
+public class EmployeeForm {
     private Integer employeeId;
 
     private String employeeName;

@@ -6,18 +6,18 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Person List</h1>
-<a href="addEmployee">Add Person</a>
+<h1>Employee List</h1>
+<a href="addEmployee">Add Employee</a>
 <br/><br/>
 <div>
     <table border="1">
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Employee Name</th>
+            <th>Employee Login</th>
         </tr>
-        <tr th:each ="person : ${persons}">
-            <td th:utext="${person.firstName}">...</td>
-            <td th:utext="${person.lastName}">...</td>
+        <tr th:each ="employee : ${employees}">
+            <td th:utext="${employee.employeeName}">...</td>
+            <td th:utext="${employee.employeeLogin}">...</td>
         </tr>
     </table>
 </div>
