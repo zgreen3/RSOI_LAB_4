@@ -58,9 +58,9 @@ public class ApiGatewayApplicationTests {
     public void beforeTestSettingUp() throws Exception {
         logger.info("beforeTestSettingUp() - START");
         boolean connectionIsASuccess;
+        //проверка, что ключевой сервис 3 (с информацией по сотрудникам) запущен:
+        URL url = new URL("http://localhost:8193");
         try {
-            //проверка, что ключевой сервис 3 (с информацией по сотрудникам) запущен:
-            URL url = new URL("http://localhost:8193");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             //int stubbedConnectionResponse = connection.getResponseCode();
