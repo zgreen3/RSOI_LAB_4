@@ -71,10 +71,8 @@
 		<module>api-gateway</module>
 		<module>service_1</module>
 		<module>service_2</module>
-		<module>service_3</module> 
-		<!--
+		<module>service_3</module>
 		<module>web_spring_app_1</module>
-		-->
 	</modules>
 
 </project>

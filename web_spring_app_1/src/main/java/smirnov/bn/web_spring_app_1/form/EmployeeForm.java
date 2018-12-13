@@ -1,4 +1,4 @@
-package smirnov.bn.apigateway.form;
+package smirnov.bn.web_spring_app_1.form;
 
 import java.util.UUID;
 
