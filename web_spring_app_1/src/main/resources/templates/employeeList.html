@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Person List</title>
+    <title>Employee List</title>
+    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
@@ -13,11 +14,12 @@
     <table border="1">
         <tr>
             <th>Employee Name</th>
-            <th>Employee Login</th>
+            <th>Employee Email</th>
         </tr>
+        <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
         <tr th:each ="employee : ${employees}">
             <td th:utext="${employee.employeeName}">...</td>
-            <td th:utext="${employee.employeeLogin}">...</td>
+            <td th:utext="${employee.employeeEmail}">...</td>
         </tr>
     </table>
 </div>

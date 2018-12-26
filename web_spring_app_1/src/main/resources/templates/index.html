@@ -2,11 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Welcome</title>
+    <title>REST[full] API frontend page</title>
+    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Welcome</h1>
+<h1>REST[full] API frontend page</h1>
+<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <h2 th:utext="${message}">..!..</h2>
 
 <!--
@@ -17,6 +19,7 @@
 
    -->
 
+<!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <a th:href="@{/employeeList}">Employee List</a>
 
 </body>
