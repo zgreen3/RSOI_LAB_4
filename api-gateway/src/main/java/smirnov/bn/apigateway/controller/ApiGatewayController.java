@@ -191,7 +191,7 @@ public class ApiGatewayController {
     //*******************************SERVICE_2_API_PROXING******************************************************************
     //**********************************************************************************************************************
     //"/biz_proc_desc/create-biz_proc_desc" (:)
-    @PostMapping(SERVICE_2_URI_COMMON_DIR_STRING + CREATE_BP_DSC_POST_URI_TMPLT)
+    @PostMapping(SERVICE_2_URI_COMMON_DIR_STRING + CREATE_BP_DSC_POST_URI_STRING)
     public ResponseEntity<String> createBusinessProcDesc(HttpServletRequest request, @RequestBody BusinessProcDescInfo businessProcDescInfo)
             throws URISyntaxException {
         logger.info("API_Gateway_controller createBusinessProcDesc() - START");
@@ -200,7 +200,7 @@ public class ApiGatewayController {
     }
 
     //"/biz_proc_desc/read-{id}" (:)
-    @GetMapping(SERVICE_2_URI_COMMON_DIR_STRING + READ_BY_ID_BP_DSC_GET_URI_TMPLT + "{id}")
+    @GetMapping(SERVICE_2_URI_COMMON_DIR_STRING + READ_BY_ID_BP_DSC_GET_URI_STRING + "{id}")
     public ResponseEntity<String> findBusinessProcDescById(HttpServletRequest request, @PathVariable Integer id)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findBusinessProcDescById() - START");
@@ -209,7 +209,7 @@ public class ApiGatewayController {
     }
 
     //"/biz_proc_desc/read-all" (:)
-    @GetMapping(SERVICE_2_URI_COMMON_DIR_STRING + READ_ALL_BP_DSC_GET_URI_TMPLT)
+    @GetMapping(SERVICE_2_URI_COMMON_DIR_STRING + READ_ALL_BP_DSC_GET_URI_STRING)
     public ResponseEntity<String> findAllBusinessProcDescs(HttpServletRequest request)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findAllBusinessProcDescs() - START");
@@ -242,7 +242,7 @@ public class ApiGatewayController {
     }
 
     //"/biz_proc_desc/delete-{bizProcId}" (:)
-    @DeleteMapping(SERVICE_2_URI_COMMON_DIR_STRING + DELETE_BP_DSC_DELETE_URI_TMPLT)
+    @DeleteMapping(SERVICE_2_URI_COMMON_DIR_STRING + DELETE_BP_DSC_DELETE_URI_STRING)
     public ResponseEntity<String> deleteBusinessProcDescById(HttpServletRequest request, @PathVariable Integer bizProcId)
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteBusinessProcDescById() - START" + "\n" + "id param: " + String.valueOf(bizProcId));
@@ -254,7 +254,7 @@ public class ApiGatewayController {
     //*******************************SERVICE_3_API_PROXING******************************************************************
     //**********************************************************************************************************************
     //"/employees/create-employee" (:)
-    @PostMapping(SERVICE_3_URI_COMMON_DIR_STRING + CREATE_EMP_POST_URI_TMPLT)
+    @PostMapping(SERVICE_3_URI_COMMON_DIR_STRING + CREATE_EMP_POST_URI_STRING)
     public ResponseEntity<String> createEmployee(HttpServletRequest request, @RequestBody EmployeeInfo employeeInfo)
             throws URISyntaxException {
         logger.info("API_Gateway_controller createEmployee() - START");
@@ -263,7 +263,7 @@ public class ApiGatewayController {
     }
 
     //"/employees/read-{id}" (:)
-    @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_BY_UUID_EMP_GET_URI_TMPLT + "{id}")
+    @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_BY_UUID_EMP_GET_URI_STRING + "{id}")
     public ResponseEntity<String> findEmployeeByUuid(HttpServletRequest request, @PathVariable UUID employeeUuid)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));
@@ -272,7 +272,7 @@ public class ApiGatewayController {
     }
 
     //"/employees/read-all" (:)
-    @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_ALL_EMP_GET_URI_TMPLT)
+    @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_ALL_EMP_GET_URI_STRING)
     public ResponseEntity<String> findAllEmployees(HttpServletRequest request)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findAllEmployees() - START");
@@ -304,7 +304,7 @@ public class ApiGatewayController {
     }
 
     //"/employees/delete-{employeeUuid}" (:)
-    @DeleteMapping(SERVICE_3_URI_COMMON_DIR_STRING + DELETE_EMP_DELETE_URI_TMPLT)
+    @DeleteMapping(SERVICE_3_URI_COMMON_DIR_STRING + DELETE_EMP_DELETE_URI_STRING)
     public ResponseEntity<String> deleteEmployeeByUuid(HttpServletRequest request, @PathVariable UUID employeeUuid)
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));

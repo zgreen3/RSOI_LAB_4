@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8" />
     <title>Add Person</title>
+    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Create a Person:</h1>
+<h1>Create an Employee:</h1>
 
 <!--
    In Thymeleaf the equivalent of
    JSP's ${pageContext.request.contextPath}/edit.html
    would be @{/edit.html}
    -->
-
+<!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+<!--*{...} : Selection expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <form th:action="@{/addEmployee}"
       th:object="${employeeForm}" method="POST">
-    First Name:
+    Name:
     <input type="text" th:field="*{employeeName}" />
     <br/>
-    Last Name:
-    <input type="text" th:field="*{employeeLogin}" />
+    Email:
+    <input type="text" th:field="*{employeeEmail}" />
     <br/>
     <input type="submit" value="Create" />
 </form>
@@ -29,6 +32,7 @@
 
 <!-- Check if errorMessage is not null and not empty -->
 
+<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <div th:if="${errorMessage}" th:utext="${errorMessage}"
      style="color:red;font-style:italic;">
     ...
