@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Add Employee</title>
+    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
@@ -13,7 +14,9 @@
    JSP's ${pageContext.request.contextPath}/edit.html
    would be @{/edit.html}
    -->
-
+<!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+<!--*{...} : Selection expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <form th:action="@{/addEmployee}"
       th:object="${employeeForm}" method="POST">
     Employee Name:
@@ -32,6 +35,7 @@
 
 <!-- Check if errorMessage is not null and not empty -->
 
+<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <div th:if="${errorMessage}" th:utext="${errorMessage}"
      style="color:red;font-style:italic;">
     ...
