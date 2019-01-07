@@ -1,9 +1,21 @@
 package smirnov.bn.service_3.entity;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
-
+/*
+@Configuration
+class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
+    @Override
+    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+        config.exposeIdsFor(Employee.class);
+    }
+}
+*/
 @Entity
 @Table(name = "employees")
 public class Employee {

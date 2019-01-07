@@ -30,8 +30,10 @@ import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
 @Controller
 public class MainController {
     private static final String MAIN_WEB_SERVER_HOST_STRING = "http://localhost:";
+    private static final String API_SERVICE_URI_CMN_DIR_STRING = "/gateway_API";
+    private static final String API_SERVICE_PORT_STRING = "8194" + API_SERVICE_URI_CMN_DIR_STRING;
 
-    private static final String SERVICE_3_PORT_STRING = "8193";
+    private static final String SERVICE_3_PORT_STRING = API_SERVICE_PORT_STRING; //"8193";
     private static final String SERVICE_3_URI_COMMON_DIR_STRING = "/employees/";
     private static final String SERVICE_3_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_3_PORT_STRING + SERVICE_3_URI_COMMON_DIR_STRING;
 
@@ -45,35 +47,6 @@ public class MainController {
     private WebAppServiceImpl service = new WebAppServiceImpl();
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
-    /*
-    //https://stackoverflow.com/questions/14726082/spring-mvc-rest-service-redirect-forward-proxy (:)
-    @ResponseBody
-    private <T> ResponseEntity<String> proxingExternalRequests(@RequestBody(required = false) T body,
-                                                               HttpMethod method, HttpServletRequest request,
-                                                               String microServiceURIString) //, HttpServletResponse response)
-            throws URISyntaxException {
-
-        URI uri = new URI(microServiceURIString);
-
-        HttpHeaders headers = new HttpHeaders();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            headers.set(headerName, request.getHeader(headerName));
-        }
-
-        HttpEntity<T> httpEntity = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            return restTemplate.exchange(uri, method, httpEntity, String.class);
-        } catch (HttpStatusCodeException e) {
-            return ResponseEntity.status(e.getRawStatusCode())
-                    .headers(e.getResponseHeaders())
-                    .body(e.getResponseBodyAsString());
-        }
-    }
-    //*/
 
     //private static List<EmployeeInfo> employees = new ArrayList<EmployeeInfo>();
 
@@ -113,41 +86,32 @@ public class MainController {
     //[https://stackoverflow.com/questions/8504258/spring-3-mvc-accessing-httprequest-from-controller] (:)
     //[https://stackoverflow.com/questions/40899494/how-to-get-input-values-from-spring-boot-thyme-leaf-to-java-class](:)
     @RequestMapping(value = { "/addEmployee" }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public String showAddEmployeeInfoPage(Model model//, HttpServletRequest request
-                                                        ) throws URISyntaxException {
+    public String showAddEmployeeInfoPage(Model model) throws URISyntaxException {
         logger.info("MainController web_spring_app_1 showAddEmployeeInfoPage() request API_Gateway_controller - START");
         EmployeeForm employeeForm = new EmployeeForm();
         model.addAttribute("employeeForm", employeeForm);
 
-        /*
-        logger.info("MainController web_spring_app_1 showAddEmployeeInfoPage() request API_Gateway_controller findAllEmployees() - START");
-
-        return
-        this.proxingExternalRequests(null, HttpMethod.GET, request,
-                                      READ_ALL_EMP_GET_URI_TMPLT).toString();
-
-        //*/
         return "addEmployee";
     }
 
     //[https://stackoverflow.com/questions/40899494/how-to-get-input-values-from-spring-boot-thyme-leaf-to-java-class](:)
-    //[The [HTML addEmployee,html] form uses Thymeleaf's th:object notation which we can refer to
+    //[The [HTML addEmployee.html] form uses Thymeleaf's th:object notation which we can refer to
     //using Spring's ModelAttribute method parameter]
     //[https://stackoverflow.com/questions/8504258/spring-3-mvc-accessing-httprequest-from-controller] (:)
     //[Spring MVC will give you the HttpRequest if you just add it to your controller method signature]
     @RequestMapping(value = { "/addEmployee" }, method = RequestMethod.POST)
-    public String saveEmployee(Model model, //
-                               @ModelAttribute("employeeForm") EmployeeForm employeeForm//,
-                               //HttpServletRequest request,
-                               //HttpServletResponse response
-                                ) {
+    public String saveEmployee(Model model,
+                               @ModelAttribute("employeeForm") EmployeeForm employeeForm
+                              ) {
         logger.info("MainController web_spring_app_1 saveEmployee() request API_Gateway_controller - START");
         String employeeName = employeeForm.getEmployeeName();
         String employeeEmail = employeeForm.getEmployeeEmail();
+        String employeeLogin = employeeForm.getEmployeeLogin();
 
-        if (employeeName != null && employeeName.length() > 0 //
-                && employeeEmail != null && employeeEmail.length() > 0) {
-            EmployeeInfo newEmployeeInfo = new EmployeeInfo(employeeName, employeeEmail);
+        if (employeeName != null && employeeName.length() > 0
+                && employeeEmail != null && employeeEmail.length() > 0
+                && employeeLogin != null && employeeLogin.length() > 0) {
+            EmployeeInfo newEmployeeInfo = new EmployeeInfo(employeeName, employeeEmail, employeeLogin);
 
 
             UUID newEmployeeUUID = service.createEmployee(newEmployeeInfo);
@@ -157,31 +121,18 @@ public class MainController {
             return "redirect:/employeeList";
         }
         else {
-            model.addAttribute("errorMessage", errorMessage);
+            String customErrorMessage = "Employee name, e-mail, login should be filled!";
+            model.addAttribute("errorMessageAttr", customErrorMessage);
+            String changeAttrErrorMessage;
+            /*
+            if (employeeName == null || employeeName.length() == 0) {
+                changeAttrErrorMessage = "Fill in employee Name, please!";
+                model.addAttribute("errorInNameMessageAttr", changeAttrErrorMessage);
+            }
+            //*/
             return "addEmployee";
         }
     }
-
-/*
-    @RequestMapping(value = { "/addEmployee" }, method = RequestMethod.POST)
-    public String saveEmployee(Model model, //
-                             @ModelAttribute("employeeForm") EmployeeForm employeeForm) {
-
-        String employeeName = employeeForm.getEmployeeName();
-        String employeeEmail = employeeForm.getEmployeeEmail();
-
-        if (employeeName != null && employeeName.length() > 0 //
-                && employeeEmail != null && employeeEmail.length() > 0) {
-            EmployeeInfo newEmployee = new EmployeeInfo(employeeName, employeeEmail);
-            employees.add(newEmployee);
-
-            return "redirect:/employeeList";
-        }
-
-        model.addAttribute("errorMessage", errorMessage);
-        return "addEmployee";
-    }
-//*/
 
 /*
     //[https://stackoverflow.com/questions/8504258/spring-3-mvc-accessing-httprequest-from-controller] (:)

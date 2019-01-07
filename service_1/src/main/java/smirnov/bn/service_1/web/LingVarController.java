@@ -21,7 +21,7 @@ public class LingVarController {
 
     private static final Logger logger = LoggerFactory.getLogger(LingVarController.class);
 
-    //curl -X POST --data {\"lingVarName\":\"Tester\",\"lingVarTermLowVal\":\"2\",\"lingVarTermMedVal\":\"4\",\"lingVarTermHighVal\":\"6\"} http://localhost:8191/ling_var_dict/create-ling_var --header "Content-Type:application/json"
+//curl -X POST --data {\"lingVarName\":\"Tester\",\"lingVarTermLowVal\":\"2\",\"lingVarTermMedVal\":\"4\",\"lingVarTermHighVal\":\"6\"} http://localhost:8191/ling_var_dict/create-ling_var --header "Content-Type:application/json"
 //curl -X POST --data {\"lingVarName\":\"Tester2\",\"lingVarTermLowVal\":\"3\",\"lingVarTermMedVal\":\"5\",\"lingVarTermHighVal\":\"8\"} http://localhost:8191/ling_var_dict/create-ling_var --header "Content-Type:application/json"
 //curl -X POST --data {\"lingVarName\":\"Tester3\",\"lingVarTermLowVal\":\"1\",\"lingVarTermMedVal\":\"3\",\"lingVarTermHighVal\":\"7\"} http://localhost:8191/ling_var_dict/create-ling_var --header "Content-Type:application/json"
 //curl -X POST --data {\"lingVarName\":\"Tester4\",\"lingVarTermLowVal\":\"0\",\"lingVarTermMedVal\":\"2\",\"lingVarTermHighVal\":\"5\"} http://localhost:8191/ling_var_dict/create-ling_var --header "Content-Type:application/json"
@@ -70,7 +70,7 @@ public class LingVarController {
         }
     }
 
-    @GetMapping("/read-all")
+    @GetMapping("/read-all") //http://localhost:8191/ling_var_dict/read-all
     public ResponseEntity<List<LingVarInfo>> findAllLingVars() {
         try {
             logger.info("findAllLingVars() - START");

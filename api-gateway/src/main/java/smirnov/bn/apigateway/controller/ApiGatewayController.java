@@ -271,7 +271,7 @@ public class ApiGatewayController {
                 READ_BY_UUID_EMP_GET_URI_TMPLT + employeeUuid.toString());
     }
 
-    //"/employees/read-all" (:)
+    //"/employees/read-all" (:) //http://localhost:8194/gateway_API/employees/read-all/
     @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_ALL_EMP_GET_URI_STRING)
     public ResponseEntity<String> findAllEmployees(HttpServletRequest request)
             throws URISyntaxException {

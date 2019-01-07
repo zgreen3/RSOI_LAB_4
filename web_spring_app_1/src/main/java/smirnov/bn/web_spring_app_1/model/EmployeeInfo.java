@@ -17,9 +17,10 @@ public class EmployeeInfo
     public EmployeeInfo() {
     }
 
-    public EmployeeInfo(String employeeName, String employeeEmail) {
+    public EmployeeInfo(String employeeName, String employeeEmail, String employeeLogin) {
         this.employeeName = employeeName;
         this.employeeEmail = employeeEmail;
+        this.employeeLogin = employeeLogin;
     }
 
     public EmployeeInfo(Integer employeeId, String employeeName, String employeeEmail, String employeeLogin, UUID employeeUuid) {

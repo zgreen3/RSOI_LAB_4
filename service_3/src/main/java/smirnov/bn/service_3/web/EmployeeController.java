@@ -62,7 +62,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/read-all")
+    @GetMapping("/read-all") //http://localhost:8193/employees/read-all
     public ResponseEntity<List<EmployeeInfo>> findAllEmployees() {
         try {
             logger.info("findAllEmployees() - START");
@@ -104,7 +104,13 @@ public class EmployeeController {
     @PutMapping("/update-employee")
     public ResponseEntity<String> updateEmployee(@RequestBody EmployeeInfo employeeInfo) {
         try {
-            logger.info("updateEmployee() - START" + "\n" + "uuid param: " + String.valueOf(employeeInfo.getEmployeeUuid()));
+            logger.info("updateEmployee() - START" + "\n");
+            if (employeeInfo.getEmployeeUuid() != null) {
+                logger.info("uuid param: " + String.valueOf(employeeInfo.getEmployeeUuid()));
+            } else {
+                logger.info("uuid param: null");
+            }
+
             employeeService.updateEmployee(employeeInfo);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
