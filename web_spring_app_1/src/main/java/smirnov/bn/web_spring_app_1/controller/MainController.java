@@ -152,8 +152,9 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = {"/employee-delete-{UUID}"}, method = RequestMethod.DELETE)
-    public String deleteEmployee(Model model,
+    //@RequestMapping(value = {"/employee-delete_{UUID}"}, method = RequestMethod.DELETE)
+    @DeleteMapping("/employee-delete_{UUID}")
+    public @ResponseBody String delete(Model model,
                                @PathVariable("UUID") String employeeUuid
     ) {
         logger.info("MainController web_spring_app_1 deleteEmployee() request API_Gateway_controller - START");
