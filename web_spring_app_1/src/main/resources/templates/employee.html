@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Add Employee</title>
+    <meta charset="UTF-8"/>
+    <title>Employee Information</title>
     <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Create an Employee:</h1>
+<h1><span th:if="${employeeEditing} == true">Update</span><span th:unless="${employeeEditing} == true">Create</span> employee's information:</h1>
 
 <!--
    In Thymeleaf the equivalent of
@@ -17,26 +17,29 @@
 <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
 <!--*{...} : Selection expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-<form th:action="@{/addEmployee}"
+<form th:action="@{''}"
       th:object="${employeeForm}" method="POST">
     Employee Name:
-    <input type="text" th:field="*{employeeName}" />
+    <input type="text" th:field="*{employeeName}" required/>
     <br/>
     Employee Email:
-    <input type="email" th:field="*{employeeEmail}" required />
+    <input type="email" th:field="*{employeeEmail}" required/>
     <br/>
     Login:
-    <input type="text" th:field="*{employeeLogin}" />
+    <input type="text" th:field="*{employeeLogin}"/>
     <br/>
-    <input type="submit" value="Create" />
+    <p>
+        <input type="submit" th:value="${employeeEditing} == true ? Edit : Create"/>
+        <input type="reset" value="Reset"/>
+    </p>
 </form>
 
 <br/>
 
 <!-- Check if errorMessage is not null and not empty -->
 
-<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-<div th:if="${errorMessage}" th:utext="${errorMessage}"
+<!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: errorMessage-->
+<div th:if="${errorMessageAttr}" th:utext="${errorMessageAttr}"
      style="color:red;font-style:italic;">
     ...
 </div>

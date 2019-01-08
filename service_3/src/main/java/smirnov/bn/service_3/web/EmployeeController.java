@@ -51,11 +51,11 @@ public class EmployeeController {
     }
     //*/
 
-    @GetMapping("/read-{employeeUuid}")
-    public ResponseEntity<EmployeeInfo> findEmployeeByUuid(@PathVariable UUID employeeUuid) {
+    @GetMapping("/read-by-emp-uuid-{employeeUuid}")
+    public ResponseEntity<EmployeeInfo> findEmployeeByUuid(@PathVariable String employeeUuid) {
         try {
             logger.info("findEmployeeByUuid() - START" + "\n" + "uuid param: " + String.valueOf(employeeUuid));
-            return new ResponseEntity<>(employeeService.findEmployeeByUuid(employeeUuid), HttpStatus.OK);
+            return new ResponseEntity<>(employeeService.findEmployeeByUuid(UUID.fromString(employeeUuid)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in findEmployeeByUuid(...)", e);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

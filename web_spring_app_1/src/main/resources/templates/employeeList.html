@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>Employee List</h1>
-<a href="addEmployee">Add Employee</a>
+<a href="employee-">Add Employee</a>
 <br/><br/>
 <div>
     <table border="1">
@@ -17,6 +17,7 @@
             <th>Employee Email</th>
             <th>Employee Login</th>
             <th>Employee UUID</th>
+            <th>Actions</th>
         </tr>
         <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
         <tr th:each ="employee : ${employees}">
@@ -24,6 +25,8 @@
             <td th:utext="${employee.employeeEmail}">...</td>
             <td th:utext="${employee.employeeLogin}">...</td>
             <td th:utext="${employee.employeeUuid}">...</td>
+            <td> <span th:utext="|<a href='employee-${employee.employeeUuid}'>edit</a>|"></span> &#124;| <span th:utext="|<a href='employee-delete-${employee.employeeUuid}'>delete</a>|"></span></td>
+
         </tr>
     </table>
 </div>

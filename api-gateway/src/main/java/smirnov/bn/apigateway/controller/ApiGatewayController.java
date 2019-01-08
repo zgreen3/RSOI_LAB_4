@@ -51,7 +51,7 @@ public class ApiGatewayController {
 
     private static final String CREATE_BP_DSC_POST_URI_STRING = "create-biz_proc_desc";
     private static final String READ_BY_ID_BP_DSC_GET_URI_STRING = "read-";
-    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "/read-by-emp-uuid-";
+    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_BP_DSC_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_STRING = "update-biz_proc_desc";
@@ -70,14 +70,15 @@ public class ApiGatewayController {
     private static final String SERVICE_3_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_3_PORT_STRING + SERVICE_3_URI_COMMON_DIR_STRING;
 
     private static final String CREATE_EMP_POST_URI_STRING = "create-employee";
-    private static final String READ_BY_UUID_EMP_GET_URI_STRING = "read-";
+    //private static final String READ_BY_UUID_EMP_GET_URI_STRING = "read-";
+    private static final String READ_BY_EMP_UUID_EMP_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_EMP_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_STRING = "update-employee";
     private static final String DELETE_EMP_DELETE_URI_STRING = "delete-";
 
     private static final String CREATE_EMP_POST_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + CREATE_EMP_POST_URI_STRING;
-    private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_BY_UUID_EMP_GET_URI_STRING;
+    private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_EMP_GET_URI_STRING; //READ_BY_UUID_EMP_GET_URI_STRING;
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_EMP_GET_URI_STRING;
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + UPDATE_BY_UUID_EMP_PUT_URI_STRING;
@@ -262,13 +263,13 @@ public class ApiGatewayController {
                 CREATE_EMP_POST_URI_TMPLT);
     }
 
-    //"/employees/read-{id}" (:)
-    @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_BY_UUID_EMP_GET_URI_STRING + "{id}")
-    public ResponseEntity<String> findEmployeeByUuid(HttpServletRequest request, @PathVariable UUID employeeUuid)
+    //"/employees/read-by-emp-uuid-{uuid}" ////"/employees/read-{id}" (:)
+    @GetMapping(SERVICE_3_URI_COMMON_DIR_STRING + READ_BY_EMP_UUID_EMP_GET_URI_STRING + "{uuid}")
+    public ResponseEntity<String> findEmployeeByUuid(HttpServletRequest request, @PathVariable("uuid") String employeeUuid)
             throws URISyntaxException {
-        logger.info("API_Gateway_controller findEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));
+        logger.info("API_Gateway_controller findEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + UUID.fromString(employeeUuid));
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
-                READ_BY_UUID_EMP_GET_URI_TMPLT + employeeUuid.toString());
+                READ_BY_UUID_EMP_GET_URI_TMPLT + employeeUuid);
     }
 
     //"/employees/read-all" (:) //http://localhost:8194/gateway_API/employees/read-all/

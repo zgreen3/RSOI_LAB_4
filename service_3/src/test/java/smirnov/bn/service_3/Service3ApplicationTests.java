@@ -44,7 +44,7 @@ public class Service3ApplicationTests {
     private static final String SERVICE_3_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_3_PORT_STRING + SERVICE_3_URI_COMMON_DIR_STRING;
 
     private static final String CREATE_EMP_POST_URI_STRING = "create-employee";
-    private static final String READ_BY_UUID_EMP_GET_URI_STRING = "read-";
+    private static final String READ_BY_UUID_EMP_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_EMP_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_STRING = "update-employee";

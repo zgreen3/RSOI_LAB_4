@@ -52,7 +52,7 @@ public class WebAppServiceImpl implements WebAppService {
 
     private static final String CREATE_BP_DSC_POST_URI_STRING = "create-biz_proc_desc";
     private static final String READ_BY_ID_BP_DSC_GET_URI_STRING = "read-";
-    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "/read-by-emp-uuid-";
+    private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_BP_DSC_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_STRING = "update-biz_proc_desc";
@@ -72,14 +72,15 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String SERVICE_3_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_3_PORT_STRING + SERVICE_3_URI_COMMON_DIR_STRING;
 
     private static final String CREATE_EMP_POST_URI_STRING = "create-employee";
-    private static final String READ_BY_UUID_EMP_GET_URI_STRING = "read-";
+    //private static final String READ_BY_UUID_EMP_GET_URI_STRING = "read-";
+    private static final String READ_BY_EMP_UUID_EMP_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_EMP_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_STRING = "update-employee";
     private static final String DELETE_EMP_DELETE_URI_STRING = "delete-";
 
     private static final String CREATE_EMP_POST_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + CREATE_EMP_POST_URI_STRING;
-    private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_BY_UUID_EMP_GET_URI_STRING;
+    private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_EMP_GET_URI_STRING; //READ_BY_UUID_EMP_GET_URI_STRING;
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_EMP_GET_URI_STRING;
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + UPDATE_BY_UUID_EMP_PUT_URI_STRING;
