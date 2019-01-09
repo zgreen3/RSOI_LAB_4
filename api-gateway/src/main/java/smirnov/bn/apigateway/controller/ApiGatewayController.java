@@ -180,7 +180,7 @@ public class ApiGatewayController {
     }
 
     //"/ling_var_dict/delete-{lingVarId}" (:)
-    @DeleteMapping(SERVICE_1_URI_COMMON_DIR_STRING + DELETE_LNG_VR_DELETE_URI_STRING)
+    @DeleteMapping(SERVICE_1_URI_COMMON_DIR_STRING + DELETE_LNG_VR_DELETE_URI_STRING + "{lingVarId}")
     public ResponseEntity<String> deleteLingVarById(HttpServletRequest request, @PathVariable Integer lingVarId)
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteLingVarById() - START" + "\n" + "id param: " + String.valueOf(lingVarId));
@@ -243,8 +243,8 @@ public class ApiGatewayController {
     }
 
     //"/biz_proc_desc/delete-{bizProcId}" (:)
-    @DeleteMapping(SERVICE_2_URI_COMMON_DIR_STRING + DELETE_BP_DSC_DELETE_URI_STRING)
-    public ResponseEntity<String> deleteBusinessProcDescById(HttpServletRequest request, @PathVariable Integer bizProcId)
+    @DeleteMapping(SERVICE_2_URI_COMMON_DIR_STRING + DELETE_BP_DSC_DELETE_URI_STRING + "{id}")
+    public ResponseEntity<String> deleteBusinessProcDescById(HttpServletRequest request, @PathVariable("id") Integer bizProcId)
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteBusinessProcDescById() - START" + "\n" + "id param: " + String.valueOf(bizProcId));
         return this.proxingExternalRequests(null, HttpMethod.DELETE, request,
@@ -305,8 +305,8 @@ public class ApiGatewayController {
     }
 
     //"/employees/delete-{employeeUuid}" (:)
-    @DeleteMapping(SERVICE_3_URI_COMMON_DIR_STRING + DELETE_EMP_DELETE_URI_STRING)
-    public ResponseEntity<String> deleteEmployeeByUuid(HttpServletRequest request, @PathVariable UUID employeeUuid)
+    @DeleteMapping(SERVICE_3_URI_COMMON_DIR_STRING + DELETE_EMP_DELETE_URI_STRING + "{uuid}")
+    public ResponseEntity<String> deleteEmployeeByUuid(HttpServletRequest request, @PathVariable("uuid")  UUID employeeUuid)
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));
         return this.proxingExternalRequests(null, HttpMethod.DELETE, request,

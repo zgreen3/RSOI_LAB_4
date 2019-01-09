@@ -20,17 +20,18 @@
 <form th:action="@{''}"
       th:object="${employeeForm}" method="POST">
     Employee Name:
-    <input type="text" th:field="*{employeeName}" required/>
+    <input type="text" th:field="*{employeeName}" />
+    <span th:if="${#fields.hasErrors('employeeName')}" th:errors="*{employeeName}">Blank employeeName!</span>
     <br/>
     Employee Email:
     <input type="email" th:field="*{employeeEmail}" required/>
     <br/>
     Login:
-    <input type="text" th:field="*{employeeLogin}"/>
+    <input type="text" th:field="*{employeeLogin}" th:class="${isErrorMessageAttrPresent}? redBorderClass : normalClass" />
     <br/>
     <p>
         <input type="submit" th:value="${employeeEditing} == true ? Edit : Create"/>
-        <input type="reset" value="Reset"/>
+        <input type="reset" value="Reset" onclick="return confirm('Are you sure you want to reset all fields' values?')"/>
     </p>
 </form>
 

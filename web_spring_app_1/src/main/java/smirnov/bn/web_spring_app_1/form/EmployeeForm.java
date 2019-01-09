@@ -2,11 +2,20 @@ package smirnov.bn.web_spring_app_1.form;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
+//https://spring.io/guides/gs/validating-form-input/
+//https://stackoverflow.com/questions/34454719/spring-boot-thymeleaf-custom-error-messages
+//http://programmertech.com/program/jee/spring-mvc-form-validation-with-thymeleaf
+//
+//https://www.baeldung.com/thymeleaf-in-spring-mvc
+//https://www.baeldung.com/spring-boot-crud-thymeleaf
+//https://www.baeldung.com/javax-validation
 
 //https://o7planning.org/en/11545/spring-boot-and-thymeleaf-tutorial
 public class EmployeeForm {
     private Integer employeeId;
 
+    @NotBlank(message = "Employee's name is mandatory")
     private String employeeName;
 
     private String employeeEmail;

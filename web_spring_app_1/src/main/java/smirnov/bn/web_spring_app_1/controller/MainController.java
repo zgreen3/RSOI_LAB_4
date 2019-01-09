@@ -17,10 +17,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -113,10 +115,15 @@ public class MainController {
     //[Spring MVC will give you the HttpRequest if you just add it to your controller method signature]
     @RequestMapping(value = {"/employee-{UUID}"}, method = RequestMethod.POST)
     public String saveEmployee(Model model,
-                               @ModelAttribute("employeeForm") EmployeeForm employeeForm,
+                               @Valid @ModelAttribute("employeeForm") EmployeeForm employeeForm,
+                               BindingResult result,
                                @PathVariable("UUID") UUID employeeUuid
     ) {
         logger.info("MainController web_spring_app_1 saveEmployee() request API_Gateway_controller - START");
+        if (result.hasErrors()) {
+            return "employee";
+        }
+
         String employeeName = employeeForm.getEmployeeName();
         String employeeEmail = employeeForm.getEmployeeEmail();
         String employeeLogin = employeeForm.getEmployeeLogin();
@@ -139,15 +146,11 @@ public class MainController {
             }
             return "redirect:/employeeList";
         } else {
-            String customErrorMessage = "Employee name, e-mail, login should be filled!";
-            model.addAttribute("errorMessageAttr", customErrorMessage);
-            String changeAttrErrorMessage;
-            /*
-            if (employeeName == null || employeeName.length() == 0) {
-                changeAttrErrorMessage = "Fill in employee Name, please!";
-                model.addAttribute("errorInNameMessageAttr", changeAttrErrorMessage);
+            if (employeeLogin == null || employeeLogin.length() == 0) {
+                String customErrorMessage = "Employee's login should be filled!";
+                model.addAttribute("errorMessageAttr", customErrorMessage);
+                model.addAttribute("isErrorMessageAttrPresent", true);
             }
-            //*/
             return "employee";
         }
     }

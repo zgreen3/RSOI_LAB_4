@@ -13,3 +13,7 @@ table {
 table th, table td {
     padding: 5px;
 }
+
+input.redBorderClass {
+    border: 2px solid #FF0000;
+}
