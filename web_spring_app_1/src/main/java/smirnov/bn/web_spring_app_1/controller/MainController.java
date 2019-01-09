@@ -85,6 +85,16 @@ public class MainController {
         return "employeeList";
     }
 
+    //@RequestMapping(value = {"/employee_delete_{empUUID}"}, method = RequestMethod.DELETE)
+    @DeleteMapping("/employee_delete_{empUUID}")
+    public @ResponseBody String delete(Model model,
+                                       @PathVariable String empUUID
+    ) {
+        logger.info("MainController web_spring_app_1 deleteEmployee() request API_Gateway_controller - START");
+        service.deleteEmployeeByUuid(UUID.fromString(empUUID));
+        return "employeeList";
+    }
+
     //[Spring MVC will give you the HttpRequest if you just add it to your controller method signature]
     //[https://stackoverflow.com/questions/8504258/spring-3-mvc-accessing-httprequest-from-controller] (:)
     //[https://stackoverflow.com/questions/40899494/how-to-get-input-values-from-spring-boot-thyme-leaf-to-java-class](:)
@@ -150,15 +160,5 @@ public class MainController {
             //*/
             return "employee";
         }
-    }
-
-    //@RequestMapping(value = {"/employee-delete_{UUID}"}, method = RequestMethod.DELETE)
-    @DeleteMapping("/employee-delete_{UUID}")
-    public @ResponseBody String delete(Model model,
-                               @PathVariable("UUID") String employeeUuid
-    ) {
-        logger.info("MainController web_spring_app_1 deleteEmployee() request API_Gateway_controller - START");
-        service.deleteEmployeeByUuid(UUID.fromString(employeeUuid));
-        return "employeeList";
     }
 }
