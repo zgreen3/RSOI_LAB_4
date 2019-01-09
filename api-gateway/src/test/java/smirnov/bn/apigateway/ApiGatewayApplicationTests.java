@@ -57,18 +57,39 @@ public class ApiGatewayApplicationTests {
     @Before
     public void beforeTestSettingUp() throws Exception {
         logger.info("beforeTestSettingUp() - START");
-        boolean connectionIsASuccess;
-        //проверка, что ключевой сервис 3 (с информацией по сотрудникам) запущен:
-        URL url = new URL("http://localhost:8193");
+        boolean connection_1_IsASuccess, connection_2_IsASuccess, connection_3_IsASuccess;
+        URL url;
+        //проверка, что ключевой сервис 1 (с информацией по лингвистическим переменным) запущен:
+        url = new URL("http://localhost:8191");
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             //int stubbedConnectionResponse = connection.getResponseCode();
-            connectionIsASuccess = true;
+            connection_1_IsASuccess = true;
         } catch (Exception e) {
-            connectionIsASuccess = false;
+            connection_1_IsASuccess = false;
         }
-        Assume.assumeTrue(connectionIsASuccess);
+        //проверка, что ключевой сервис 2 (с информацией по сотрудникам) запущен:
+        url = new URL("http://localhost:8193");
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            //int stubbedConnectionResponse = connection.getResponseCode();
+            connection_2_IsASuccess = true;
+        } catch (Exception e) {
+            connection_2_IsASuccess = false;
+        }
+        //проверка, что ключевой сервис 3 (с информацией по сотрудникам) запущен:
+        url = new URL("http://localhost:8193");
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            //int stubbedConnectionResponse = connection.getResponseCode();
+            connection_3_IsASuccess = true;
+        } catch (Exception e) {
+            connection_3_IsASuccess = false;
+        }
+        Assume.assumeTrue(connection_1_IsASuccess && connection_2_IsASuccess && connection_3_IsASuccess);
     }
 
     //*****************************API_GATEWAY_[MULTI_API]_TESTS**************************************************************************

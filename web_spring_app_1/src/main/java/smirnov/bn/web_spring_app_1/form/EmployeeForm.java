@@ -15,6 +15,17 @@ public class EmployeeForm {
 
     private UUID employeeUuid;
 
+    public EmployeeForm() {
+    }
+
+    public EmployeeForm(Integer employeeId, String employeeName, String employeeEmail, String employeeLogin, UUID employeeUuid) {
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
+        this.employeeEmail = employeeEmail;
+        this.employeeLogin = employeeLogin;
+        this.employeeUuid = employeeUuid;
+    }
+
     public Integer getEmployeeId() {
         return employeeId;
     }

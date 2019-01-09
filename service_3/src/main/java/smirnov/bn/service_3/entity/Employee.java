@@ -7,7 +7,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
-
+/*
 @Configuration
 class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
     @Override
@@ -15,7 +15,7 @@ class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Employee.class);
     }
 }
-
+*/
 @Entity
 @Table(name = "employees")
 public class Employee {

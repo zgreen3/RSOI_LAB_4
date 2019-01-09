@@ -51,18 +51,18 @@ public class EmployeeController {
     }
     //*/
 
-    @GetMapping("/read-{employeeUuid}")
-    public ResponseEntity<EmployeeInfo> findEmployeeByUuid(@PathVariable UUID employeeUuid) {
+    @GetMapping("/read-by-emp-uuid-{employeeUuid}")
+    public ResponseEntity<EmployeeInfo> findEmployeeByUuid(@PathVariable String employeeUuid) {
         try {
             logger.info("findEmployeeByUuid() - START" + "\n" + "uuid param: " + String.valueOf(employeeUuid));
-            return new ResponseEntity<>(employeeService.findEmployeeByUuid(employeeUuid), HttpStatus.OK);
+            return new ResponseEntity<>(employeeService.findEmployeeByUuid(UUID.fromString(employeeUuid)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in findEmployeeByUuid(...)", e);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
-    @GetMapping("/read-all")
+    @GetMapping("/read-all") //http://localhost:8193/employees/read-all
     public ResponseEntity<List<EmployeeInfo>> findAllEmployees() {
         try {
             logger.info("findAllEmployees() - START");
@@ -104,7 +104,13 @@ public class EmployeeController {
     @PutMapping("/update-employee")
     public ResponseEntity<String> updateEmployee(@RequestBody EmployeeInfo employeeInfo) {
         try {
-            logger.info("updateEmployee() - START" + "\n" + "uuid param: " + String.valueOf(employeeInfo.getEmployeeUuid()));
+            logger.info("updateEmployee() - START" + "\n");
+            if (employeeInfo.getEmployeeUuid() != null) {
+                logger.info("uuid param: " + String.valueOf(employeeInfo.getEmployeeUuid()));
+            } else {
+                logger.info("uuid param: null");
+            }
+
             employeeService.updateEmployee(employeeInfo);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
