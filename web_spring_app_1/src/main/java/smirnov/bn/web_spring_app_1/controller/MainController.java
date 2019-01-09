@@ -152,13 +152,19 @@ public class MainController {
         }
     }
 
-    //@RequestMapping(value = {"/employee-delete_{UUID}"}, method = RequestMethod.DELETE)
-    @DeleteMapping("/employee-delete_{UUID}")
-    public @ResponseBody String delete(Model model,
-                               @PathVariable("UUID") String employeeUuid
+    //no PUT and DELETE methods on HTML forms (:)
+    //https://softwareengineering.stackexchange.com/questions/114156/why-are-there-are-no-put-and-delete-methods-on-html-forms
+    //(+) https://stackoverflow.com/questions/44170932/attempting-to-make-a-delete-button-in-thyme-leaf-spring
+    //(+) https://stackoverflow.com/questions/22794057/thymeleaf-send-parameter-from-html-to-controller
+    //(+) https://stackoverflow.com/questions/43606063/spring-thymeleaf-delete-object-from-html-table-and-pass-id-to-controller?rq=1
+    @RequestMapping(value = {"/employee_delete_{employeeUuid}"}, method = RequestMethod.POST)
+    //@PostMapping("/employee_delete_{employeeUuid}")
+    public //@ResponseBody
+           String deleteEmployee(Model model,
+                               @PathVariable("employeeUuid") String employeeUuid
     ) {
         logger.info("MainController web_spring_app_1 deleteEmployee() request API_Gateway_controller - START");
         service.deleteEmployeeByUuid(UUID.fromString(employeeUuid));
-        return "employeeList";
+        return "redirect:/employeeList";
     }
 }
