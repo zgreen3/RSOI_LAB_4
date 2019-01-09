@@ -1,12 +1,13 @@
 package smirnov.bn.service_3.model;
 
-import smirnov.bn.service_3.entity.Employee;
+//import smirnov.bn.service_3.entity.Employee;
 
-//import java.util.UUID;
+import java.util.UUID;
 
-public class EmployeeInfo extends Employee {
+public class EmployeeInfo //extends Employee
+{
 
-    /*
+    ///*
     private Integer employeeId;
 
     private String employeeName;

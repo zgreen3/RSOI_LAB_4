@@ -15,11 +15,15 @@
         <tr>
             <th>Employee Name</th>
             <th>Employee Email</th>
+            <th>Employee Login</th>
+            <th>Employee UUID</th>
         </tr>
         <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
         <tr th:each ="employee : ${employees}">
             <td th:utext="${employee.employeeName}">...</td>
             <td th:utext="${employee.employeeEmail}">...</td>
+            <td th:utext="${employee.employeeLogin}">...</td>
+            <td th:utext="${employee.employeeUuid}">...</td>
         </tr>
     </table>
 </div>

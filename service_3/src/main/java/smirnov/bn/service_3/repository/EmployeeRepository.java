@@ -8,10 +8,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import smirnov.bn.service_3.entity.Employee;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface EmployeeRepository
         extends JpaRepository<Employee, Integer> {
+
+    @Query(value = "SELECT e.* FROM employees e",
+            nativeQuery = true)
+    List<Employee> findAll();
 
     @Query(value = "SELECT e.* FROM employees e WHERE e.employee_uuid = :employeeUuid",
             nativeQuery = true)
