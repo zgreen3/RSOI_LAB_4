@@ -73,6 +73,7 @@
 		<module>service_2</module>
 		<module>service_3</module>
 		<module>web_spring_app_1</module>
-	</modules>
+        <module>security_service</module>
+    </modules>
 
 </project>

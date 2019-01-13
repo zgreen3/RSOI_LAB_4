@@ -1,0 +1,3 @@
+CREATE DATABASE pstgr_scrty_srvc;
+CREATE USER pstgr_scrty_srvc_usr WITH ENCRYPTED PASSWORD '0123';
+GRANT ALL PRIVILEGES ON DATABASE pstgr_scrty_srvc TO pstgr_scrty_srvc_usr;

@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>web_spring_app_1</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Custom web-frontend server</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

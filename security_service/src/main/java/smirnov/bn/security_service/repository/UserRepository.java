@@ -1,0 +1,37 @@
+package smirnov.bn.security_service.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+import smirnov.bn.security_service.entity.User;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface UserRepository
+        extends JpaRepository<User, Integer> {
+
+    @Query(value = "SELECT u.* FROM users u",
+            nativeQuery = true)
+    List<User> findAll();
+
+    @Query(value = "SELECT u.* FROM users u WHERE u.usr_uuid = :userUuid",
+            nativeQuery = true)
+    User findByUuid(@Param("userUuid") UUID userUuid);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE users SET usr_login = :userLogin, usr_email = :userEmail, usr_psswrd_hash = :userPasswordHash WHERE usr_uuid = :userUuid",
+            nativeQuery = true)
+    void updateUser(@Param("userLogin") String userLogin, @Param("userPasswordHash") String userPasswordHash,
+                    @Param("userEmail") String userEmail, @Param("userUuid") UUID userUuid);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM users u WHERE u.usr_uuid = :userUuid",
+            nativeQuery = true)
+    void deleteByUuid(@Param("userUuid") UUID userUuid);
+}
