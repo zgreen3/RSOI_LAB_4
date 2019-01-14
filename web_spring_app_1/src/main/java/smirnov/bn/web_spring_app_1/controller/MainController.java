@@ -25,7 +25,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import smirnov.bn.web_spring_app_1.form.EmployeeForm;
+import smirnov.bn.web_spring_app_1.form.UserForm;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
+import smirnov.bn.web_spring_app_1.model.UserInfo;
 import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
 
 
@@ -42,9 +44,9 @@ public class MainController {
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
 
-    //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
-    //@Autowired
-    private RestTemplate restTemplate = new RestTemplate();
+    ////https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
+    ////@Autowired
+    //private RestTemplate restTemplate = new RestTemplate();
 
     private WebAppServiceImpl service = new WebAppServiceImpl();
 
@@ -167,7 +169,8 @@ public class MainController {
     //https://stackoverflow.com/questions/24256051/delete-or-put-methods-in-thymeleaf
     //https://www.w3schools.com/tags/att_input_type_hidden.asp
     //https://stackoverflow.com/questions/38370011/thymeleaf-button-click-to-call-http-delete-method?noredirect=1&lq=1
-    @RequestMapping(value = {"/employee/{employeeUuid}/delete"}, method = RequestMethod.DELETE) //RequestMethod.DELETE) //RequestMethod.POST)
+    @RequestMapping(value = {"/employee/{employeeUuid}/delete"}, method = RequestMethod.DELETE)
+    //RequestMethod.DELETE) //RequestMethod.POST)
     //@PostMapping("/employee_delete_{employeeUuid}")
     public //@ResponseBody
     String deleteEmployee(Model model,
@@ -176,5 +179,65 @@ public class MainController {
         logger.info("MainController web_spring_app_1 deleteEmployee() request API_Gateway_controller - START");
         service.deleteEmployeeByUuid(UUID.fromString(employeeUuid));
         return "redirect:/employeeList";
+    }
+
+    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.GET)
+    //, produces = "text/html;charset=UTF-8")
+    public String showLoginUserPage(Model model) throws URISyntaxException {
+        logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
+
+        return "loginUser";
+    }
+
+    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.POST)
+    public String authenticateUser(Model model,
+                                   @Valid @ModelAttribute("userForm") UserForm userForm,
+                                   BindingResult result) {
+        logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - START");
+        if (result.hasErrors()) {
+            return "loginUser";
+        }
+
+        String userLogin = userForm.getUserLogin();
+        String userPassword = userForm.getUserPassword();
+        String userEmail = userForm.getUserEmail();
+
+        if (userLogin != null && userLogin.length() > 0
+            && userPassword != null && userPassword.length() > 0
+                && userEmail != null && userEmail.length() > 0) {
+
+            //UUID detectedUserUUID = service.findUserByLoginEmail(userLogin, userEmail);
+            //String correctPasswordHash = service.findUserPasswordHashByUuid(detectedUserUUID);
+            //PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
+
+            //String userPasswordHash = service.hashPassword(userPassword);
+
+            //UserInfo userInfo = new UserInfo(userLogin, userPasswordHash, userEmail);
+
+
+
+            logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
+                        "detectedUserInfo UUID: " //+
+                        //detectedUserUUID.toString()
+                        );
+
+            return "redirect:/index";
+        } else {
+            if (userLogin == null || userLogin.length() == 0) {
+                String customErrorMessage = "User's login should be filled!";
+                model.addAttribute("errorMessageAttr", customErrorMessage);
+                model.addAttribute("isErrorMessageAttrPresent", true);
+            } else if (userPassword == null || userPassword.length() == 0) {
+                String customErrorMessage = "User's password should be filled!";
+                model.addAttribute("errorMessageAttr", customErrorMessage);
+                model.addAttribute("isErrorMessageAttrPresent", true);
+            } else if (userEmail == null || userEmail.length() == 0) {
+                String customErrorMessage = "User's e-mail should be filled!";
+                model.addAttribute("errorMessageAttr", customErrorMessage);
+                model.addAttribute("isErrorMessageAttrPresent", true);
+            }
+        }
+            return "loginUser";
+        }
     }
 }

@@ -36,7 +36,7 @@ public interface UserService {
 
     void deleteUserByUuid(UUID userUuid);
 
-    void registerUser(UserInfo userInfo);
+    //void registerUser(UserInfo userInfo);
 
     boolean authenticateUser(UserInfo userInfo);
 }

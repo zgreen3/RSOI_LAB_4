@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.annotation.Nonnull;
+//import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Nonnull
     private UserInfo buildlingUserInfo(User user) {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserLogin(user.getUserLogin());
@@ -46,9 +45,10 @@ public class UserServiceImpl implements UserService {
     }
     //*/
 
+    @Nullable
     @Override
     @Transactional
-    public UUID createUser(@Nonnull UserInfo userInfo) {
+    public UUID createUser(UserInfo userInfo) {
         User user = new User();
         user.setUserLogin(userInfo.getUserLogin());
         user.setUserPasswordHash(userInfo.getUserPasswordHash());
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     @Nullable
     @Override
     @Transactional(readOnly = true)
-    public UserInfo findUserByUuid(@Nonnull UUID userUuid) {
+    public UserInfo findUserByUuid(UUID userUuid) {
         return this.buildlingUserInfo(userRepository.findByUuid(userUuid));
     }
 
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(@Nonnull UserInfo userInfo) {
+    public void updateUser(UserInfo userInfo) {
         userRepository.updateUser(userInfo.getUserLogin(), userInfo.getUserPasswordHash(), userInfo.getUserEmail(), userInfo.getUserUuid());
     }
 
@@ -121,15 +121,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUserByUuid(@Nonnull UUID userUuid) {
+    public void deleteUserByUuid(UUID userUuid) {
         userRepository.deleteByUuid(userUuid);
     }
 
-
+    /*
     @Nullable
     @Override
     public void registerUser(UserInfo userInfo) {
-        /*
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL_API_VK)
                 .queryParam("user_ids", userInfo.getVk()).queryParam("fields", "online")
                 .queryParam("access_token", VK_TOKEN);
@@ -147,12 +147,11 @@ public class UserServiceImpl implements UserService {
         } else {
             //return false;
         }
-        //*/
     }
+    //*/
 
     //N.B.: в данном методе сравниваем не введённый пользователем пароль с паролем из БД,
     //а хэши от пароля пользователя из БД и со страницы аутентификации ("логирования"):
-    @Nullable
     @Override
     public boolean authenticateUser(UserInfo userInfo) {
         User user = userRepository.findByUuid(userInfo.getUserUuid());

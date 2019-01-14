@@ -21,7 +21,6 @@ public class User {
     @Column(name = "usr_email", length = 255)
     private String userEmail;
 
-
     @Column(name = "usr_uuid", unique = true)
     private UUID userUuid;
 

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import smirnov.bn.web_spring_app_1.model.LingVarInfo;
 import smirnov.bn.web_spring_app_1.model.BusinessProcDescInfo;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
+import smirnov.bn.web_spring_app_1.model.UserInfo;
 
 public interface WebAppService {
     /*
@@ -78,5 +79,9 @@ public interface WebAppService {
     //void deleteEmployeeById(Integer employeeId);
 
     void deleteEmployeeByUuid(UUID employeeUuid);
+
+    UUID createUser(UserInfo userInfo);
+
+    String hashPassword(String password);
 
 }

@@ -1,4 +1,4 @@
-package smirnov.bn.security_service.form;
+package smirnov.bn.web_spring_app_1.form;
 
 import java.util.UUID;
 
@@ -8,7 +8,7 @@ public class UserForm {
 
     private String userLogin;
 
-    private String userPasswordHash;
+    private String userPassword;
 
     private String userEmail;
 
@@ -30,12 +30,12 @@ public class UserForm {
         this.userLogin = userLogin;
     }
 
-    public String getUserPasswordHash() {
-        return userPasswordHash;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUserPasswordHash(String userPasswordHash) {
-        this.userPasswordHash = userPasswordHash;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getUserEmail() {

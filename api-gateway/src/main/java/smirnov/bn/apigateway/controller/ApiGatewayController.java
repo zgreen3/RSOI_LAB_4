@@ -84,6 +84,26 @@ public class ApiGatewayController {
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + UPDATE_BY_UUID_EMP_PUT_URI_STRING;
     private static final String DELETE_EMP_DELETE_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + DELETE_EMP_DELETE_URI_STRING;
 
+    private static final String SCRT_SERVICE_PORT_STRING = "8202";
+    private static final String SCRT_SERVICE_URI_COMMON_DIR_STRING = "/security_service";
+    private static final String SCRT_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_URI_COMMON_DIR_STRING;
+
+    private static final String CREATE_USER_POST_URI_STRING = "/create-user";
+    //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
+    private static final String READ_BY_EMP_UUID_USER_GET_URI_STRING = "/read-by-emp-uuid-";
+    private static final String READ_ALL_USER_GET_URI_STRING = "/read-all";
+    private static final String READ_ALL_PGNTD_USER_GET_URI_STRING = "/read-all-paginated";
+    private static final String UPDATE_BY_ID_USER_PUT_URI_STRING = "/update-user";
+    private static final String DELETE_USER_DELETE_URI_STRING = "/delete-";
+
+    private static final String CREATE_USER_POST_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + CREATE_USER_POST_URI_STRING; //private static final String READ_BY_ID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_ID_USER_GET_URI_STRING;
+    private static final String READ_BY_EMP_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_USER_GET_URI_STRING;
+    private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
+    private static final String READ_ALL_PGNTD_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_USER_GET_URI_STRING;
+    private static final String UPDATE_BY_ID_USER_PUT_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING;
+    private static final String DELETE_USER_DELETE_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + DELETE_USER_DELETE_URI_STRING;
+
+
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
     private RestTemplate restTemplate = new RestTemplate();
@@ -492,4 +512,78 @@ public class ApiGatewayController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    //**********************************************************************************************************************
+    //*******************************SECURITY_SERVICE_API_PROXING***********************************************************
+    //**********************************************************************************************************************
+    //"http:/localhost:8194/gateway_API/security_service/create-user" (:)
+    @PostMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + CREATE_USER_POST_URI_STRING)
+    public ResponseEntity<String> createUser(HttpServletRequest request, @RequestBody UserInfo userInfo)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller createUser() - START");
+        return this.proxingExternalRequests(userInfo, HttpMethod.POST, request,
+                CREATE_USER_POST_URI_TMPLT);
+    }
+
+    /*
+    //"http:/localhost:8194/gateway_API/security_service/read-{id}" (:)
+    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_ID_USER_GET_URI_STRING + "{id}")
+    public ResponseEntity<String> findUserById(HttpServletRequest request, @PathVariable Integer id)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller findUserById() - START" + "\n" + "id param: " + String.valueOf(id));
+        return this.proxingExternalRequests(null, HttpMethod.GET, request,
+                READ_BY_ID_USER_GET_URI_TMPLT + String.valueOf(id));
+    }
+    //*/
+
+    //"http:/localhost:8194/gateway_API/security_service/read-by-emp-uuid-{userUuid}" (:)
+    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_EMP_UUID_USER_GET_URI_STRING + "{userUuid}")
+    public ResponseEntity<String> findUsersByUserUuid(HttpServletRequest request, @PathVariable String userUuid)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller findUsersByUserUuid() - START" + "\n" + "id param: " + userUuid);
+        return this.proxingExternalRequests(null, HttpMethod.GET, request,
+                READ_BY_EMP_UUID_USER_GET_URI_TMPLT + userUuid);
+    }
+
+    //"http:/localhost:8194/gateway_API/security_service/read-all" (:)
+    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_ALL_USER_GET_URI_STRING)
+    public ResponseEntity<String> findAllUsers(HttpServletRequest request)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller findAllUsers() - START");
+        return this.proxingExternalRequests(null, HttpMethod.GET, request,
+                READ_ALL_USER_GET_URI_TMPLT);
+    }
+
+    //"http:/localhost:8194/gateway_API/security_service/read-all-paginated" (:)
+    @RequestMapping(value = SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_ALL_PGNTD_USER_GET_URI_STRING, params = {"page", "sizeLimit"}, method = GET)
+    @ResponseBody
+    public ResponseEntity<String> findAllUserPaginated(HttpServletRequest request,
+                                                          @RequestParam(value = "page", defaultValue = "0") int page,
+                                                          @RequestParam(value = "sizeLimit", defaultValue = "100") int sizeLimit)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller findAllUserPaginated() - START" + "\n" + "page param: " + String.valueOf(page) + "\n" +
+                "sizeLimit param: " + String.valueOf(sizeLimit));
+        return this.proxingExternalRequests(null, HttpMethod.GET, request,
+                READ_ALL_PGNTD_USER_GET_URI_TMPLT + "?" + "page=" + String.valueOf(page) + "&" +
+                        "sizeLimit=" + String.valueOf(sizeLimit));
+    }
+
+    //"http:/localhost:8194/gateway_API/security_service/update-user" (:)
+    @PutMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING)
+    public ResponseEntity<String> updateUser(HttpServletRequest request, @RequestBody UserInfo userInfo)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller updateUser() - START" + "\n" + "id param: " + String.valueOf(userInfo.getUserId()));
+        return this.proxingExternalRequests(userInfo, HttpMethod.PUT, request,
+                UPDATE_BY_ID_USER_PUT_URI_TMPLT);
+    }
+
+    //"http:/localhost:8194/gateway_API/security_service/delete-{userId}" (:)
+    @DeleteMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + DELETE_USER_DELETE_URI_STRING + "{userId}")
+    public ResponseEntity<String> deleteUserById(HttpServletRequest request, @PathVariable Integer userId)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller deleteUserById() - START" + "\n" + "id param: " + String.valueOf(userId));
+        return this.proxingExternalRequests(null, HttpMethod.DELETE, request,
+                DELETE_USER_DELETE_URI_TMPLT + String.valueOf(userId));
+    }
+
 }
