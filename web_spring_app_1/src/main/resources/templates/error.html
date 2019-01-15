@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
@@ -19,8 +20,12 @@ padding:10px;
 }
 
     </style>
+
+    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
+<div class="container-fluid">
     <!-- https://www.logicbig.com/tutorials/spring-framework/spring-boot/custom-thymeleaf-error-page.html (:) -->
     <h1>My Thymeleaf Error Page</h1>
     <table>
@@ -55,6 +60,7 @@ padding:10px;
             </td>
         </tr>
     </table>
+</div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

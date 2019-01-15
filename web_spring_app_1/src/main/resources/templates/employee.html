@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="UTF-8"/>
@@ -15,141 +16,77 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-    <h1><span th:if="${employeeEditing} == true">Update</span><span th:unless="${employeeEditing} == true">Create</span> employee's information:</h1>
-
-    <!--
-       In Thymeleaf the equivalent of
-       JSP's ${pageContext.request.contextPath}/edit.html
-       would be @{/edit.html}
-       -->
-    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-    <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-    <!--*{...} : Selection expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-    <form th:action="@{''}"
-          th:object="${employeeForm}" method="POST">
-        Employee Name:
-        <input type="text" th:field="*{employeeName}" />
-        <span th:if="${#fields.hasErrors('employeeName')}" th:errors="*{employeeName}">Blank employeeName!</span>
-        <br/>
-        Employee Email:
-        <input type="email" th:field="*{employeeEmail}" required/>
-        <br/>
-        Login:
-        <input type="text" th:field="*{employeeLogin}" th:class="${isErrorMessageAttrPresent}? redBorderClass : normalClass" />
-        <br/>
-        <p>
-            <input class="btn btn-primary" type="submit" th:value="${employeeEditing} == true ? Edit : Create"/>
-            <!-- <button type="submit" class="btn btn-primary" th:value="${employeeEditing} == true ? Edit : Create"/> -->
-            <input class="btn btn-primary" type="reset" value="Reset" onclick="return confirm('Are you sure you want to reset all fields' values?')"/>
-        </p>
-    </form>
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 align="center">
+                <span th:if="${employeeEditing} == true">Update</span>
+                <span th:unless="${employeeEditing} == true">Create</span> employee's information:
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <!--
+               In Thymeleaf the equivalent of
+               JSP's ${pageContext.request.contextPath}/edit.html
+               would be @{/edit.html}
+               -->
+            <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+            <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+            <!--*{...} : Selection expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
+            <form th:action="@{''}"
+                  th:object="${employeeForm}" method="POST">
+                <div class="form-group">
+                    <label for="nameInput_1">Employee Name:</label>
+                    <input type="text" class="form-control" id="nameInput_1" placeholder="Enter employee's name"
+                           th:field="*{employeeName}" />
+                    <span th:if="${#fields.hasErrors('employeeName')}" th:errors="*{employeeName}">Blank employeeName!</span>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="emailInput_1">Employee Email:</label>
+                    <input type="email" class="form-control" id="emailInput_1" th:field="*{employeeEmail}"
+                           aria-describedby="emailHelp" placeholder="Enter employee's email"
+                           required />
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="loginInput_1">Employee Login:</label>
+                    <input type="text" id="loginInput_1"
+                           placeholder="Enter employee's login"
+                           th:field="*{employeeLogin}"
+                           class="form-control"
+                           th:name="${isErrorMessageAttrPresent}? redBorderClass : normalClass" />
+                </div>
+                <br/>
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" th:value="${employeeEditing} == true ? Edit : Create"/>
+                    <!-- <button type="submit" class="btn btn-primary" th:value="${employeeEditing} == true ? Edit : Create"/> -->
+                    <input class="btn btn-primary" type="reset" value="Reset" onclick="return confirm('Are you sure you want to reset all fields' values?')"/>
+                </div>
+            </form>
+        </div>
+    </div>
     <br/>
 
-    <!--
-    <form>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">Password</label>
-                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Check if errorMessage is not null and not empty -->
+            <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: errorMessage-->
+            <div th:if="${errorMessageAttr}" th:utext="${errorMessageAttr}"
+                 style="color:red;font-style:italic;">
+                ...
             </div>
         </div>
-        <div class="form-group">
-            <label for="inputAddress">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        <div class="col-md-6">
         </div>
-        <div class="form-group">
-            <label for="inputAddress2">Address 2</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputCity">City</label>
-                <input type="text" class="form-control" id="inputCity">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="inputState">State</label>
-                <select id="inputState" class="form-control">
-                    <option selected>Choose...</option>
-                    <option>...</option>
-                </select>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="inputZip">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Check me out
-                </label>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
-    </form>
-    -->
-
-    <!--
-    <table border="1">
-        <tr>
-            <th>Linguistic Variable Name</th>
-            <th>Linguistic Variable Email</th>
-            <th>Linguistic Variable Login</th>
-            <th>Linguistic Variable UUID</th>
-            <th colspan="2">Actions</th>
-        </tr>
-        <tr th:each ="lingVarWithEmployee : ${LingVarWithEmployees}">
-            <td th:utext="${lingVarWithEmployee.employeeName}">...</td>
-            <td th:utext="${lingVarWithEmployee.employeeEmail}">...</td>
-            <td th:utext="${lingVarWithEmployee.employeeLogin}">...</td>
-            <td th:utext="${lingVarWithEmployee.employeeUuid}">...</td>
-            <td> <form th:action="@{/employee-{employeeUuid}(employeeUuid=${employee.employeeUuid})}" method="get" th:object="${employee}">
-                    <input type="hidden" name="edit_employee_action" />
-                    <button type="submit">edit</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{/employee_delete_{employeeUuid}(employeeUuid=${employee.employeeUuid})}" method="post" th:object="${employee}">
-                    <input type="hidden" name="delete_employee_action" />
-                    <button type="submit" onClick="return confirm('Are you sure you want to delete this record?')">delete</button>
-                </form>
-            </td>
-        </tr>
-    </table>
-    -->
-    <!--
-    <form th:action="@{''}"
-          th:object="${LingVarWithEmployeeForm}" method="POST">
-        Linguistic Variables Name:
-        <input type="text" th:field="*{lingVarName}" required/>
-        <br/>
-        Employee Email:
-        <input type="email" th:field="*{employeeEmail}" required/>
-        <br/>
-        Login:
-        <input type="text" th:field="*{employeeLogin}" th:class="${isErrorMessageAttrPresent}? redBorderClass : normalClass" />
-        <br/>
-        <p>
-            <input type="submit" th:value="${employeeEditing} == true ? Edit : Create"/>
-            <input type="reset" value="Reset" onclick="return confirm('Are you sure you want to reset all fields' values?')"/>
-        </p>
-    </form>
-    -->
-
-    <!-- Check if errorMessage is not null and not empty -->
-
-    <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: errorMessage-->
-    <div th:if="${errorMessageAttr}" th:utext="${errorMessageAttr}"
-         style="color:red;font-style:italic;">
-        ...
     </div>
-
+</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
