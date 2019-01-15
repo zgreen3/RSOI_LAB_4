@@ -206,7 +206,7 @@ public class MainController {
             && userPassword != null && userPassword.length() > 0
                 && userEmail != null && userEmail.length() > 0) {
 
-            //UUID detectedUserUUID = service.findUserByLoginEmail(userLogin, userEmail);
+            UUID detectedUserUUID = service.findUserByLoginEmail(userLogin, userEmail);
             //String correctPasswordHash = service.findUserPasswordHashByUuid(detectedUserUUID);
             //PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
 

@@ -165,6 +165,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/read-by-emp-uuid-{userUuid}")
+    public ResponseEntity<UserInfo> findUserByUuid(@PathVariable String userUuid) {
+        try {
+            logger.info("/security_service : findUserByUuid() - START" + "\n" + "uuid param: " + String.valueOf(userUuid));
+            return new ResponseEntity<>(userService.findUserByUuid(UUID.fromString(userUuid)), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error in findUserByUuid(...)", e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping("/read-all") //http://localhost:8193/users/read-all
     public ResponseEntity<List<UserInfo>> findAllUsers() {
         try {

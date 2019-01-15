@@ -87,6 +87,27 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + UPDATE_BY_UUID_EMP_PUT_URI_STRING;
     private static final String DELETE_EMP_DELETE_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + DELETE_EMP_DELETE_URI_STRING;
 
+    private static final String SCRT_SERVICE_PORT_STRING = API_SERVICE_PORT_STRING; //"8202";
+    private static final String SCRT_SERVICE_URI_COMMON_DIR_STRING = "/security_service";
+    private static final String SCRT_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_URI_COMMON_DIR_STRING;
+
+    private static final String CREATE_USER_POST_URI_STRING = "/create-user";
+    //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
+    private static final String READ_BY_EMP_UUID_USER_GET_URI_STRING = "/read-by-emp-uuid-";
+    private static final String READ_BY_LGN_EML_USER_GET_URI_STRING = "/read-by-usr-login-";
+    private static final String READ_ALL_USER_GET_URI_STRING = "/read-all";
+    private static final String READ_ALL_PGNTD_USER_GET_URI_STRING = "/read-all-paginated";
+    private static final String UPDATE_BY_ID_USER_PUT_URI_STRING = "/update-user";
+    private static final String DELETE_USER_DELETE_URI_STRING = "/delete-";
+
+    private static final String CREATE_USER_POST_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + CREATE_USER_POST_URI_STRING; //private static final String READ_BY_ID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_ID_USER_GET_URI_STRING;
+    private static final String READ_BY_EMP_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_USER_GET_URI_STRING;
+    private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
+    private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
+    private static final String READ_ALL_PGNTD_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_USER_GET_URI_STRING;
+    private static final String UPDATE_BY_ID_USER_PUT_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING;
+    private static final String DELETE_USER_DELETE_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + DELETE_USER_DELETE_URI_STRING;
+
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
     private RestTemplate restTemplate = new RestTemplate();
@@ -196,6 +217,7 @@ public class WebAppServiceImpl implements WebAppService {
     //https://stackoverflow.com/questions/2860943/how-can-i-hash-a-password-in-java
     //https://stackoverflow.com/questions/19348501/pbkdf2withhmacsha512-vs-pbkdf2withhmacsha1
     public String hashPassword(String password) {
+        logger.info("hashPassword() in WebAppServiceImpl class in web_spring_app_1 module - START");
         String hashedPassword;
         String exceptionString;
         try {
@@ -208,4 +230,11 @@ public class WebAppServiceImpl implements WebAppService {
         return hashedPassword;
     }
 
+    public UUID findUserByLoginEmail(String userLogin, String userEmail) {
+        logger.info("findUserByLoginEmail() in WebAppServiceImpl class in web_spring_app_1 module - START");
+        return restTemplate.exchange(READ_BY_LGN_EML_USER_GET_URI_TMPLT + userLogin + "/email-" + userEmail,
+                //"http://localhost:8202/security_service/read-by-usr-login-{userLogin}/email-{userEmail}",
+                HttpMethod.GET, null, new ParameterizedTypeReference<EmployeeInfo>() {
+                }).getBody();
+    }
 }
