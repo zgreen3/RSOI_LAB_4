@@ -28,6 +28,9 @@ public interface UserService {
     @Nullable
     UserInfo findUserByUuid(UUID userUuid);
 
+    @Nullable
+    UserInfo findUserByLoginEmail(String userLogin, String userEmail);
+
     //void updateUser(String userLogin, String userPasswordHash, String userEmail, UUID userUuid);
 
     void updateUser(UserInfo userInfo);

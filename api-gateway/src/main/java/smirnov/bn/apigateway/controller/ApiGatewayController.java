@@ -90,14 +90,16 @@ public class ApiGatewayController {
 
     private static final String CREATE_USER_POST_URI_STRING = "/create-user";
     //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
-    private static final String READ_BY_EMP_UUID_USER_GET_URI_STRING = "/read-by-emp-uuid-";
+    private static final String READ_BY_USR_UUID_USER_GET_URI_STRING = "/read-by-usr-uuid-";
+    private static final String READ_BY_LGN_EML_USER_GET_URI_STRING = "/read-by-usr-login-";
     private static final String READ_ALL_USER_GET_URI_STRING = "/read-all";
     private static final String READ_ALL_PGNTD_USER_GET_URI_STRING = "/read-all-paginated";
     private static final String UPDATE_BY_ID_USER_PUT_URI_STRING = "/update-user";
     private static final String DELETE_USER_DELETE_URI_STRING = "/delete-";
 
     private static final String CREATE_USER_POST_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + CREATE_USER_POST_URI_STRING; //private static final String READ_BY_ID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_ID_USER_GET_URI_STRING;
-    private static final String READ_BY_EMP_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_USER_GET_URI_STRING;
+    private static final String READ_BY_USR_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_USR_UUID_USER_GET_URI_STRING;
+    private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
     private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_USER_GET_URI_STRING;
     private static final String UPDATE_BY_ID_USER_PUT_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING;
@@ -536,13 +538,22 @@ public class ApiGatewayController {
     }
     //*/
 
-    //"http:/localhost:8194/gateway_API/security_service/read-by-emp-uuid-{userUuid}" (:)
-    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_EMP_UUID_USER_GET_URI_STRING + "{userUuid}")
+    //"http:/localhost:8194/gateway_API/security_service/read-by-usr-uuid-{userUuid}" (:)
+    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_USR_UUID_USER_GET_URI_STRING + "{userUuid}")
     public ResponseEntity<String> findUsersByUserUuid(HttpServletRequest request, @PathVariable String userUuid)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findUsersByUserUuid() - START" + "\n" + "id param: " + userUuid);
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
-                READ_BY_EMP_UUID_USER_GET_URI_TMPLT + userUuid);
+                READ_BY_USR_UUID_USER_GET_URI_TMPLT + userUuid);
+    }
+
+    //"http:/localhost:8194/gateway_API/security_service/read-by-usr-login-{userLogin}-email-{userEmail}" (:)
+    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING + "{userLogin}" + "-email-" + "{userEmail}")
+    public ResponseEntity<String> findUserByLoginEmail(HttpServletRequest request, @PathVariable String userLogin, @PathVariable String userEmail)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller findUserByLoginEmail() - START" + "\n" + " userLogin: " + userLogin + " userEmail: " + userEmail);
+        return this.proxingExternalRequests(null, HttpMethod.GET, request,
+                READ_BY_LGN_EML_USER_GET_URI_TMPLT + userLogin + "-email-" + userEmail);
     }
 
     //"http:/localhost:8194/gateway_API/security_service/read-all" (:)

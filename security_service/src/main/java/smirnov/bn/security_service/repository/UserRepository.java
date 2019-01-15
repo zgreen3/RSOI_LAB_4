@@ -21,6 +21,10 @@ public interface UserRepository
             nativeQuery = true)
     User findByUuid(@Param("userUuid") UUID userUuid);
 
+    @Query(value = "SELECT u.* FROM users u WHERE u.usr_login = :userLogin AND u.usr_email = :userEmail LIMIT 1",
+            nativeQuery = true)
+    User findByLoginEmail(@Param("userLogin") String userLogin, @Param("userEmail") String userEmail);
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE users SET usr_login = :userLogin, usr_email = :userEmail, usr_psswrd_hash = :userPasswordHash WHERE usr_uuid = :userUuid",

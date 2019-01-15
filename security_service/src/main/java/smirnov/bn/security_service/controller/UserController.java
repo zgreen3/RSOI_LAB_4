@@ -154,7 +154,7 @@ public class UserController {
     }
     //*/
 
-    @GetMapping("/read-by-emp-uuid-{userUuid}")
+    @GetMapping("/read-by-usr-uuid-{userUuid}")
     public ResponseEntity<UserInfo> findUserByUuid(@PathVariable String userUuid) {
         try {
             logger.info("/security_service : findUserByUuid() - START" + "\n" + "uuid param: " + String.valueOf(userUuid));
@@ -165,11 +165,11 @@ public class UserController {
         }
     }
 
-    @GetMapping("/read-by-emp-uuid-{userUuid}")
-    public ResponseEntity<UserInfo> findUserByUuid(@PathVariable String userUuid) {
+    @GetMapping("/read-by-usr-login-{userLogin}-email-{userEmail}")
+    public ResponseEntity<UserInfo> findUserByLoginEmail(@PathVariable String userLogin, @PathVariable String userEmail) {
         try {
-            logger.info("/security_service : findUserByUuid() - START" + "\n" + "uuid param: " + String.valueOf(userUuid));
-            return new ResponseEntity<>(userService.findUserByUuid(UUID.fromString(userUuid)), HttpStatus.OK);
+            logger.info("/security_service : findUserByLoginEmail() - START" + "\n" + "userLogin: " + userLogin + " userEmail " + userEmail);
+            return new ResponseEntity<>(userService.findUserByLoginEmail(userLogin, userEmail), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in findUserByUuid(...)", e);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -28,6 +28,7 @@ import smirnov.bn.web_spring_app_1.form.EmployeeForm;
 import smirnov.bn.web_spring_app_1.form.UserForm;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 import smirnov.bn.web_spring_app_1.model.UserInfo;
+import smirnov.bn.web_spring_app_1.service.PasswordHashingHelper;
 import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
 
 
@@ -206,22 +207,24 @@ public class MainController {
             && userPassword != null && userPassword.length() > 0
                 && userEmail != null && userEmail.length() > 0) {
 
-            UUID detectedUserUUID = service.findUserByLoginEmail(userLogin, userEmail);
-            //String correctPasswordHash = service.findUserPasswordHashByUuid(detectedUserUUID);
-            //PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
-
-            //String userPasswordHash = service.hashPassword(userPassword);
-
-            //UserInfo userInfo = new UserInfo(userLogin, userPasswordHash, userEmail);
-
-
+            String correctPasswordHash = service.findUserByLoginEmail(userLogin, userEmail).getUserPasswordHash();
 
             logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
-                        "detectedUserInfo UUID: " //+
-                        //detectedUserUUID.toString()
-                        );
+                            "correctPasswordHash: " + correctPasswordHash);
+            String exceptionString;
+            boolean authenticationIsSuccess;
+            try {
+                authenticationIsSuccess = PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
+            } catch(PasswordHashingHelper.CannotPerformOperationException | PasswordHashingHelper.InvalidHashException e) {
+                exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
+                System.out.println(exceptionString);
+                return "loginUser";
+            }
 
-            return "redirect:/index";
+            //только в случае успешной аутентификации перенаправляем на другую страницу (:)
+            if (authenticationIsSuccess) {
+                return "redirect:/index";
+            }
         } else {
             if (userLogin == null || userLogin.length() == 0) {
                 String customErrorMessage = "User's login should be filled!";

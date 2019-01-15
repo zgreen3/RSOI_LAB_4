@@ -87,6 +87,13 @@ public class UserServiceImpl implements UserService {
         return this.buildlingUserInfo(userRepository.findByUuid(userUuid));
     }
 
+    @Nullable
+    @Override
+    @Transactional(readOnly = true)
+    public UserInfo findUserByLoginEmail(String userLogin, String userEmail) {
+        return this.buildlingUserInfo(userRepository.findByLoginEmail(userLogin, userEmail));
+    }
+
     /*
     @Override
     @Transactional

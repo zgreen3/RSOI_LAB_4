@@ -84,4 +84,6 @@ public interface WebAppService {
 
     String hashPassword(String password);
 
+    UserInfo findUserByLoginEmail(String userLogin, String userEmail);
+
 }
