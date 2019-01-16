@@ -25,10 +25,24 @@ public class UserServiceImpl implements UserService {
 
     private UserInfo buildlingUserInfo(User user) {
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserLogin(user.getUserLogin());
-        userInfo.setUserPasswordHash(user.getUserPasswordHash());
-        userInfo.setUserEmail(user.getUserEmail());
-        userInfo.setUserUuid(user.getUserUuid());
+        if (user != null) {
+            String userLogin = user.getUserLogin();
+            if (userLogin != null) {
+                userInfo.setUserLogin(userLogin);
+            }
+            String userPasswordHash = user.getUserPasswordHash();
+            if (userPasswordHash != null) {
+                userInfo.setUserPasswordHash(userPasswordHash);
+            }
+            String userEmail = user.getUserEmail();
+            if (userEmail != null) {
+                userInfo.setUserEmail(userEmail);
+            }
+            UUID userUuid = user.getUserUuid();
+            if (userUuid != null) {
+                userInfo.setUserUuid(userUuid);
+            }
+        }
         return userInfo;
     }
 
@@ -91,7 +105,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserInfo findUserByLoginEmail(String userLogin, String userEmail) {
-        return this.buildlingUserInfo(userRepository.findByLoginEmail(userLogin, userEmail));
+        if (userLogin != null && userEmail != null) {
+            return this.buildlingUserInfo(userRepository.findByLoginEmail(userLogin, userEmail));
+        } else {
+            return new UserInfo();
+        }
+
     }
 
     /*

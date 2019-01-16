@@ -186,7 +186,7 @@ public class MainController {
     //, produces = "text/html;charset=UTF-8")
     public String showLoginUserPage(Model model) throws URISyntaxException {
         logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
-
+        model.addAttribute("userForm", new UserForm());
         return "loginUser";
     }
 
@@ -209,21 +209,30 @@ public class MainController {
 
             String correctPasswordHash = service.findUserByLoginEmail(userLogin, userEmail).getUserPasswordHash();
 
-            logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
-                            "correctPasswordHash: " + correctPasswordHash);
-            String exceptionString;
             boolean authenticationIsSuccess;
-            try {
-                authenticationIsSuccess = PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
-            } catch(PasswordHashingHelper.CannotPerformOperationException | PasswordHashingHelper.InvalidHashException e) {
-                exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
-                System.out.println(exceptionString);
-                return "loginUser";
+            if (correctPasswordHash != null) {
+                logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
+                        "correctPasswordHash: " + correctPasswordHash);
+                String exceptionString;
+                try {
+                    authenticationIsSuccess = PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
+                } catch (PasswordHashingHelper.CannotPerformOperationException | PasswordHashingHelper.InvalidHashException e) {
+                    exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
+                    System.out.println(exceptionString);
+                    return "loginUser";
+                }
+            } else {
+                authenticationIsSuccess = false;
             }
 
             //только в случае успешной аутентификации перенаправляем на другую страницу (:)
             if (authenticationIsSuccess) {
                 return "redirect:/index";
+            } else {
+                String customErrorMessage = "Can't find user with this combination of name, email & password!";
+                model.addAttribute("errorMessageAttr", customErrorMessage);
+                model.addAttribute("isErrorMessageAttrPresent", true);
+                return "loginUser";
             }
         } else {
             if (userLogin == null || userLogin.length() == 0) {
