@@ -203,7 +203,7 @@ public class WebAppServiceImpl implements WebAppService {
         userInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<UserInfo> requestUserInfoEntity = new HttpEntity<>(userInfo, userInfoHeaders);
         ResponseEntity<String> usersUuidResponseString =
-                restTemplate.exchange(CREATE_EMP_POST_URI_TMPLT, //SERVICE_3_URI_COMMON_DIR_STRING + CREATE_EMP_POST_URI_STRING, //UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
+                restTemplate.exchange(CREATE_USER_POST_URI_TMPLT, //SERVICE_3_URI_COMMON_DIR_STRING + CREATE_EMP_POST_URI_STRING, //UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
                         HttpMethod.POST, requestUserInfoEntity, new ParameterizedTypeReference<String>() {});
         if (usersUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
             return UUID.fromString(usersUuidResponseString.getBody());

@@ -185,15 +185,15 @@ public class MainController {
         logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
         model.addAttribute("userForm", new UserForm());
 
-        ///*
+        /*
         logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - START");
         String userPasswordHash;
         try {
             userPasswordHash = PasswordHashingHelper.createHash("12345");
         } catch (PasswordHashingHelper.CannotPerformOperationException e) {
-            String exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
-            System.out.println(exceptionString);
             userPasswordHash = "0";
+                String exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
+                System.out.println(exceptionString);
         }
 
         UserInfo newUserInfo = new UserInfo("Tester_1", userPasswordHash, "tester_1@test.com");
@@ -270,8 +270,8 @@ public class MainController {
             return "loginUser";
         }
 
-    /*
-    //curl -X POST --data "{\"userLogin\":\"Tester_1\",\"userEmail\":\"tester_1@example.com\",\"userPassword\":\"12345\"}" http://localhost:8201/user-backdoor-create --header "Content-Type:application/json"
+    ///*
+    //curl -X POST --data "{\"userLogin\":\"Tester_2\",\"userEmail\":\"tester_2@example.com\",\"userPassword\":\"123\"}" http://localhost:8201/user-backdoor-create --header "Content-Type:application/json"
     @RequestMapping(value = {"/user-backdoor-create"}, method = RequestMethod.POST)
     public String registerUser(@RequestBody UserForm userForm) {
         try {
@@ -286,14 +286,15 @@ public class MainController {
             logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - newUserInfo UUID: " +
                         newUserUuid.toString());
 
-            return HttpStatus.CREATED.toString();
+            //return HttpStatus.CREATED.toString();
 
         } catch (Exception e) {
 
             logger.error("Error in createUser(...)", e);
 
-            return HttpStatus.NO_CONTENT.toString();
+            //return HttpStatus.NO_CONTENT.toString();
         }
+        return "loginUser";
     }
     //*/
 }
