@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -187,6 +184,26 @@ public class MainController {
     public String showLoginUserPage(Model model) throws URISyntaxException {
         logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
         model.addAttribute("userForm", new UserForm());
+
+        ///*
+        logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - START");
+        String userPasswordHash;
+        try {
+            userPasswordHash = PasswordHashingHelper.createHash("12345");
+        } catch (PasswordHashingHelper.CannotPerformOperationException e) {
+            String exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
+            System.out.println(exceptionString);
+            userPasswordHash = "0";
+        }
+
+        UserInfo newUserInfo = new UserInfo("Tester_1", userPasswordHash, "tester_1@test.com");
+
+        UUID newUserUuid = service.createUser(newUserInfo);
+
+        logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - newUserInfo UUID: " +
+                newUserUuid.toString());
+        //*/
+
         return "loginUser";
     }
 
@@ -213,6 +230,7 @@ public class MainController {
             if (correctPasswordHash != null) {
                 logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
                         "correctPasswordHash: " + correctPasswordHash);
+
                 String exceptionString;
                 try {
                     authenticationIsSuccess = PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
@@ -251,4 +269,31 @@ public class MainController {
         }
             return "loginUser";
         }
+
+    /*
+    //curl -X POST --data "{\"userLogin\":\"Tester_1\",\"userEmail\":\"tester_1@example.com\",\"userPassword\":\"12345\"}" http://localhost:8201/user-backdoor-create --header "Content-Type:application/json"
+    @RequestMapping(value = {"/user-backdoor-create"}, method = RequestMethod.POST)
+    public String registerUser(@RequestBody UserForm userForm) {
+        try {
+            logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - START");
+
+            String userPasswordHash = PasswordHashingHelper.createHash(userForm.getUserPassword());
+
+            UserInfo newUserInfo = new UserInfo(userForm.getUserLogin(), userPasswordHash, userForm.getUserEmail());
+
+            UUID newUserUuid = service.createUser(newUserInfo);
+
+            logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - newUserInfo UUID: " +
+                        newUserUuid.toString());
+
+            return HttpStatus.CREATED.toString();
+
+        } catch (Exception e) {
+
+            logger.error("Error in createUser(...)", e);
+
+            return HttpStatus.NO_CONTENT.toString();
+        }
+    }
+    //*/
 }
