@@ -179,7 +179,7 @@ public class MainController {
         return "redirect:/employeeList";
     }
 
-    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/loginUser_2"}, method = RequestMethod.GET)
     //, produces = "text/html;charset=UTF-8")
     public String showLoginUserPage(Model model) throws URISyntaxException {
         logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
@@ -204,16 +204,16 @@ public class MainController {
                 newUserUuid.toString());
         //*/
 
-        return "loginUser";
+        return "loginUser_2";
     }
 
-    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/loginUser_2"}, method = RequestMethod.POST)
     public String authenticateUser(Model model,
                                    @Valid @ModelAttribute("userForm") UserForm userForm,
                                    BindingResult result) {
         logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - START");
         if (result.hasErrors()) {
-            return "loginUser";
+            return "loginUser_2";
         }
 
         String userLogin = userForm.getUserLogin();
@@ -237,7 +237,7 @@ public class MainController {
                 } catch (PasswordHashingHelper.CannotPerformOperationException | PasswordHashingHelper.InvalidHashException e) {
                     exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
                     System.out.println(exceptionString);
-                    return "loginUser";
+                    return "loginUser_2";
                 }
             } else {
                 authenticationIsSuccess = false;
@@ -250,7 +250,7 @@ public class MainController {
                 String customErrorMessage = "Can't find user with this combination of name, email & password!";
                 model.addAttribute("errorMessageAttr", customErrorMessage);
                 model.addAttribute("isErrorMessageAttrPresent", true);
-                return "loginUser";
+                return "loginUser_2";
             }
         } else {
             if (userLogin == null || userLogin.length() == 0) {
@@ -267,7 +267,7 @@ public class MainController {
                 model.addAttribute("isErrorMessageAttrPresent", true);
             }
         }
-            return "loginUser";
+            return "loginUser_2";
         }
 
     ///*
@@ -294,7 +294,7 @@ public class MainController {
 
             //return HttpStatus.NO_CONTENT.toString();
         }
-        return "loginUser";
+        return "loginUser_2";
     }
     //*/
 }

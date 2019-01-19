@@ -1,5 +1,6 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
@@ -11,45 +12,56 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"/>
 
-    <title>REST[full] API frontend page</title>
+    <style>
+table td{
+vertical-align:top;
+border:solid 1px #888;
+padding:10px;
+}
+
+    </style>
+
     <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1>REST[full] API frontend page</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-            <h2 th:utext="${message}">..!..</h2>
-        </div>
-    </div>
-
-    <!--
-
-       In Thymeleaf the equivalent of
-       JSP's ${pageContext.request.contextPath}/edit.html
-       would be @{/edit.html}
-
-       -->
-
-    <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-    <div class="row">
-        <div class="col-md-6">
-            <a th:href="@{/employeeList}" class="btn btn-primary">Employee List</a>
-        </div>
-        <!-- <span class="tab-1"></span> -->
-        <div class="col-md-6">
-            <!--@{...} : Link (URL) expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: -->
-            <a th:href="@{http://localhost:8203/loginUser}" class="btn btn-primary">Login (sign in) a user</a>
-        </div>
-    </div>
+    <!-- https://www.logicbig.com/tutorials/spring-framework/spring-boot/custom-thymeleaf-error-page.html (:) -->
+    <h1>My Thymeleaf Error Page</h1>
+    <table>
+        <tr>
+            <td>Date</td>
+            <td th:text="${timestamp}"/>
+        </tr>
+        <tr>
+            <td>Path</td>
+            <td th:text="${path}"/>
+        </tr>
+        <tr>
+            <td>Error</td>
+            <td th:text="${error}"/>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td th:text="${status}"/>
+        </tr>
+        <tr>
+            <td>Message</td>
+            <td th:text="${message}"/>
+        </tr>
+        <tr>
+            <td>Exception</td>
+            <td th:text="${exception}"/>
+        </tr>
+        <tr>
+            <td>Trace</td>
+            <td>
+                <pre th:text="${trace}"/>
+            </td>
+        </tr>
+    </table>
 </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -62,5 +74,4 @@
             integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
             crossorigin="anonymous"></script>
 </body>
-
 </html>
