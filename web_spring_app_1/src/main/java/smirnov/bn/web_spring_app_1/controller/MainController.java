@@ -1,31 +1,20 @@
 package smirnov.bn.web_spring_app_1.controller;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
-
 import smirnov.bn.web_spring_app_1.form.EmployeeForm;
-import smirnov.bn.web_spring_app_1.form.UserForm;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
-import smirnov.bn.web_spring_app_1.model.UserInfo;
-import smirnov.bn.web_spring_app_1.service.PasswordHashingHelper;
 import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
 
 
@@ -41,6 +30,8 @@ public class MainController {
 
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
+
+    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser";
 
     ////https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     ////@Autowired
@@ -78,8 +69,19 @@ public class MainController {
     public String employeeList(Model model) {
 
         logger.info("MainController web_spring_app_1 showemployeeInfoPage() request API_Gateway_controller findAllEmployees() - START");
-
         model.addAttribute("employees", service.findAllEmployees());
+        /*
+        try {
+            model.addAttribute("employees", service.findAllEmployees());
+        } catch (HttpStatusCodeException  e) {
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                return "redirect:http://localhost:8203/loginUser";
+            } else {
+                return "error";
+            }
+
+        }
+        //*/
 
         return "employeeList";
     }
@@ -179,122 +181,21 @@ public class MainController {
         return "redirect:/employeeList";
     }
 
-    @RequestMapping(value = {"/loginUser_2"}, method = RequestMethod.GET)
-    //, produces = "text/html;charset=UTF-8")
-    public String showLoginUserPage(Model model) throws URISyntaxException {
-        logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
-        model.addAttribute("userForm", new UserForm());
+    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.GET)
+    public String redirectToLoginUserPage() throws URISyntaxException {
+        logger.info("MainController web_spring_app_1 redirectToLoginUserPage() request to API_Gateway_controller - START");
 
-        /*
-        logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - START");
-        String userPasswordHash;
-        try {
-            userPasswordHash = PasswordHashingHelper.createHash("12345");
-        } catch (PasswordHashingHelper.CannotPerformOperationException e) {
-            userPasswordHash = "0";
-                String exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
-                System.out.println(exceptionString);
-        }
-
-        UserInfo newUserInfo = new UserInfo("Tester_1", userPasswordHash, "tester_1@test.com");
-
-        UUID newUserUuid = service.createUser(newUserInfo);
-
-        logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - newUserInfo UUID: " +
-                newUserUuid.toString());
-        //*/
-
-        return "loginUser_2";
+        return "redirect:" + LOGIN_STANDALONE_SERVICE_URI_HARDCODED;
     }
 
-    @RequestMapping(value = {"/loginUser_2"}, method = RequestMethod.POST)
-    public String authenticateUser(Model model,
-                                   @Valid @ModelAttribute("userForm") UserForm userForm,
-                                   BindingResult result) {
-        logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - START");
-        if (result.hasErrors()) {
-            return "loginUser_2";
-        }
-
-        String userLogin = userForm.getUserLogin();
-        String userPassword = userForm.getUserPassword();
-        String userEmail = userForm.getUserEmail();
-
-        if (userLogin != null && userLogin.length() > 0
-            && userPassword != null && userPassword.length() > 0
-                && userEmail != null && userEmail.length() > 0) {
-
-            String correctPasswordHash = service.findUserByLoginEmail(userLogin, userEmail).getUserPasswordHash();
-
-            boolean authenticationIsSuccess;
-            if (correctPasswordHash != null) {
-                logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
-                        "correctPasswordHash: " + correctPasswordHash);
-
-                String exceptionString;
-                try {
-                    authenticationIsSuccess = PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
-                } catch (PasswordHashingHelper.CannotPerformOperationException | PasswordHashingHelper.InvalidHashException e) {
-                    exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
-                    System.out.println(exceptionString);
-                    return "loginUser_2";
-                }
-            } else {
-                authenticationIsSuccess = false;
-            }
-
-            //только в случае успешной аутентификации перенаправляем на другую страницу (:)
-            if (authenticationIsSuccess) {
-                return "redirect:/index";
-            } else {
-                String customErrorMessage = "Can't find user with this combination of name, email & password!";
-                model.addAttribute("errorMessageAttr", customErrorMessage);
-                model.addAttribute("isErrorMessageAttrPresent", true);
-                return "loginUser_2";
-            }
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public String handleHttpUnauthorizedStatusCodeException(HttpStatusCodeException e)
+    {
+        logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
+        if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+            return "redirect:" + LOGIN_STANDALONE_SERVICE_URI_HARDCODED;
         } else {
-            if (userLogin == null || userLogin.length() == 0) {
-                String customErrorMessage = "User's login should be filled!";
-                model.addAttribute("errorMessageAttr", customErrorMessage);
-                model.addAttribute("isErrorMessageAttrPresent", true);
-            } else if (userPassword == null || userPassword.length() == 0) {
-                String customErrorMessage = "User's password should be filled!";
-                model.addAttribute("errorMessageAttr", customErrorMessage);
-                model.addAttribute("isErrorMessageAttrPresent", true);
-            } else if (userEmail == null || userEmail.length() == 0) {
-                String customErrorMessage = "User's e-mail should be filled!";
-                model.addAttribute("errorMessageAttr", customErrorMessage);
-                model.addAttribute("isErrorMessageAttrPresent", true);
-            }
+            return "error";
         }
-            return "loginUser_2";
-        }
-
-    ///*
-    //curl -X POST --data "{\"userLogin\":\"Tester_2\",\"userEmail\":\"tester_2@example.com\",\"userPassword\":\"123\"}" http://localhost:8201/user-backdoor-create --header "Content-Type:application/json"
-    @RequestMapping(value = {"/user-backdoor-create"}, method = RequestMethod.POST)
-    public String registerUser(@RequestBody UserForm userForm) {
-        try {
-            logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - START");
-
-            String userPasswordHash = PasswordHashingHelper.createHash(userForm.getUserPassword());
-
-            UserInfo newUserInfo = new UserInfo(userForm.getUserLogin(), userPasswordHash, userForm.getUserEmail());
-
-            UUID newUserUuid = service.createUser(newUserInfo);
-
-            logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - newUserInfo UUID: " +
-                        newUserUuid.toString());
-
-            //return HttpStatus.CREATED.toString();
-
-        } catch (Exception e) {
-
-            logger.error("Error in createUser(...)", e);
-
-            //return HttpStatus.NO_CONTENT.toString();
-        }
-        return "loginUser_2";
     }
-    //*/
 }

@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import smirnov.bn.apigateway.info_model_patterns.*;
@@ -301,6 +303,7 @@ public class ApiGatewayController {
         logger.info("API_Gateway_controller findAllEmployees() - START");
         return this.proxingExternalRequests(null, HttpMethod.GET, request,
                 READ_ALL_EMP_GET_URI_TMPLT);
+        //ResponseEntity.status(401).build();
     }
 
     //"/employees/read-all-paginated" (:)
@@ -328,7 +331,7 @@ public class ApiGatewayController {
 
     //"/employees/delete-{employeeUuid}" (:)
     @DeleteMapping(SERVICE_3_URI_COMMON_DIR_STRING + DELETE_EMP_DELETE_URI_STRING + "{uuid}")
-    public ResponseEntity<String> deleteEmployeeByUuid(HttpServletRequest request, @PathVariable("uuid")  UUID employeeUuid)
+    public ResponseEntity<String> deleteEmployeeByUuid(HttpServletRequest request, @PathVariable("uuid") UUID employeeUuid)
             throws URISyntaxException {
         logger.info("API_Gateway_controller deleteEmployeeByUuid() - START" + "\n" + "employeeUuid param: " + String.valueOf(employeeUuid));
         return this.proxingExternalRequests(null, HttpMethod.DELETE, request,
@@ -569,8 +572,8 @@ public class ApiGatewayController {
     @RequestMapping(value = SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_ALL_PGNTD_USER_GET_URI_STRING, params = {"page", "sizeLimit"}, method = GET)
     @ResponseBody
     public ResponseEntity<String> findAllUserPaginated(HttpServletRequest request,
-                                                          @RequestParam(value = "page", defaultValue = "0") int page,
-                                                          @RequestParam(value = "sizeLimit", defaultValue = "100") int sizeLimit)
+                                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                                       @RequestParam(value = "sizeLimit", defaultValue = "100") int sizeLimit)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findAllUserPaginated() - START" + "\n" + "page param: " + String.valueOf(page) + "\n" +
                 "sizeLimit param: " + String.valueOf(sizeLimit));

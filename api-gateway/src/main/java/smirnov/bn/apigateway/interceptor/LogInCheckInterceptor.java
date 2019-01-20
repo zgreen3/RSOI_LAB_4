@@ -1,23 +1,17 @@
-package smirnov.bn.web_spring_app_1.interceptor;
+package smirnov.bn.apigateway.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import smirnov.bn.web_spring_app_1.controller.MainController;
-import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
-import smirnov.bn.web_spring_app_1.model.LingVarInfo;
-
-import java.util.List;
+import java.util.Arrays;
 
 @Component
 public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
@@ -30,7 +24,7 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
     private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING;
 
     private static final Logger logger = LoggerFactory.getLogger(LogInCheckInterceptor.class);
-    private RestTemplate restTemplate = new RestTemplate();
+    //private RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -44,7 +38,22 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
             request.setAttribute("startTime", startTime);
             //*/
 
-        logger.info("LogInCheckInterceptor web_spring_app_1 preHandle() - START");
+        logger.info("LogInCheckInterceptor apigateway preHandle() - START");
+
+        //https://stackoverflow.com/questions/33118342/java-get-cookie-value-by-name-in-spring-mvc (:)
+        if (Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("AccessTokenID"))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null) != null) {
+            //checkTokenValidityOnSecurityServer()
+            return true;
+        } else {
+            //https://stackoverflow.com/questions/39554740/springboot-how-to-return-error-status-code-in-prehandle-of-handlerinterceptor (:)
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return false;
+        }
+
 
         /*
         EmployeeInfo employeeInfo = new EmployeeInfo();
@@ -70,7 +79,7 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
         ////https://o7planning.org/en/11689/spring-boot-interceptors-tutorial (:)
         //response.sendRedirect(request.getContextPath() + "/loginUser");
         //return false;
-        return true;
+        //return true;
     }
 
     @Override

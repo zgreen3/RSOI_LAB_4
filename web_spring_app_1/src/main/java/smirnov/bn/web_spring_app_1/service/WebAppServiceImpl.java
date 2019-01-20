@@ -1,23 +1,15 @@
 package smirnov.bn.web_spring_app_1.service;
 
 import javax.annotation.Nullable;
-import javax.servlet.http.HttpServletRequest;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
-import smirnov.bn.web_spring_app_1.controller.MainController;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
-import smirnov.bn.web_spring_app_1.model.UserInfo;
 
 public class WebAppServiceImpl implements WebAppService {
 
@@ -191,51 +183,4 @@ public class WebAppServiceImpl implements WebAppService {
         //return ;
     }
 
-    /*
-     @Nullable
-     void createEmployee(String userLogin, String userPassword, String userEmail);
-     //*/
-    public UUID createUser(UserInfo userInfo) {
-        logger.info("createUser() in WebAppServiceImpl class in web_spring_app_1 module - START");
-
-        // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
-        HttpHeaders userInfoHeaders = new HttpHeaders();
-        userInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<UserInfo> requestUserInfoEntity = new HttpEntity<>(userInfo, userInfoHeaders);
-        ResponseEntity<String> usersUuidResponseString =
-                restTemplate.exchange(CREATE_USER_POST_URI_TMPLT, //SERVICE_3_URI_COMMON_DIR_STRING + CREATE_EMP_POST_URI_STRING, //UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
-                        HttpMethod.POST, requestUserInfoEntity, new ParameterizedTypeReference<String>() {});
-        if (usersUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
-            return UUID.fromString(usersUuidResponseString.getBody());
-        } else {
-            return null;
-        }
-    }
-
-    //passwords hashing (:)
-    //https://github.com/defuse/password-hashing/blob/master/PasswordStorage.java
-    //https://stackoverflow.com/questions/2860943/how-can-i-hash-a-password-in-java
-    //https://stackoverflow.com/questions/19348501/pbkdf2withhmacsha512-vs-pbkdf2withhmacsha1
-    public String hashPassword(String password) {
-        logger.info("hashPassword() in WebAppServiceImpl class in web_spring_app_1 module - START");
-        String hashedPassword;
-        String exceptionString;
-        try {
-            hashedPassword = PasswordHashingHelper.createHash(password);
-        } catch (PasswordHashingHelper.CannotPerformOperationException e) {
-            exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
-            System.out.println(exceptionString);
-            return exceptionString;
-        }
-        return hashedPassword;
-    }
-
-    public UserInfo findUserByLoginEmail(String userLogin, String userEmail) {
-        logger.info("findUserByLoginEmail() in WebAppServiceImpl class in web_spring_app_1 module - START");
-        //localhost:8194/gateway_API/security_service/read-by-usr-login-{userLogin}-email-{userEmail}
-        return restTemplate.exchange(READ_BY_LGN_EML_USER_GET_URI_TMPLT + userLogin + "-email-" + userEmail,
-                //"http://localhost:8202/security_service/read-by-usr-login-{userLogin}-email-{userEmail}",
-                HttpMethod.GET, null, new ParameterizedTypeReference<UserInfo>() {
-                }).getBody();
-    }
 }

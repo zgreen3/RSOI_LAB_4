@@ -140,6 +140,8 @@ public class LogInController {
 
             //return HttpStatus.NO_CONTENT.toString();
         }
+        //N.B., TODO: [после 19.01.19 желательно сделать отдельную форму регистрации нового пользователя, Ex, registerUser,
+        //которую и возвращать в return-коде далее]:
         return "loginUser";
     }
     //*/
