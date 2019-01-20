@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
+import smirnov.bn.REST_API_frontend.model.AuthorizationCodeInfo;
 import smirnov.bn.REST_API_frontend.model.UserInfo;
 
 
@@ -28,6 +29,11 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
     private static final String CREATE_USER_POST_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + CREATE_USER_POST_URI_STRING;
     private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
 
+    private static final String SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING = "/security_service/authorization";
+    private static final String SCRT_SERVICE_AUTH_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING;
+    private static final String CREATE_AUTH_CODE_POST_URI_STRING = "/create-auth-code";
+    private static final String CREATE_AUTH_CODE_POST_URI_TMPLT = SCRT_SERVICE_AUTH_ABS_URI_COMMON_STRING + CREATE_AUTH_CODE_POST_URI_STRING;
+
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
@@ -38,7 +44,7 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
      void createEmployee(String userLogin, String userPassword, String userEmail);
      //*/
     public UUID createUser(UserInfo userInfo) {
-        logger.info("createUser() in RestApiFrontendServiceImpl class in web_spring_app_1 module - START");
+        logger.info("createUser() in RestApiFrontendServiceImpl class in rest_api_frontend module - START");
 
         // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
         HttpHeaders userInfoHeaders = new HttpHeaders();
@@ -59,7 +65,7 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
     //https://stackoverflow.com/questions/2860943/how-can-i-hash-a-password-in-java
     //https://stackoverflow.com/questions/19348501/pbkdf2withhmacsha512-vs-pbkdf2withhmacsha1
     public String hashPassword(String password) {
-        logger.info("hashPassword() in RestApiFrontendServiceImpl class in web_spring_app_1 module - START");
+        logger.info("hashPassword() in RestApiFrontendServiceImpl class in rest_api_frontend module - START");
         String hashedPassword;
         String exceptionString;
         try {
@@ -73,11 +79,38 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
     }
 
     public UserInfo findUserByLoginEmail(String userLogin, String userEmail) {
-        logger.info("findUserByLoginEmail() in RestApiFrontendServiceImpl class in web_spring_app_1 module - START");
+        logger.info("findUserByLoginEmail() in RestApiFrontendServiceImpl class in rest_api_frontend module - START");
         //localhost:8194/gateway_API/security_service/read-by-usr-login-{userLogin}-email-{userEmail}
         return restTemplate.exchange(READ_BY_LGN_EML_USER_GET_URI_TMPLT + userLogin + "-email-" + userEmail,
                 //"http://localhost:8202/security_service/read-by-usr-login-{userLogin}-email-{userEmail}",
                 HttpMethod.GET, null, new ParameterizedTypeReference<UserInfo>() {
                 }).getBody();
+    }
+
+    public UUID createAuthenticationCode(String clientId, String redirectionUri) {
+        logger.info("createAuthenticationCode() in RestApiFrontendServiceImpl class in rest_api_frontend module - START");
+
+        //[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html] [:]
+        //localhost:8194/gateway_API/security_service/authorization/create-auth-code (:)
+        AuthorizationCodeInfo authorizationCodeInfo = new AuthorizationCodeInfo(clientId, redirectionUri);
+        HttpHeaders authorizationCodeHeaders = new HttpHeaders();
+        authorizationCodeHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<AuthorizationCodeInfo> requestAuthorizationCodeInfoEntity = new HttpEntity<>(authorizationCodeInfo, authorizationCodeHeaders);
+        ResponseEntity<String> authorizationCodeUuidResponseString =
+                restTemplate.exchange(CREATE_AUTH_CODE_POST_URI_TMPLT,
+                        HttpMethod.POST, requestAuthorizationCodeInfoEntity, new ParameterizedTypeReference<String>() {});
+        if (authorizationCodeUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
+            return UUID.fromString(authorizationCodeUuidResponseString.getBody());
+        } else {
+            return null;
+        }
+    }
+
+    public Boolean isAuthCodeValid() {
+        return true;
+    }
+
+    public String buildOAuth2FirstAuthorizationUri() {
+        return "http://8203";
     }
 }

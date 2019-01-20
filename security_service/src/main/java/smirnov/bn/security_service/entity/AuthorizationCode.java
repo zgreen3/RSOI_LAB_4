@@ -1,7 +1,7 @@
 package smirnov.bn.security_service.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ public class AuthorizationCode {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="created_date_time")
-    private Date createdDateTime;
+    private LocalDateTime createdDateTime;
 
     @Column(name="expires_in_seconds", columnDefinition = "BIGINT")
     private Long expiresInSeconds;
@@ -36,7 +36,9 @@ public class AuthorizationCode {
     @Column(name = "redirection_uri", length = 255)
     private String redirectionURI;
 
-    public AuthorizationCode(Boolean isExpired, Boolean isUsed, Date createdDateTime, Long expiresInSeconds, String clientID, String redirectionURI) {
+    public AuthorizationCode() {}
+
+    public AuthorizationCode(Boolean isExpired, Boolean isUsed, LocalDateTime createdDateTime, Long expiresInSeconds, String clientID, String redirectionURI) {
         this.isExpired = isExpired;
         this.isUsed = isUsed;
         this.createdDateTime = createdDateTime;
@@ -69,11 +71,11 @@ public class AuthorizationCode {
         isUsed = used;
     }
 
-    public Date getCreatedDateTime() {
+    public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(Date createdDateTime) {
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 

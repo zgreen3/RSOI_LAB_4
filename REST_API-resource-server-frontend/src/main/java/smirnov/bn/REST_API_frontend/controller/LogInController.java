@@ -2,17 +2,17 @@ package smirnov.bn.REST_API_frontend.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+import org.springframework.web.client.HttpClientErrorException;
 import smirnov.bn.REST_API_frontend.form.UserForm;
 import smirnov.bn.REST_API_frontend.model.UserInfo;
 import smirnov.bn.REST_API_frontend.service.PasswordHashingHelper;
@@ -21,15 +21,44 @@ import smirnov.bn.REST_API_frontend.service.RestApiFrontendServiceImpl;
 @Controller
 public class LogInController {
 
+    private static final String WEB_SRVC_APP_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
+    private static final String WEB_SRVC_APP_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
+
+    private String afterSigningInRedirectionUri;
+
     private RestApiFrontendServiceImpl service = new RestApiFrontendServiceImpl();
 
     private static final Logger logger = LoggerFactory.getLogger(LogInController.class);
 
-    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public class ForbiddenException extends RuntimeException {
+    }
+
+    @RequestMapping(value = {"/loginUser", "/authorize"}, method = RequestMethod.GET)
     //, produces = "text/html;charset=UTF-8")
-    public String showLoginUserPage(Model model) throws URISyntaxException {
+    public String showLoginUserPage(Model model,
+                                    @RequestParam(value = "client_id", required = false) String clientServiceId,
+                                    @RequestParam(value = "client_secret", required = false) String clientSecret,
+                                    @RequestParam(value = "redirect_uri", required = false) String callBackRedirectUri
+    ) throws URISyntaxException {
         logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
+
+        //проверка, что clientID и clientSecret совпадают с заданными в коде (hard-coded) значениями соответствующих констант:
+        if ((!clientServiceId.equals(WEB_SRVC_APP_ID_STRING)) && (!clientSecret.equals(WEB_SRVC_APP_SECRET_STRING))) {
+            //String customErrorMessage = "Client ID or secret do not match the ones in DB!";
+            //model.addAttribute("errorMessageAttr", customErrorMessage);
+            //model.addAttribute("isErrorMessageAttrPresent", true);
+            //System.out.println(customErrorMessage);
+            //return "loginUser" //"error";
+            throw new ForbiddenException();
+        }
+
+        //сохраняем (локально, в переменной экземпляра класса, в ОЗУ)
+        //redirect URL для последующей передачи по этому адресу authorization code(:)
+        afterSigningInRedirectionUri = callBackRedirectUri;
+
         model.addAttribute("userForm", new UserForm());
+        model.addAttribute("clientServiceId", clientServiceId);
 
         /*
         logger.info("MainController web_spring_app_1 createUser() request API_Gateway_controller - START");
@@ -70,8 +99,10 @@ public class LogInController {
                 && userPassword != null && userPassword.length() > 0
                 && userEmail != null && userEmail.length() > 0) {
 
+            //ищем хэш выбранного пользователем при регистрации пароля в БД:
             String correctPasswordHash = service.findUserByLoginEmail(userLogin, userEmail).getUserPasswordHash();
 
+            //сравниваем хэш из БД с хешем от пароля, введённого пользователем на форме аутентификации:
             boolean authenticationIsSuccess;
             if (correctPasswordHash != null) {
                 logger.info("MainController web_spring_app_1 authenticateUser() request to API_Gateway_controller - " +
@@ -82,20 +113,26 @@ public class LogInController {
                     authenticationIsSuccess = PasswordHashingHelper.verifyPassword(userPassword, correctPasswordHash);
                 } catch (PasswordHashingHelper.CannotPerformOperationException | PasswordHashingHelper.InvalidHashException e) {
                     exceptionString = "PasswordHashingHelper.CannotPerformOperationException: " + e.toString();
+                    model.addAttribute("errorMessageAttr", exceptionString);
+                    model.addAttribute("isErrorMessageAttrPresent", true);
                     System.out.println(exceptionString);
-                    return "loginUser";
+                    return "loginUser"; //throw new ForbiddenException();
                 }
             } else {
                 authenticationIsSuccess = false;
             }
 
-            //только в случае успешной аутентификации перенаправляем на другую страницу (:)
+            //только в случае успешной аутентификации выдаём authorizationCode и перенаправляем на другую страницу (:)
             if (authenticationIsSuccess) {
-                return "redirect:/index";
+                //запрос authorizationCode через GatewayAPI у SecurityServer:
+                UUID authorizationCodeUuid = service.createAuthenticationCode(WEB_SRVC_APP_ID_STRING, afterSigningInRedirectionUri);
+
+                return "redirect:" + afterSigningInRedirectionUri + "?authorization_code=" + authorizationCodeUuid.toString();
             } else {
                 String customErrorMessage = "Can't find user with this combination of name, email & password!";
                 model.addAttribute("errorMessageAttr", customErrorMessage);
                 model.addAttribute("isErrorMessageAttrPresent", true);
+                System.out.println(customErrorMessage);
                 return "loginUser";
             }
         } else {
@@ -112,8 +149,8 @@ public class LogInController {
                 model.addAttribute("errorMessageAttr", customErrorMessage);
                 model.addAttribute("isErrorMessageAttrPresent", true);
             }
+            return "loginUser";
         }
-        return "loginUser";
     }
 
     ///*

@@ -1,14 +1,18 @@
 package smirnov.bn.web_spring_app_1.service;
 
 import javax.annotation.Nullable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import org.springframework.web.util.UriComponentsBuilder;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 
 public class WebAppServiceImpl implements WebAppService {
@@ -100,6 +104,8 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String UPDATE_BY_ID_USER_PUT_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING;
     private static final String DELETE_USER_DELETE_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + DELETE_USER_DELETE_URI_STRING;
 
+    //private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser";
+
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
     private RestTemplate restTemplate = new RestTemplate();
@@ -181,6 +187,26 @@ public class WebAppServiceImpl implements WebAppService {
                 HttpMethod.DELETE, null, new ParameterizedTypeReference<EmployeeInfo>() {
                 });
         //return ;
+    }
+
+    public String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId, String clientSecret) {
+        //https://stackoverflow.com/questions/19538431/is-there-a-right-way-to-build-a-url (,)
+        //https://stackoverflow.com/questions/18138011/url-encoding-using-the-new-spring-uricomponentsbuilder/21259193#21259193 (:)
+        String ultimateUrl;
+        try {
+            ultimateUrl =
+                    UriComponentsBuilder
+                            .fromUriString(authorizationServerLoginPageUri)
+                            .queryParam("response_type", URLEncoder.encode("code", "UTF-8"))
+                            .queryParam("client_id", URLEncoder.encode(clientId, "UTF-8"))
+                            .queryParam("client_secret", URLEncoder.encode(clientSecret, "UTF-8"))
+                            .queryParam("redirect_uri", URLEncoder.encode(callBackRedirectUri, "UTF-8"))
+                            .build().encode().toUriString();
+        } catch (UnsupportedEncodingException e) {
+            return "UnsupportedEncodingException: " + e.toString();
+        }
+
+        return ultimateUrl;
     }
 
 }

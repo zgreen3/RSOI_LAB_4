@@ -77,4 +77,6 @@ public interface WebAppService {
 
     void deleteEmployeeByUuid(UUID employeeUuid);
 
+    String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId, String clientSecret);
+
 }

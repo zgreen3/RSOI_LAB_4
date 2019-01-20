@@ -1,7 +1,7 @@
 package smirnov.bn.security_service.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,14 +27,14 @@ public class Token {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="created_date_time")
-    private Date createdDateTime;
+    private LocalDateTime createdDateTime;
 
     @Column(name="expires_in_seconds", columnDefinition = "BIGINT")
     private Long expiresInSeconds;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="last_used_date_time")
-    private Date lastUsedDateTime;
+    private LocalDateTime lastUsedDateTime;
 
     @Column(name = "client_id", length = 255)
     private String clientID;
@@ -42,7 +42,9 @@ public class Token {
     @Column(name = "refresh_token_uuid", unique = true)
     private UUID refreshTokenUuid;
 
-    public Token(Boolean isInvalidated, Boolean isExpired, String tokenType, Date createdDateTime, Long expiresInSeconds, Date lastUsedDateTime, String clientID) {
+    public Token() {}
+
+    public Token(Boolean isInvalidated, Boolean isExpired, String tokenType, LocalDateTime createdDateTime, Long expiresInSeconds, LocalDateTime lastUsedDateTime, String clientID) {
         this.isInvalidated = isInvalidated;
         this.isExpired = isExpired;
         this.tokenType = tokenType;
@@ -92,11 +94,11 @@ public class Token {
         this.tokenType = tokenType;
     }
 
-    public Date getCreatedDateTime() {
+    public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(Date createdDateTime) {
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 
@@ -108,11 +110,11 @@ public class Token {
         this.expiresInSeconds = expiresInSeconds;
     }
 
-    public Date getLastUsedDateTime() {
+    public LocalDateTime getLastUsedDateTime() {
         return lastUsedDateTime;
     }
 
-    public void setLastUsedDateTime(Date lastUsedDateTime) {
+    public void setLastUsedDateTime(LocalDateTime lastUsedDateTime) {
         this.lastUsedDateTime = lastUsedDateTime;
     }
 

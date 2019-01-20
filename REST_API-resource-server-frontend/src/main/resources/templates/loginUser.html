@@ -67,6 +67,15 @@
                     <div class="col-md-12">
                         <!-- Check if errorMessage is not null and not empty -->
                         <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: errorMessage-->
+                        <div th:if="${clientServiceId}"
+                             th:utext="N.B.: by signing in to the account you authorize a client service with ID ${clientServiceId} to access it!"
+                             style="color:blue;font-style:italic;">
+                            ...
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <!-- Check if errorMessage is not null and not empty -->
+                        <!--${...} : Variable expressions [https://www.thymeleaf.org/doc/articles/standarddialect5minutes.html]: errorMessage-->
                         <div th:if="${errorMessageAttr}" th:utext="${errorMessageAttr}"
                              style="color:red;font-style:italic;">
                             ...

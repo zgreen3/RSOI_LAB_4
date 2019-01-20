@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-
 import org.springframework.web.client.HttpStatusCodeException;
+
 import smirnov.bn.web_spring_app_1.form.EmployeeForm;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
@@ -31,7 +31,9 @@ public class MainController {
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
 
-    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser";
+    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/authorize"; //"http://localhost:8203/loginUser";
+    private static final String THIS_CLIENT_SERVICE_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
+    private static final String THIS_CLIENT_SERVICE_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 
     ////https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     ////@Autowired
@@ -185,7 +187,8 @@ public class MainController {
     public String redirectToLoginUserPage() throws URISyntaxException {
         logger.info("MainController web_spring_app_1 redirectToLoginUserPage() request to API_Gateway_controller - START");
 
-        return "redirect:" + LOGIN_STANDALONE_SERVICE_URI_HARDCODED;
+        return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
+                "http://localhost:8201/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
     }
 
     @ExceptionHandler(HttpStatusCodeException.class)
@@ -193,7 +196,8 @@ public class MainController {
     {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            return "redirect:" + LOGIN_STANDALONE_SERVICE_URI_HARDCODED;
+            return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
+                    "http://localhost:8201/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
         } else {
             return "error";
         }

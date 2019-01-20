@@ -88,9 +88,13 @@ public class ApiGatewayController {
 
     private static final String SCRT_SERVICE_PORT_STRING = "8202";
     private static final String SCRT_SERVICE_URI_COMMON_DIR_STRING = "/security_service";
+    private static final String SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING = "/security_service/authorization";
+
     private static final String SCRT_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_URI_COMMON_DIR_STRING;
+    private static final String SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING;
 
     private static final String CREATE_USER_POST_URI_STRING = "/create-user";
+    private static final String CREATE_AUTH_CODE_POST_URI_STRING = "/create-auth-code";
     //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
     private static final String READ_BY_USR_UUID_USER_GET_URI_STRING = "/read-by-usr-uuid-";
     private static final String READ_BY_LGN_EML_USER_GET_URI_STRING = "/read-by-usr-login-";
@@ -100,6 +104,7 @@ public class ApiGatewayController {
     private static final String DELETE_USER_DELETE_URI_STRING = "/delete-";
 
     private static final String CREATE_USER_POST_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + CREATE_USER_POST_URI_STRING; //private static final String READ_BY_ID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_ID_USER_GET_URI_STRING;
+    private static final String CREATE_AUTH_CODE_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_AUTH_CODE_POST_URI_STRING;
     private static final String READ_BY_USR_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_USR_UUID_USER_GET_URI_STRING;
     private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
     private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
@@ -600,4 +605,15 @@ public class ApiGatewayController {
                 DELETE_USER_DELETE_URI_TMPLT + String.valueOf(userId));
     }
 
+    //[https://stackoverflow.com/questions/13715811/requestparam-vs-pathvariable] [:]
+    //"http:/localhost:8194/gateway_API/security_service/authorization/create-auth-code" (:)
+    //@PostMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + "/authorization" + "/create-auth-code")
+    @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CREATE_AUTH_CODE_POST_URI_STRING}, method = RequestMethod.POST)
+    @ResponseBody
+    public UUID createAuthCode(HttpServletRequest request, @RequestBody AuthorizationCodeInfo authorizationCodeInfo)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller createAuthCode() - START");
+        return UUID.fromString(this.proxingExternalRequests(authorizationCodeInfo, HttpMethod.POST, request,
+                CREATE_AUTH_CODE_POST_URI_TMPLT).getBody());
+    }
 }
