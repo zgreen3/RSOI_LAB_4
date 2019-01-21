@@ -31,7 +31,7 @@ public class MainController {
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
 
-    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/authorize"; //"http://localhost:8203/loginUser";
+    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser"; //"http://localhost:8203/authorize"; //"http://localhost:8203/loginUser";
     private static final String THIS_CLIENT_SERVICE_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
     private static final String THIS_CLIENT_SERVICE_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 

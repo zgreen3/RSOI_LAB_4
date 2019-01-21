@@ -1,19 +1,18 @@
 package smirnov.bn.security_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import javax.annotation.Nullable;
 
 import smirnov.bn.security_service.entity.AuthorizationCode;
 import smirnov.bn.security_service.entity.Token;
 import smirnov.bn.security_service.repository.AuthRepository;
 import smirnov.bn.security_service.repository.TokenRepository;
 
-import javax.annotation.Nullable;
-
+@Service
 public class AuthAndTokenServiceImpl implements AuthAndTokenService {
 
     private static final int AUTHENTICATION_CODE_MINUTES_OF_LIFE = 60;

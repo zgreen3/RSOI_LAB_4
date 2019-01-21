@@ -25,14 +25,14 @@ public class Token {
     @Column(name = "token_type", length = 255)
     private String tokenType;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name="created_date_time")
     private LocalDateTime createdDateTime;
 
     @Column(name="expires_in_seconds", columnDefinition = "BIGINT")
     private Long expiresInSeconds;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name="last_used_date_time")
     private LocalDateTime lastUsedDateTime;
 

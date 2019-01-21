@@ -41,11 +41,12 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
         logger.info("LogInCheckInterceptor apigateway preHandle() - START");
 
         //https://stackoverflow.com/questions/33118342/java-get-cookie-value-by-name-in-spring-mvc (:)
-        if (Arrays.stream(request.getCookies())
+        if ((request.getCookies() != null) &&
+                (Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equals("AccessTokenID"))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElse(null) != null) {
+                .orElse(null) != null)) {
             //checkTokenValidityOnSecurityServer()
             return true;
         } else {

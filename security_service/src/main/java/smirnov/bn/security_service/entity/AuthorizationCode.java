@@ -23,7 +23,7 @@ public class AuthorizationCode {
     @Column(name = "is_used", columnDefinition = "boolean default false", nullable = false)
     private Boolean isUsed;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name="created_date_time")
     private LocalDateTime createdDateTime;
 

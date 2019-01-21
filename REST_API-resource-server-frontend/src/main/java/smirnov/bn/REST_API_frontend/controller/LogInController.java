@@ -34,14 +34,15 @@ public class LogInController {
     public class ForbiddenException extends RuntimeException {
     }
 
-    @RequestMapping(value = {"/loginUser", "/authorize"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/loginUser"}, //, "/authorize"},
+            method = RequestMethod.GET)
     //, produces = "text/html;charset=UTF-8")
     public String showLoginUserPage(Model model,
                                     @RequestParam(value = "client_id", required = false) String clientServiceId,
                                     @RequestParam(value = "client_secret", required = false) String clientSecret,
                                     @RequestParam(value = "redirect_uri", required = false) String callBackRedirectUri
     ) throws URISyntaxException {
-        logger.info("MainController web_spring_app_1 showLoginUserPage() request to API_Gateway_controller - START");
+        logger.info("LogInController rest_api_frontend showLoginUserPage() request to API_Gateway_controller - START");
 
         //проверка, что clientID и clientSecret совпадают с заданными в коде (hard-coded) значениями соответствующих констант:
         if ((!clientServiceId.equals(WEB_SRVC_APP_ID_STRING)) && (!clientSecret.equals(WEB_SRVC_APP_SECRET_STRING))) {
