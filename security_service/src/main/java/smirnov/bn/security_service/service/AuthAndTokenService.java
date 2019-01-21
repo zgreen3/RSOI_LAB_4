@@ -6,10 +6,10 @@ public interface AuthAndTokenService {
 
     UUID createAuthenticationCode(String clientId, String redirectionUri);
 
-    Boolean isAuthCodeValid(UUID authenticationCodeUuid);
+    Boolean checkAuthCodeValidity(UUID authenticationCodeUuid);
 
     UUID createAccessToken(String clientId);
 
-    Boolean isAccessTokenValid(UUID accessTokenUuid);
+    Boolean checkAccessTokenValidity(UUID accessTokenUuid);
 
 }

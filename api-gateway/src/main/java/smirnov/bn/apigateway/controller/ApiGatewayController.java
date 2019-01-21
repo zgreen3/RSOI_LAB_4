@@ -95,7 +95,9 @@ public class ApiGatewayController {
 
     private static final String CREATE_USER_POST_URI_STRING = "/create-user";
     private static final String CREATE_AUTH_CODE_POST_URI_STRING = "/create-auth-code";
+    private static final String CHECK_AUTH_CODE_POST_URI_STRING = "/auth-code-validation";
     private static final String CREATE_ACCESS_TOKEN_POST_URI_STRING = "/create-access-token";
+    private static final String CHECK_ACCESS_TOKEN_POST_URI_STRING = "/access-token-validation";
     //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
     private static final String READ_BY_USR_UUID_USER_GET_URI_STRING = "/read-by-usr-uuid-";
     private static final String READ_BY_LGN_EML_USER_GET_URI_STRING = "/read-by-usr-login-";
@@ -106,7 +108,9 @@ public class ApiGatewayController {
 
     private static final String CREATE_USER_POST_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + CREATE_USER_POST_URI_STRING; //private static final String READ_BY_ID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_ID_USER_GET_URI_STRING;
     private static final String CREATE_AUTH_CODE_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_AUTH_CODE_POST_URI_STRING;
+    private static final String CHECK_AUTH_CODE_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_AUTH_CODE_POST_URI_STRING;
     private static final String CREATE_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING;
+    private static final String CHECK_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_ACCESS_TOKEN_POST_URI_STRING;
     private static final String READ_BY_USR_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_USR_UUID_USER_GET_URI_STRING;
     private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
     private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
@@ -620,6 +624,16 @@ public class ApiGatewayController {
         return authCodeAsString;
     }
 
+    @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CHECK_AUTH_CODE_POST_URI_STRING}, method = RequestMethod.POST)
+    @ResponseBody
+    public String checkAuthCodeValidity(HttpServletRequest request, @RequestBody AuthorizationCodeInfo authorizationCodeInfo)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller checkAuthCodeValidity() - START");
+        String boolCheckValStr = this.proxingExternalRequests(authorizationCodeInfo, HttpMethod.POST, request,
+                CHECK_AUTH_CODE_POST_URI_TMPLT).getBody();
+        return boolCheckValStr;
+    }
+
     @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING}, method = RequestMethod.POST)
     @ResponseBody
     public String createAccessToken(HttpServletRequest request, @RequestBody TokenInfo tokenInfo)
@@ -629,5 +643,16 @@ public class ApiGatewayController {
                 CREATE_ACCESS_TOKEN_POST_URI_TMPLT).getBody();
         return tokenAsString;
     }
+
+    @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CHECK_ACCESS_TOKEN_POST_URI_STRING}, method = RequestMethod.POST)
+    @ResponseBody
+    public String checkAccessTokenValidity(HttpServletRequest request, @RequestBody TokenInfo tokenInfo)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller checkAccessTokenValidity() - START");
+        String boolCheckValStr = this.proxingExternalRequests(tokenInfo, HttpMethod.POST, request,
+                CHECK_ACCESS_TOKEN_POST_URI_TMPLT).getBody();
+        return boolCheckValStr;
+    }
+
 }
 

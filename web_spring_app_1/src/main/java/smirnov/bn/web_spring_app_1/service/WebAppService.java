@@ -3,6 +3,7 @@ package smirnov.bn.web_spring_app_1.service;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletResponse;
 
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 
@@ -79,6 +80,12 @@ public interface WebAppService {
 
     String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId, String clientSecret);
 
-    void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode);
+    Boolean checkAuthorizationCode(String authorizationCode, String clientId);
+
+    String createAccessToken(String clientId);
+
+    void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response);
+
+    String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, HttpServletResponse response);
 
 }

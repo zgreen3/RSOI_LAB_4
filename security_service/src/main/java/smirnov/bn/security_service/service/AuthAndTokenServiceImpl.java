@@ -45,7 +45,7 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
         return authorizationCode.getAuthCodeUuid();
     }
 
-    public Boolean isAuthCodeValid(UUID authenticationCodeUuid) {
+    public Boolean checkAuthCodeValidity(UUID authenticationCodeUuid) {
         AuthorizationCode authorizationCodeToCheck = authRepository.findByUuid(authenticationCodeUuid);
         if ((authorizationCodeToCheck != null) && authorizationCodeToCheck.getUsed().equals(false)
                 && authorizationCodeToCheck.getExpired().equals(false)) {
@@ -70,7 +70,7 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
         return accessToken.getAccessTokenUuid();
     }
 
-    public Boolean isAccessTokenValid(UUID accessTokenUuid) {
+    public Boolean checkAccessTokenValidity(UUID accessTokenUuid) {
         Token accessTokenToCheck = tokenRepository.findByUuid(accessTokenUuid);
         if ((accessTokenToCheck != null) && accessTokenToCheck.getInvalidated().equals(false)
                 && accessTokenToCheck.getExpired().equals(false)) {

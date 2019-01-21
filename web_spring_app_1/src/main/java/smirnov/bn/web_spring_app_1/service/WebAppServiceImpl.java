@@ -1,7 +1,10 @@
 package smirnov.bn.web_spring_app_1.service;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.List;
@@ -14,6 +17,7 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.util.UriComponentsBuilder;
+import smirnov.bn.web_spring_app_1.model.AuthorizationCodeInfo;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 import smirnov.bn.web_spring_app_1.model.TokenInfo;
 
@@ -111,6 +115,9 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING;
     private static final String CREATE_ACCESS_TOKEN_POST_URI_STRING = "/create-access-token";
     private static final String CREATE_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING;
+
+    private static final String CHECK_AUTH_CODE_POST_URI_STRING = "/auth-code-validation";
+    private static final String CHECK_AUTH_CODE_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_AUTH_CODE_POST_URI_STRING;
 
     //private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser";
 
@@ -217,37 +224,94 @@ public class WebAppServiceImpl implements WebAppService {
         return ultimateUrl;
     }
 
-    public void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId) {
-        logger.info("oAuth2GetAndSaveAccessTokenFromSecurityServer() in WebAppServiceImpl class in web_spring_app_1 module - START");
+    public String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString) {
+        try {
+            uriForRedirectionAsString =
+                    /*
+                            UriComponentsBuilder
+                                    .fromHttpUrl(afterSigningInRedirectionUriString)
+                                    .queryParam("authorization_code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))
+                                    .build().encode().toUriString();
+                    //*/
+                    UriComponentsBuilder.newInstance()
+                            .scheme("http").host("localhost").port(8201).path(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
+                            .queryParam("Authorization: Bearer", tokenUuidAsString, "UTF-8")
+                            .build().toString();
+        } catch (UnsupportedEncodingException e) {
+            return "UnsupportedEncodingException: " + e.toString();
+        }
+        return "redirect:" + uriForRedirectionAsString;
+    }
 
-        //check Authorization code
+    public Boolean checkAuthorizationCode(String authorizationCode, String clientId) {
+        logger.info("checkAuthorizationCode() in WebAppServiceImpl class in web_spring_app_1 module - START");
+        AuthorizationCodeInfo authCodeInfo = new AuthorizationCodeInfo(authorizationCode, clientId);
+        HttpHeaders authCodeInfoHeaders = new HttpHeaders();
+        authCodeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<AuthorizationCodeInfo> requestAuthCodeInfoEntity = new HttpEntity<>(authCodeInfo, authCodeInfoHeaders);
+        ResponseEntity<String> authCodeUuidResponseString =
+                restTemplate.exchange(CHECK_AUTH_CODE_POST_URI_TMPLT, //check Authorization code
+                        HttpMethod.POST, requestAuthCodeInfoEntity, new ParameterizedTypeReference<String>() {
+                        });
+        String boolCheckValStr = authCodeUuidResponseString.getBody();
+        return Boolean.valueOf(boolCheckValStr);
+    }
 
+    public String createAccessToken(String clientId) {
+        logger.info("createAccessToken() in WebAppServiceImpl class in web_spring_app_1 module - START");
         //[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html] [:]
         //localhost:8194/gateway_API/security_service/authorization/create-auth-code (:)
         TokenInfo tokenInfo = new TokenInfo(clientId);
         HttpHeaders tokenInfoHeaders = new HttpHeaders();
         tokenInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        /*
-        //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
-        String encodedAuthentication = "Bearer " +
-                Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
-        tokenInfoHeaders.set("Authorization", encodedAuthentication);
-        //*/
-
+            /*
+            //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
+            String encodedAuthentication = "Bearer " +
+                    Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
+            tokenInfoHeaders.set("Authorization", encodedAuthentication);
+            //*/
         HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, tokenInfoHeaders);
         ResponseEntity<String> tokenUuidResponseString =
-                restTemplate.exchange(CREATE_ACCESS_TOKEN_POST_URI_TMPLT, //createAccessToken
-                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {});
+                restTemplate.exchange(CREATE_ACCESS_TOKEN_POST_URI_TMPLT, //create Access Token
+                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
+                        });
         String tokenUuidAsString;
         if (tokenUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
             tokenUuidAsString = tokenUuidResponseString.getBody();
         } else {
             tokenUuidAsString = "";
         }
+        return tokenUuidAsString;
+    }
 
-        //save token as cookie for session with GatewayAPI
+    public void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response) {
+        logger.info("saveTokenAsCookie() in WebAppServiceImpl class in web_spring_app_1 module - START");
+        //https://stackoverflow.com/questions/8889679/how-to-create-a-cookie-and-add-to-http-response-from-inside-my-service-layer (,)
+        //https://stackoverflow.com/questions/3342140/cross-domain-cookies (:)
+        Cookie cookie = new Cookie("AccessTokenID", tokenUuidAsString);
+        //The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories (:)
+        cookie.setPath("/");
+        // 24 hours in seconds format - [max] cookie lifespan:
+        cookie.setMaxAge(60 * 60 * 24);
+        cookie.setHttpOnly(true);
+        //determines whether the cookie should only be sent using a secure protocol, such as HTTPS or SSL (:)
+        cookie.setSecure(false); //(true);
+        response.addCookie(cookie);
+    }
 
+    public String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, HttpServletResponse response) {
+        logger.info("oAuth2GetAndSaveAccessTokenFromSecurityServer() in WebAppServiceImpl class in web_spring_app_1 module - START");
+        String tokenUuidAsString = "0";
+//***********check Authorization code (:)***********
+        //Только, если код авторизации валиден, выдаём токен доступа (и сохраняем его как cookie):
+        if (Boolean.TRUE.equals(checkAuthorizationCode(authorizationCode, clientId))) {
+//***********create Access Token (:)***********
+            tokenUuidAsString = createAccessToken(clientId);
+//***********save token as cookie for session with GatewayAPI (:)***********
+            saveTokenAsCookie(tokenUuidAsString, response);
+        }
+
+        return tokenUuidAsString;
     }
 
 }

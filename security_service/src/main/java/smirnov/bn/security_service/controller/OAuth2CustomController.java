@@ -35,6 +35,19 @@ public class OAuth2CustomController {
         }
     }
 
+    @RequestMapping(value = {"/auth-code-validation"}, method = RequestMethod.POST)
+    @ResponseBody
+    public String checkAuthCodeValidity(@RequestBody AuthorizationCodeInfo authorizationCodeInfo) {
+        try {
+            Boolean isAuthCodeValidBoolVar = authAndTokenService.checkAuthCodeValidity(authorizationCodeInfo.getAuthCodeUuid());
+            logger.info("/security_service/authorization : /auth-code-validation, checkAuthCodeValidity() - CHEKING " + isAuthCodeValidBoolVar.toString());
+            return isAuthCodeValidBoolVar.toString();
+        } catch (Exception e) {
+            logger.error("Error in isAuthCodeValid(...)", e);
+            return null;
+        }
+    }
+
     @RequestMapping(value = {"/create-access-token"}, method = RequestMethod.POST)
     @ResponseBody
     public String createAccessToken(@RequestBody TokenInfo tokenInfo) {
@@ -48,4 +61,16 @@ public class OAuth2CustomController {
         }
     }
 
+    @RequestMapping(value = {"/access-token-validation"}, method = RequestMethod.POST)
+    @ResponseBody
+    public String checkAccessTokenValidity(@RequestBody TokenInfo tokenInfo) {
+        try {
+            Boolean isTokenValidBoolVar = authAndTokenService.checkAccessTokenValidity(tokenInfo.getAccessTokenUuid());
+            logger.info("/security_service/authorization : /access-token-validation, checkAccessTokenValidity() - CHEKING " + isTokenValidBoolVar.toString());
+            return isTokenValidBoolVar.toString();
+        } catch (Exception e) {
+            logger.error("Error in isAuthCodeValid(...)", e);
+            return null;
+        }
+    }
 }

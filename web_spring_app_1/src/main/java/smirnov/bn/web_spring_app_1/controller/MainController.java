@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -191,10 +194,14 @@ public class MainController {
                 "/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
     }
 
+    //метод для обработк полученного в callback reference кода аутентификации (кода авторизации)
+    //по OAuth2 алгоритму для authorization code [flow]:
     @RequestMapping(value = {"/redirected_auth_uri"}, method = RequestMethod.GET)
-    public String redirectedAuthorizationUriProcess(@RequestParam(value = "authorization_code") String authorizationCode) {
+    public String redirectedAuthorizationUriProcess(//HttpServletRequest request,
+                                                    HttpServletResponse response,
+                                                    @RequestParam(value = "authorization_code") String authorizationCode) {
         logger.info("MainController web_spring_app_1 redirectedAuthorizationUriProcess() request to API_Gateway_controller - START");
-        service.oAuth2GetAndSaveAccessTokenFromSecurityServer(authorizationCode);
+        String tokenUuidAsString = service.oAuth2GetAndSaveAccessTokenFromSecurityServer(authorizationCode, THIS_CLIENT_SERVICE_ID_STRING, response);
         return "redirect:" + "/index";
     }
 
