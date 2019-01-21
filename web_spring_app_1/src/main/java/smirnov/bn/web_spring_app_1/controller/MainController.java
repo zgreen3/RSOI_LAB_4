@@ -31,7 +31,7 @@ public class MainController {
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
 
-    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser"; //"http://localhost:8203/authorize"; //"http://localhost:8203/loginUser";
+    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/authorize"; //"http://localhost:8203/loginUser";
     private static final String THIS_CLIENT_SERVICE_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
     private static final String THIS_CLIENT_SERVICE_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 
@@ -188,7 +188,14 @@ public class MainController {
         logger.info("MainController web_spring_app_1 redirectToLoginUserPage() request to API_Gateway_controller - START");
 
         return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                "http://localhost:8201/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
+                "/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
+    }
+
+    @RequestMapping(value = {"/redirected_auth_uri"}, method = RequestMethod.GET)
+    public String redirectedAuthorizationUriProcess(@RequestParam(value = "authorization_code") String authorizationCode) {
+        logger.info("MainController web_spring_app_1 redirectedAuthorizationUriProcess() request to API_Gateway_controller - START");
+        service.oAuth2GetAndSaveAccessTokenFromSecurityServer(authorizationCode);
+        return "redirect:" + "/index";
     }
 
     @ExceptionHandler(HttpStatusCodeException.class)
@@ -197,7 +204,7 @@ public class MainController {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
             return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                    "http://localhost:8201/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
+                    "/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
         } else {
             return "error";
         }

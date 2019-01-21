@@ -79,4 +79,6 @@ public interface WebAppService {
 
     String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId, String clientSecret);
 
+    void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode);
+
 }

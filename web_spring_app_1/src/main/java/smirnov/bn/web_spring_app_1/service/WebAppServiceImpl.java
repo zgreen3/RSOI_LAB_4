@@ -3,6 +3,7 @@ package smirnov.bn.web_spring_app_1.service;
 import javax.annotation.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.util.UriComponentsBuilder;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
+import smirnov.bn.web_spring_app_1.model.TokenInfo;
 
 public class WebAppServiceImpl implements WebAppService {
 
@@ -23,45 +25,45 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String API_SERVICE_URI_CMN_DIR_STRING = "/gateway_API";
     private static final String API_SERVICE_PORT_STRING = "8194" + API_SERVICE_URI_CMN_DIR_STRING;
 
-    private static final String SERVICE_1_PORT_STRING = API_SERVICE_PORT_STRING; //"8191";
-    private static final String SERVICE_1_URI_COMMON_DIR_STRING = "/ling_var_dict";
-    private static final String SERVICE_1_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_1_PORT_STRING + SERVICE_1_URI_COMMON_DIR_STRING;
+    //private static final String SERVICE_1_PORT_STRING = API_SERVICE_PORT_STRING; //"8191";
+    //private static final String SERVICE_1_URI_COMMON_DIR_STRING = "/ling_var_dict";
+    //private static final String SERVICE_1_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_1_PORT_STRING + SERVICE_1_URI_COMMON_DIR_STRING;
 
-    private static final String CREATE_LNG_VR_POST_URI_STRING = "/create-ling_var";
+/*    private static final String CREATE_LNG_VR_POST_URI_STRING = "/create-ling_var";
     private static final String READ_BY_ID_LNG_VR_GET_URI_STRING = "/read-";
     private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING = "/read-by-emp-uuid-";
     private static final String READ_ALL_LNG_VR_GET_URI_STRING = "/read-all";
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_STRING = "/read-all-paginated";
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_STRING = "/update-ling_var";
-    private static final String DELETE_LNG_VR_DELETE_URI_STRING = "/delete-";
+    private static final String DELETE_LNG_VR_DELETE_URI_STRING = "/delete-";*/
 
-    private static final String CREATE_LNG_VR_POST_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + CREATE_LNG_VR_POST_URI_STRING;
+/*    private static final String CREATE_LNG_VR_POST_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + CREATE_LNG_VR_POST_URI_STRING;
     private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_ID_LNG_VR_GET_URI_STRING;
     private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING;
     private static final String READ_ALL_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_LNG_VR_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_LNG_VR_GET_URI_STRING;
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + UPDATE_BY_ID_LNG_VR_PUT_URI_STRING;
-    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + DELETE_LNG_VR_DELETE_URI_STRING;
+    private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + DELETE_LNG_VR_DELETE_URI_STRING;*/
 
-    private static final String SERVICE_2_PORT_STRING = API_SERVICE_PORT_STRING; //"8192";
-    private static final String SERVICE_2_URI_COMMON_DIR_STRING = "/biz_proc_desc/";
-    private static final String SERVICE_2_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_2_PORT_STRING + SERVICE_2_URI_COMMON_DIR_STRING;
+    //private static final String SERVICE_2_PORT_STRING = API_SERVICE_PORT_STRING; //"8192";
+    //private static final String SERVICE_2_URI_COMMON_DIR_STRING = "/biz_proc_desc/";
+    //private static final String SERVICE_2_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SERVICE_2_PORT_STRING + SERVICE_2_URI_COMMON_DIR_STRING;
 
-    private static final String CREATE_BP_DSC_POST_URI_STRING = "create-biz_proc_desc";
+/*    private static final String CREATE_BP_DSC_POST_URI_STRING = "create-biz_proc_desc";
     private static final String READ_BY_ID_BP_DSC_GET_URI_STRING = "read-";
     private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING = "read-by-emp-uuid-";
     private static final String READ_ALL_BP_DSC_GET_URI_STRING = "read-all";
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_STRING = "update-biz_proc_desc";
-    private static final String DELETE_BP_DSC_DELETE_URI_STRING = "delete-";
+    private static final String DELETE_BP_DSC_DELETE_URI_STRING = "delete-";*/
 
-    private static final String CREATE_BP_DSC_POST_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + CREATE_BP_DSC_POST_URI_STRING;
+/*    private static final String CREATE_BP_DSC_POST_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + CREATE_BP_DSC_POST_URI_STRING;
     private static final String READ_BY_ID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_ID_BP_DSC_GET_URI_STRING;
     private static final String READ_BY_EMP_UUID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_BP_DSC_GET_URI_STRING;
     private static final String READ_ALL_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_BP_DSC_GET_URI_STRING;
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_BP_DSC_GET_URI_STRING;
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + UPDATE_BY_ID_BP_DSC_PUT_URI_STRING;
-    private static final String DELETE_BP_DSC_DELETE_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + DELETE_BP_DSC_DELETE_URI_STRING;
+    private static final String DELETE_BP_DSC_DELETE_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + DELETE_BP_DSC_DELETE_URI_STRING;*/
 
     private static final String SERVICE_3_PORT_STRING = API_SERVICE_PORT_STRING; //"8193";
     private static final String SERVICE_3_URI_COMMON_DIR_STRING = "/employees/";
@@ -84,9 +86,9 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String DELETE_EMP_DELETE_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + DELETE_EMP_DELETE_URI_STRING;
 
     private static final String SCRT_SERVICE_PORT_STRING = API_SERVICE_PORT_STRING; //"8202";
-    private static final String SCRT_SERVICE_URI_COMMON_DIR_STRING = "/security_service";
-    private static final String SCRT_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_URI_COMMON_DIR_STRING;
-
+    //private static final String SCRT_SERVICE_URI_COMMON_DIR_STRING = "/security_service";
+    //private static final String SCRT_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_URI_COMMON_DIR_STRING;
+    /*
     private static final String CREATE_USER_POST_URI_STRING = "/create-user";
     //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
     private static final String READ_BY_USR_UUID_USER_GET_URI_STRING = "/read-by-usr-uuid-";
@@ -103,6 +105,12 @@ public class WebAppServiceImpl implements WebAppService {
     private static final String READ_ALL_PGNTD_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_USER_GET_URI_STRING;
     private static final String UPDATE_BY_ID_USER_PUT_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING;
     private static final String DELETE_USER_DELETE_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + DELETE_USER_DELETE_URI_STRING;
+    */
+
+    private static final String SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING = "/security_service/authorization";
+    private static final String SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING;
+    private static final String CREATE_ACCESS_TOKEN_POST_URI_STRING = "/create-access-token";
+    private static final String CREATE_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING;
 
     //private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser";
 
@@ -207,6 +215,39 @@ public class WebAppServiceImpl implements WebAppService {
         }
 
         return ultimateUrl;
+    }
+
+    public void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId) {
+        logger.info("oAuth2GetAndSaveAccessTokenFromSecurityServer() in WebAppServiceImpl class in web_spring_app_1 module - START");
+
+        //check Authorization code
+
+        //[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html] [:]
+        //localhost:8194/gateway_API/security_service/authorization/create-auth-code (:)
+        TokenInfo tokenInfo = new TokenInfo(clientId);
+        HttpHeaders tokenInfoHeaders = new HttpHeaders();
+        tokenInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        /*
+        //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
+        String encodedAuthentication = "Bearer " +
+                Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
+        tokenInfoHeaders.set("Authorization", encodedAuthentication);
+        //*/
+
+        HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, tokenInfoHeaders);
+        ResponseEntity<String> tokenUuidResponseString =
+                restTemplate.exchange(CREATE_ACCESS_TOKEN_POST_URI_TMPLT, //createAccessToken
+                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {});
+        String tokenUuidAsString;
+        if (tokenUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
+            tokenUuidAsString = tokenUuidResponseString.getBody();
+        } else {
+            tokenUuidAsString = "";
+        }
+
+        //save token as cookie for session with GatewayAPI
+
     }
 
 }

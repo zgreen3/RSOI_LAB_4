@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import smirnov.bn.apigateway.interceptor.LogInCheckInterceptor;
+import smirnov.bn.apigateway.interceptor.ApiGatewayLogInCheckInterceptor;
 
 @Configuration
 public class CustomConfigForInterceptors extends WebMvcConfigurerAdapter {
     //https://www.tutorialspoint.com/spring_boot/spring_boot_interceptor.htm (:)
     @Autowired
-    LogInCheckInterceptor logInCheckInterceptor;
+    ApiGatewayLogInCheckInterceptor apiGatewayLogInCheckInterceptor;
 
     private static final Logger logger = LoggerFactory.getLogger(CustomConfigForInterceptors.class);
 
@@ -21,6 +21,6 @@ public class CustomConfigForInterceptors extends WebMvcConfigurerAdapter {
         logger.info("CustomConfigForInterceptors apigateway addInterceptors() - START");
 
         //Log In Check Interceptor applied to all URLs:
-        registry.addInterceptor(logInCheckInterceptor); //.excludePathPatterns("/loginUser");
+        registry.addInterceptor(apiGatewayLogInCheckInterceptor); //.excludePathPatterns("/loginUser");
     }
 }

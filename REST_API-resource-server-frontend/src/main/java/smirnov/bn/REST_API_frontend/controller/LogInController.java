@@ -1,5 +1,6 @@
 package smirnov.bn.REST_API_frontend.controller;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -7,12 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.net.URISyntaxException;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.util.UUID;
-
 import org.springframework.web.client.HttpClientErrorException;
+
+import org.springframework.web.util.UriComponentsBuilder;
 import smirnov.bn.REST_API_frontend.form.UserForm;
 import smirnov.bn.REST_API_frontend.model.UserInfo;
 import smirnov.bn.REST_API_frontend.service.PasswordHashingHelper;
@@ -24,7 +26,7 @@ public class LogInController {
     private static final String WEB_SRVC_APP_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
     private static final String WEB_SRVC_APP_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 
-    private String afterSigningInRedirectionUri;
+    private String afterSigningInRedirectionUriString;
 
     private RestApiFrontendServiceImpl service = new RestApiFrontendServiceImpl();
 
@@ -34,7 +36,7 @@ public class LogInController {
     public class ForbiddenException extends RuntimeException {
     }
 
-    @RequestMapping(value = {"/loginUser"}, //, "/authorize"},
+    @RequestMapping(value = {"/loginUser", "/authorize"},
             method = RequestMethod.GET)
     //, produces = "text/html;charset=UTF-8")
     public String showLoginUserPage(Model model,
@@ -56,7 +58,7 @@ public class LogInController {
 
         //сохраняем (локально, в переменной экземпляра класса, в ОЗУ)
         //redirect URL для последующей передачи по этому адресу authorization code(:)
-        afterSigningInRedirectionUri = callBackRedirectUri;
+        afterSigningInRedirectionUriString = callBackRedirectUri;
 
         model.addAttribute("userForm", new UserForm());
         model.addAttribute("clientServiceId", clientServiceId);
@@ -83,7 +85,7 @@ public class LogInController {
         return "loginUser";
     }
 
-    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/loginUser", "/authorize"}, method = RequestMethod.POST)
     public String authenticateUser(Model model,
                                    @Valid @ModelAttribute("userForm") UserForm userForm,
                                    BindingResult result) {
@@ -126,9 +128,29 @@ public class LogInController {
             //только в случае успешной аутентификации выдаём authorizationCode и перенаправляем на другую страницу (:)
             if (authenticationIsSuccess) {
                 //запрос authorizationCode через GatewayAPI у SecurityServer:
-                UUID authorizationCodeUuid = service.createAuthenticationCode(WEB_SRVC_APP_ID_STRING, afterSigningInRedirectionUri);
+                UUID authorizationCodeUuid = service.createAuthenticationCode(WEB_SRVC_APP_ID_STRING, afterSigningInRedirectionUriString);
 
-                return "redirect:" + afterSigningInRedirectionUri + "?authorization_code=" + authorizationCodeUuid.toString();
+                //URIBuilder uriBuilder = new URIBuilder();
+
+                //uriBuilder.addParameter("abc", "xyz");
+
+                String uriForRedirectionAsString;
+                try {
+                    uriForRedirectionAsString =
+                    /*
+                            UriComponentsBuilder
+                                    .fromHttpUrl(afterSigningInRedirectionUriString)
+                                    .queryParam("authorization_code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))
+                                    .build().encode().toUriString();
+                    //*/
+                    UriComponentsBuilder.newInstance()
+                            .scheme("http").host("localhost").port(8201).path(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
+                            .queryParam("authorization_code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))
+                            .build().toString();
+                } catch (UnsupportedEncodingException e) {
+                    return "UnsupportedEncodingException: " + e.toString();
+                }
+                return "redirect:" + uriForRedirectionAsString;
             } else {
                 String customErrorMessage = "Can't find user with this combination of name, email & password!";
                 model.addAttribute("errorMessageAttr", customErrorMessage);

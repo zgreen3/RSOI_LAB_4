@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Base64;
 import java.util.UUID;
 
 import smirnov.bn.REST_API_frontend.model.AuthorizationCodeInfo;
@@ -34,6 +36,9 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
     private static final String CREATE_AUTH_CODE_POST_URI_STRING = "/create-auth-code";
     private static final String CREATE_AUTH_CODE_POST_URI_TMPLT = SCRT_SERVICE_AUTH_ABS_URI_COMMON_STRING + CREATE_AUTH_CODE_POST_URI_STRING;
 
+    private static final String REST_API_FRONTEND_ID_STRING = "REST_API_FRONTEND_1_CLT_ID0_000_2";
+    private static final String REST_API_FRONTEND_SECRET_STRING = "REST_API_FRONTEND_1_CLT_0SECRET0STRING0_000_2";
+
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
@@ -49,6 +54,10 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
         // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
         HttpHeaders userInfoHeaders = new HttpHeaders();
         userInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+        //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
+        String encodedAuthentication = "Basic [CUSTOM] " +
+                Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
+        userInfoHeaders.set("Authorization", encodedAuthentication);
         HttpEntity<UserInfo> requestUserInfoEntity = new HttpEntity<>(userInfo, userInfoHeaders);
         ResponseEntity<String> usersUuidResponseString =
                 restTemplate.exchange(CREATE_USER_POST_URI_TMPLT, //SERVICE_3_URI_COMMON_DIR_STRING + CREATE_EMP_POST_URI_STRING, //UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
@@ -80,10 +89,18 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
 
     public UserInfo findUserByLoginEmail(String userLogin, String userEmail) {
         logger.info("findUserByLoginEmail() in RestApiFrontendServiceImpl class in rest_api_frontend module - START");
+        // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+        HttpHeaders customHeaders = new HttpHeaders();
+        customHeaders.setContentType(MediaType.APPLICATION_JSON);
+        //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
+        String encodedAuthentication = "Basic [CUSTOM] " +
+                Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
+        customHeaders.set("Authorization", encodedAuthentication);
+        HttpEntity<UserInfo> customRequestEntity = new HttpEntity<>(null, customHeaders);
         //localhost:8194/gateway_API/security_service/read-by-usr-login-{userLogin}-email-{userEmail}
         return restTemplate.exchange(READ_BY_LGN_EML_USER_GET_URI_TMPLT + userLogin + "-email-" + userEmail,
                 //"http://localhost:8202/security_service/read-by-usr-login-{userLogin}-email-{userEmail}",
-                HttpMethod.GET, null, new ParameterizedTypeReference<UserInfo>() {
+                HttpMethod.GET, customRequestEntity, new ParameterizedTypeReference<UserInfo>() {
                 }).getBody();
     }
 
@@ -95,6 +112,10 @@ public class RestApiFrontendServiceImpl implements RestApiFrontendService {
         AuthorizationCodeInfo authorizationCodeInfo = new AuthorizationCodeInfo(clientId, redirectionUri);
         HttpHeaders authorizationCodeHeaders = new HttpHeaders();
         authorizationCodeHeaders.setContentType(MediaType.APPLICATION_JSON);
+        //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
+        String encodedAuthentication = "Basic [CUSTOM] " +
+                Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
+        authorizationCodeHeaders.set("Authorization", encodedAuthentication);
         HttpEntity<AuthorizationCodeInfo> requestAuthorizationCodeInfoEntity = new HttpEntity<>(authorizationCodeInfo, authorizationCodeHeaders);
         ResponseEntity<String> authorizationCodeUuidResponseString =
                 restTemplate.exchange(CREATE_AUTH_CODE_POST_URI_TMPLT,

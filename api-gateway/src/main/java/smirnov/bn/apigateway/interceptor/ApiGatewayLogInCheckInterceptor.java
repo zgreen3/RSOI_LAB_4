@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -12,9 +11,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Base64;
 
 @Component
-public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
+public class ApiGatewayLogInCheckInterceptor extends HandlerInterceptorAdapter {
 
     private static final String MAIN_WEB_SERVER_HOST_STRING = "http://localhost:";
     private static final String SERVICE_1_PORT_STRING = "8191";
@@ -23,7 +23,11 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
     private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING = "/read-by-emp-uuid-";
     private static final String READ_BY_EMP_UUID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_LNG_VR_GET_URI_STRING;
 
-    private static final Logger logger = LoggerFactory.getLogger(LogInCheckInterceptor.class);
+    //Client ID and Client Secret from REST_API_frontend (:)
+    private static final String REST_API_FRONTEND_ID_STRING = "REST_API_FRONTEND_1_CLT_ID0_000_2";
+    private static final String REST_API_FRONTEND_SECRET_STRING = "REST_API_FRONTEND_1_CLT_0SECRET0STRING0_000_2";
+
+    private static final Logger logger = LoggerFactory.getLogger(ApiGatewayLogInCheckInterceptor.class);
     //private RestTemplate restTemplate = new RestTemplate();
 
     @Override
@@ -38,16 +42,21 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
             request.setAttribute("startTime", startTime);
             //*/
 
-        logger.info("LogInCheckInterceptor apigateway preHandle() - START");
+        logger.info("ApiGatewayLogInCheckInterceptor apigateway preHandle() - START");
 
         //https://stackoverflow.com/questions/33118342/java-get-cookie-value-by-name-in-spring-mvc (:)
         if ((request.getCookies() != null) &&
                 (Arrays.stream(request.getCookies())
-                .filter(c -> c.getName().equals("AccessTokenID"))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null) != null)) {
+                        .filter(c -> c.getName().equals("AccessTokenID"))
+                        .findFirst()
+                        .map(Cookie::getValue)
+                        .orElse(null) != null)) {
             //checkTokenValidityOnSecurityServer()
+            return true;
+        } else if ((request.getHeader("Authorization") != null) &&
+                (!request.getHeader("Authorization").isEmpty()) &&
+                request.getHeader("Authorization").equals("Basic [CUSTOM] " +
+                        Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes()))) {
             return true;
         } else {
             //https://stackoverflow.com/questions/39554740/springboot-how-to-return-error-status-code-in-prehandle-of-handlerinterceptor (:)
@@ -86,7 +95,7 @@ public class LogInCheckInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         //super.postHandle(request, response, handler, modelAndView);
-        logger.info("LogInCheckInterceptor web_spring_app_1 postHandle() - START");
+        logger.info("ApiGatewayLogInCheckInterceptor web_spring_app_1 postHandle() - START");
         /*
         if (response.getStatus() == HttpStatus.UNAUTHORIZED.value()) {
             response.sendRedirect("http://localhost:8203/loginUser");
