@@ -7,16 +7,23 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.sun.deploy.net.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.util.UriComponentsBuilder;
+import smirnov.bn.web_spring_app_1.interceptor.RestTemplateCustomAccessTokenSettingInterceptor;
 import smirnov.bn.web_spring_app_1.model.AuthorizationCodeInfo;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 import smirnov.bn.web_spring_app_1.model.TokenInfo;
@@ -122,8 +129,18 @@ public class WebAppServiceImpl implements WebAppService {
     //private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/loginUser";
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
+    //https://objectpartners.com/2018/03/01/log-your-resttemplate-request-and-response-without-destroying-the-body/
+    //http://springinpractice.com/2013/10/27/how-to-send-an-http-header-with-every-request-with-spring-resttemplate (:)
     //@Autowired
     private RestTemplate restTemplate = new RestTemplate();
+    {
+        ////https://molchanoff.me/software-development/logging-spring-rest-template-requests/
+        //RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+        //restTemplate.setInterceptors(Collections.singletonList(new RestTemplateCustomAccessTokenSettingInterceptor()));
+
+        //https://stackoverflow.com/questions/3987428/what-is-an-initialization-block (:)
+        restTemplate.setInterceptors(Collections.singletonList(new RestTemplateCustomAccessTokenSettingInterceptor()));
+    }
 
     /*
      @Nullable
@@ -224,18 +241,13 @@ public class WebAppServiceImpl implements WebAppService {
         return ultimateUrl;
     }
 
-    public String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString) {
+    public String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString, String afterSigningInRedirectionUriString) {
+        String uriForRedirectionAsString;
         try {
             uriForRedirectionAsString =
-                    /*
-                            UriComponentsBuilder
-                                    .fromHttpUrl(afterSigningInRedirectionUriString)
-                                    .queryParam("authorization_code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))
-                                    .build().encode().toUriString();
-                    //*/
                     UriComponentsBuilder.newInstance()
                             .scheme("http").host("localhost").port(8201).path(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
-                            .queryParam("Authorization: Bearer", tokenUuidAsString, "UTF-8")
+                            .queryParam("Authorization: Bearer", URLEncoder.encode(tokenUuidAsString, "UTF-8"))
                             .build().toString();
         } catch (UnsupportedEncodingException e) {
             return "UnsupportedEncodingException: " + e.toString();
@@ -290,28 +302,33 @@ public class WebAppServiceImpl implements WebAppService {
         //https://stackoverflow.com/questions/3342140/cross-domain-cookies (:)
         Cookie cookie = new Cookie("AccessTokenID", tokenUuidAsString);
         //The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories (:)
-        cookie.setPath("/");
+        //[https://stackoverflow.com/questions/576535/cookie-path-and-its-accessibility-to-subfolder-pages] [:]
+        cookie.setPath(API_SERVICE_URI_CMN_DIR_STRING); //("/gateway_API"); ////("/");
+        ////https://stackoverflow.com/questions/1336126/does-every-web-request-send-the-browser-cookies (:)
+        //cookie.setDomain("localhost");
         // 24 hours in seconds format - [max] cookie lifespan:
         cookie.setMaxAge(60 * 60 * 24);
         cookie.setHttpOnly(true);
         //determines whether the cookie should only be sent using a secure protocol, such as HTTPS or SSL (:)
         cookie.setSecure(false); //(true);
+        //[https://docs.microsoft.com/ru-ru/dotnet/api/system.web.httpresponse.cookies?view=netframework-4.7.2]
         response.addCookie(cookie);
     }
 
-    public String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, HttpServletResponse response) {
+    public void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, HttpServletResponse response) {
         logger.info("oAuth2GetAndSaveAccessTokenFromSecurityServer() in WebAppServiceImpl class in web_spring_app_1 module - START");
+
         String tokenUuidAsString = "0";
-//***********check Authorization code (:)***********
+        //***********check Authorization code (:)***********
         //Только, если код авторизации валиден, выдаём токен доступа (и сохраняем его как cookie):
         if (Boolean.TRUE.equals(checkAuthorizationCode(authorizationCode, clientId))) {
-//***********create Access Token (:)***********
+            //***********create Access Token (:)***********
             tokenUuidAsString = createAccessToken(clientId);
-//***********save token as cookie for session with GatewayAPI (:)***********
+            //***********(+)save token as cookie [for session with GatewayAPI - with path "/gateway_API"] (:)***********
             saveTokenAsCookie(tokenUuidAsString, response);
         }
 
-        return tokenUuidAsString;
+        //return tokenUuidAsString;
     }
 
 }

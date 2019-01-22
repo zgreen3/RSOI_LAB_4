@@ -1,6 +1,8 @@
 package smirnov.bn.web_spring_app_1.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,7 +203,17 @@ public class MainController {
                                                     HttpServletResponse response,
                                                     @RequestParam(value = "authorization_code") String authorizationCode) {
         logger.info("MainController web_spring_app_1 redirectedAuthorizationUriProcess() request to API_Gateway_controller - START");
-        String tokenUuidAsString = service.oAuth2GetAndSaveAccessTokenFromSecurityServer(authorizationCode, THIS_CLIENT_SERVICE_ID_STRING, response);
+        try {
+            //Получение access token-а от Security Service-а (с сохранением в cookies-коллекции сервера/сервиса,
+            //для путри "/gateway_API", в виде String-представления его UUID-а)
+            //для авторизованной работы с rest api данной микросервисной системы:
+            //String tokenUuidAsString =
+                    service.oAuth2GetAndSaveAccessTokenFromSecurityServer(
+                    URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING, response);
+        } catch (UnsupportedEncodingException e) {
+            return "UnsupportedEncodingException: " + e.toString();
+        }
+
         return "redirect:" + "/index";
     }
 

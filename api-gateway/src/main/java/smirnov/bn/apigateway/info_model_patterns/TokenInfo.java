@@ -25,6 +25,17 @@ public class TokenInfo {
 
     private UUID refreshTokenUuid;
 
+    public TokenInfo() {
+    }
+
+    public TokenInfo(UUID accessTokenUuid) {
+        this.accessTokenUuid = accessTokenUuid;
+    }
+
+    public TokenInfo(String accessTokenUuidAsString) {
+        this.accessTokenUuid = UUID.fromString(accessTokenUuidAsString);
+    }
+
     public Integer getTokenId() {
         return tokenId;
     }
