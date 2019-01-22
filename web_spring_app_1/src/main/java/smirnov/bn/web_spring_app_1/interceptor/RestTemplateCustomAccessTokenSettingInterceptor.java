@@ -20,16 +20,30 @@ public class RestTemplateCustomAccessTokenSettingInterceptor implements ClientHt
 
         //получаем access token из cookies-"хранилища" (в ОЗУ / in JVM memory):
         String accessTokenUuidStr = "0";
-        if ((((HttpServletRequest)request).getCookies() != null)) {
-            accessTokenUuidStr = Arrays.stream(((HttpServletRequest)request).getCookies())
+        //https://stackoverflow.com/questions/33690741/httpservletrequest-getcookies-or-getheader (:)
+        if (request.getHeaders().getFirst("Cookie") != null) {
+            String rawCookie = request.getHeaders().getFirst("Cookie");
+            String[] rawCookieParams = rawCookie.split(";");
+            for(String rawCookieNameAndValue : rawCookieParams)
+            {
+                String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
+                if (rawCookieNameAndValuePair[0].equals("AccessTokenID")) {
+                    accessTokenUuidStr = rawCookieNameAndValuePair[1];
+                    break;
+                }
+            }
+
+            /*
+            accessTokenUuidStr = Arrays.stream(rawCookieParams)
                     .filter(c -> c.getName().equals("AccessTokenID"))
                     .findFirst()
                     .map(Cookie::getValue)
                     .orElse(null);
+            //*/
         }
         //https://stackoverflow.com/questions/2811769/adding-an-http-header-to-the-request-in-a-servlet-filter (:)
         HttpHeaders headers = request.getHeaders();
-        headers.add("Authorization: Bearer", accessTokenUuidStr);
+        headers.add("Authorization", "Bearer " + accessTokenUuidStr);
 
         ////https://www.baeldung.com/spring-rest-template-interceptor (:)
         //ClientHttpResponse response = execution.execute(request, body);

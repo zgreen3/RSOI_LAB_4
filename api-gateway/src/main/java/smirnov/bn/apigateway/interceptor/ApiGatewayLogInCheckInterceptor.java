@@ -75,18 +75,22 @@ public class ApiGatewayLogInCheckInterceptor extends HandlerInterceptorAdapter {
                 return true;
             } else {
                 //**********проверка access token-а валидности / корректности:**********
-                String accessTokenUuidAsString = request.getHeader("Authorization");
-
                 logger.info("check Access Token() in api-gateway class in preHandle() interceptor - START");
-                TokenInfo tokenInfo = new TokenInfo(accessTokenUuidAsString);
-                HttpHeaders authCodeInfoHeaders = new HttpHeaders();
-                authCodeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, authCodeInfoHeaders);
-                ResponseEntity<String> tokenUuidResponseString =
-                        restTemplate.exchange(CHECK_ACCESS_TOKEN_POST_URI_TMPLT, //check access token
-                                HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
-                                });
-                String boolCheckValStr = tokenUuidResponseString.getBody();
+
+                //проверяем наличие валидного корректного токена, отбрасываем значение "Bearer":
+                String accessTokenUuidAsString = request.getHeader("Authorization").split(" ")[1];
+                String boolCheckValStr = "false";
+                if (!accessTokenUuidAsString.equals("0")) {
+                    TokenInfo tokenInfo = new TokenInfo(accessTokenUuidAsString);
+                    HttpHeaders authCodeInfoHeaders = new HttpHeaders();
+                    authCodeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, authCodeInfoHeaders);
+                    ResponseEntity<String> tokenUuidResponseString =
+                            restTemplate.exchange(CHECK_ACCESS_TOKEN_POST_URI_TMPLT, //check access token
+                                    HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
+                                    });
+                    boolCheckValStr = tokenUuidResponseString.getBody();
+                }
 
                 if (TRUE.equals(Boolean.valueOf(boolCheckValStr))) {
                     return true;

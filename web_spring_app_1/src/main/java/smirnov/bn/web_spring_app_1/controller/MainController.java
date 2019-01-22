@@ -193,7 +193,7 @@ public class MainController {
         logger.info("MainController web_spring_app_1 redirectToLoginUserPage() request to API_Gateway_controller - START");
 
         return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                "/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
+                "redirected_auth_uri", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
     }
 
     //метод для обработк полученного в callback reference кода аутентификации (кода авторизации)
@@ -223,7 +223,7 @@ public class MainController {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
             return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                    "/index", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
+                    "/redirected_auth_uri", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
         } else {
             return "error";
         }

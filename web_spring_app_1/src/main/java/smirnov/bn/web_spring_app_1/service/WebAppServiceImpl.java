@@ -6,23 +6,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import com.sun.deploy.net.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-
 import org.springframework.web.util.UriComponentsBuilder;
+
 import smirnov.bn.web_spring_app_1.interceptor.RestTemplateCustomAccessTokenSettingInterceptor;
 import smirnov.bn.web_spring_app_1.model.AuthorizationCodeInfo;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
