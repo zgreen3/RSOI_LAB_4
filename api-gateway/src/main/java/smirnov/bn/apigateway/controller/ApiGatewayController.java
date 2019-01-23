@@ -118,6 +118,8 @@ public class ApiGatewayController {
     private static final String UPDATE_BY_ID_USER_PUT_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + UPDATE_BY_ID_USER_PUT_URI_STRING;
     private static final String DELETE_USER_DELETE_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + DELETE_USER_DELETE_URI_STRING;
 
+    private static final String WEB_SRVC_APP_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
+    private static final String WEB_SRVC_APP_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
@@ -629,8 +631,14 @@ public class ApiGatewayController {
     public String checkAuthCodeValidity(HttpServletRequest request, @RequestBody AuthorizationCodeInfo authorizationCodeInfo)
             throws URISyntaxException {
         logger.info("API_Gateway_controller checkAuthCodeValidity() - START");
-        String boolCheckValStr = this.proxingExternalRequests(authorizationCodeInfo, HttpMethod.POST, request,
-                CHECK_AUTH_CODE_POST_URI_TMPLT).getBody();
+        String boolCheckValStr;
+        if ((!authorizationCodeInfo.getClientID().equals(WEB_SRVC_APP_ID_STRING)) &&
+                (!authorizationCodeInfo.getClientSecret().equals(WEB_SRVC_APP_SECRET_STRING))) {
+            boolCheckValStr = "false";
+        } else {
+            boolCheckValStr = this.proxingExternalRequests(authorizationCodeInfo, HttpMethod.POST, request,
+                    CHECK_AUTH_CODE_POST_URI_TMPLT).getBody();
+        }
         return boolCheckValStr;
     }
 

@@ -78,16 +78,17 @@ public interface WebAppService {
 
     void deleteEmployeeByUuid(UUID employeeUuid);
 
-    String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId, String clientSecret);
+    String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId//, String clientSecret
+    );
 
     String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString, String afterSigningInRedirectionUriString);
 
-    Boolean checkAuthorizationCode(String authorizationCode, String clientId);
+    Boolean checkAuthorizationCode(String authorizationCode, String clientId, String clientSecret);
 
     String createAccessToken(String clientId);
 
     void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response);
 
-    void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, HttpServletResponse response);
+    String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, String clientSecret, HttpServletResponse response);
 
 }

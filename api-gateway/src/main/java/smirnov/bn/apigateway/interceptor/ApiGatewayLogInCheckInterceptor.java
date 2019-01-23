@@ -36,7 +36,7 @@ public class ApiGatewayLogInCheckInterceptor extends HandlerInterceptorAdapter {
     private static final String SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING = MAIN_WEB_SERVER_HOST_STRING + SCRT_SERVICE_PORT_STRING + SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING;
     private static final String CHECK_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_ACCESS_TOKEN_POST_URI_STRING;
 
-    //Client ID and Client Secret from REST_API_frontend (:)
+    //Client ID and Client Secret from web_frontend (:)
     private static final String REST_API_FRONTEND_ID_STRING = "REST_API_FRONTEND_1_CLT_ID0_000_2";
     private static final String REST_API_FRONTEND_SECRET_STRING = "REST_API_FRONTEND_1_CLT_0SECRET0STRING0_000_2";
 

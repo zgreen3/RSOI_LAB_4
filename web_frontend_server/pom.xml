@@ -4,12 +4,12 @@
 <modelVersion>4.0.0</modelVersion>
 
 <groupId>smirnov.bn</groupId>
-<artifactId>wREST_API-resource-server-frontend</artifactId>
+<artifactId>web_frontend_server</artifactId>
 <version>0.0.1-SNAPSHOT</version>
 <packaging>jar</packaging>
 
-<name>wREST_API-resource-server-frontend</name>
-<description>Custom REST_API-resource-server-frontend</description>
+<name>web_frontend_server</name>
+<description>Custom frontend web-service server</description>
 
 <parent>
     <groupId>org.springframework.boot</groupId>

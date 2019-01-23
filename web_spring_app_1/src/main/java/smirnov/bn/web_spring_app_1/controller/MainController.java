@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -21,7 +20,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 import smirnov.bn.web_spring_app_1.form.EmployeeForm;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
-
 
 @Controller
 public class MainController {
@@ -36,7 +34,8 @@ public class MainController {
     private static final String READ_ALL_EMP_GET_URI_STRING = "read-all";
     private static final String READ_ALL_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_EMP_GET_URI_STRING;
 
-    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/authorize"; //"http://localhost:8203/loginUser";
+    private static final String LOGIN_STANDALONE_SERVICE_URI_HARDCODED = "http://localhost:8203/oauth/authorize"; //"http://localhost:8203/loginUser";
+    private static final String CALLBACK_REDIRECT_URL_HARDCODED = "http://localhost:8201/redirected_auth_uri";
     private static final String THIS_CLIENT_SERVICE_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
     private static final String THIS_CLIENT_SERVICE_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 
@@ -47,6 +46,12 @@ public class MainController {
     private WebAppServiceImpl service = new WebAppServiceImpl();
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+
+    private String tokenUuidStringSavedLocally;
+
+    public String getTokenUuidStringSavedLocally() {
+        return tokenUuidStringSavedLocally;
+    }
 
     //private static List<EmployeeInfo> employees = new ArrayList<EmployeeInfo>();
 
@@ -188,33 +193,43 @@ public class MainController {
         return "redirect:/employeeList";
     }
 
-    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.GET)
-    public String redirectToLoginUserPage() throws URISyntaxException {
-        logger.info("MainController web_spring_app_1 redirectToLoginUserPage() request to API_Gateway_controller - START");
-
-        return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                "redirected_auth_uri", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
-    }
-
     //метод для обработк полученного в callback reference кода аутентификации (кода авторизации)
     //по OAuth2 алгоритму для authorization code [flow]:
-    @RequestMapping(value = {"/redirected_auth_uri"}, method = RequestMethod.GET)
-    public String redirectedAuthorizationUriProcess(//HttpServletRequest request,
+    @RequestMapping(value = {"/redirected_auth_uri/{clientId}"}, method = RequestMethod.GET)
+    public String redirectedAuthorizationUriProcess(Model model,
+                                                    //HttpServletRequest request,
                                                     HttpServletResponse response,
-                                                    @RequestParam(value = "authorization_code") String authorizationCode) {
+                                                    @RequestParam(value = "code") String authorizationCode,
+                                                    @PathVariable("clientId") String clientId) {
         logger.info("MainController web_spring_app_1 redirectedAuthorizationUriProcess() request to API_Gateway_controller - START");
+        //проверка, что clientId достоверен (не изменился с момента его отправки в web_frontend_server):
+        if (!clientId.equals(THIS_CLIENT_SERVICE_ID_STRING)) {
+            String customErrorMessage = "Error in redirectedAuthorizationUriProcess(...) from web_spring_app_1, in clientId check";
+            logger.error(customErrorMessage);
+            model.addAttribute("message", customErrorMessage);
+            return "error";
+        }
+
         try {
-            //Получение access token-а от Security Service-а (с сохранением в cookies-коллекции сервера/сервиса,
-            //для путри "/gateway_API", в виде String-представления его UUID-а)
+            //Получение access token-а от Security Service-а (с сохранением в переменные / ОЗУ //cookies-коллекции
+            // сервера/сервиса, для путри "/gateway_API", в виде String-представления его UUID-а)
             //для авторизованной работы с rest api данной микросервисной системы:
-            //String tokenUuidAsString =
-                    service.oAuth2GetAndSaveAccessTokenFromSecurityServer(
-                    URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING, response);
+            tokenUuidStringSavedLocally = service.oAuth2GetAndSaveAccessTokenFromSecurityServer(
+                        URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING, response);
         } catch (UnsupportedEncodingException e) {
             return "UnsupportedEncodingException: " + e.toString();
         }
 
         return "redirect:" + "/index";
+    }
+
+    @RequestMapping(value = {"/loginUser"}, method = RequestMethod.GET)
+    public String redirectToLoginUserPage() throws URISyntaxException {
+        logger.info("MainController web_spring_app_1 redirectToLoginUserPage() request to API_Gateway_controller - START");
+
+        return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
+                CALLBACK_REDIRECT_URL_HARDCODED, THIS_CLIENT_SERVICE_ID_STRING//, THIS_CLIENT_SERVICE_SECRET_STRING
+        );
     }
 
     @ExceptionHandler(HttpStatusCodeException.class)
@@ -223,7 +238,8 @@ public class MainController {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
             return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                    "/redirected_auth_uri", THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING);
+                    CALLBACK_REDIRECT_URL_HARDCODED, THIS_CLIENT_SERVICE_ID_STRING//, THIS_CLIENT_SERVICE_SECRET_STRING
+            );
         } else {
             return "error";
         }

@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -126,6 +127,7 @@ public class WebAppServiceImpl implements WebAppService {
     //http://springinpractice.com/2013/10/27/how-to-send-an-http-header-with-every-request-with-spring-resttemplate (:)
     //@Autowired
     private RestTemplate restTemplate = new RestTemplate();
+
     {
         ////https://molchanoff.me/software-development/logging-spring-rest-template-requests/
         //RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
@@ -214,7 +216,8 @@ public class WebAppServiceImpl implements WebAppService {
         //return ;
     }
 
-    public String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId, String clientSecret) {
+    public String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId//, String clientSecret
+    ) {
         //https://stackoverflow.com/questions/19538431/is-there-a-right-way-to-build-a-url (,)
         //https://stackoverflow.com/questions/18138011/url-encoding-using-the-new-spring-uricomponentsbuilder/21259193#21259193 (:)
         String ultimateUrl;
@@ -224,7 +227,7 @@ public class WebAppServiceImpl implements WebAppService {
                             .fromUriString(authorizationServerLoginPageUri)
                             .queryParam("response_type", URLEncoder.encode("code", "UTF-8"))
                             .queryParam("client_id", URLEncoder.encode(clientId, "UTF-8"))
-                            .queryParam("client_secret", URLEncoder.encode(clientSecret, "UTF-8"))
+                            //.queryParam("client_secret", URLEncoder.encode(clientSecret, "UTF-8"))
                             .queryParam("redirect_uri", URLEncoder.encode(callBackRedirectUri, "UTF-8"))
                             .build().encode().toUriString();
         } catch (UnsupportedEncodingException e) {
@@ -248,11 +251,12 @@ public class WebAppServiceImpl implements WebAppService {
         return "redirect:" + uriForRedirectionAsString;
     }
 
-    public Boolean checkAuthorizationCode(String authorizationCode, String clientId) {
+    public Boolean checkAuthorizationCode(String authorizationCode, String clientId, String clientSecret) {
         logger.info("checkAuthorizationCode() in WebAppServiceImpl class in web_spring_app_1 module - START");
-        AuthorizationCodeInfo authCodeInfo = new AuthorizationCodeInfo(authorizationCode, clientId);
+        AuthorizationCodeInfo authCodeInfo = new AuthorizationCodeInfo(authorizationCode, clientId, clientSecret);
         HttpHeaders authCodeInfoHeaders = new HttpHeaders();
         authCodeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+        authCodeInfoHeaders.add("grant_type", "authorization_code");
         HttpEntity<AuthorizationCodeInfo> requestAuthCodeInfoEntity = new HttpEntity<>(authCodeInfo, authCodeInfoHeaders);
         ResponseEntity<String> authCodeUuidResponseString =
                 restTemplate.exchange(CHECK_AUTH_CODE_POST_URI_TMPLT, //check Authorization code
@@ -308,20 +312,20 @@ public class WebAppServiceImpl implements WebAppService {
         response.addCookie(cookie);
     }
 
-    public void oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, HttpServletResponse response) {
+    public String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, String clientSecret, HttpServletResponse response) {
         logger.info("oAuth2GetAndSaveAccessTokenFromSecurityServer() in WebAppServiceImpl class in web_spring_app_1 module - START");
 
         String tokenUuidAsString = "0";
         //***********check Authorization code (:)***********
         //Только, если код авторизации валиден, выдаём токен доступа (и сохраняем его как cookie):
-        if (Boolean.TRUE.equals(checkAuthorizationCode(authorizationCode, clientId))) {
+        if (Boolean.TRUE.equals(checkAuthorizationCode(authorizationCode, clientId, clientSecret))) {
             //***********create Access Token (:)***********
             tokenUuidAsString = createAccessToken(clientId);
             //***********(+)save token as cookie [for session with GatewayAPI - with path "/gateway_API"] (:)***********
             saveTokenAsCookie(tokenUuidAsString, response);
         }
 
-        //return tokenUuidAsString;
+        return tokenUuidAsString;
     }
 
 }

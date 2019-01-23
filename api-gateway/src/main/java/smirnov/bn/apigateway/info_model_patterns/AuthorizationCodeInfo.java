@@ -19,6 +19,8 @@ public class AuthorizationCodeInfo {
 
     private String clientID;
 
+    private String clientSecret;
+
     private String redirectionURI;
 
     public Integer getAuthCodeId() {
@@ -83,5 +85,13 @@ public class AuthorizationCodeInfo {
 
     public void setRedirectionURI(String redirectionURI) {
         this.redirectionURI = redirectionURI;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }

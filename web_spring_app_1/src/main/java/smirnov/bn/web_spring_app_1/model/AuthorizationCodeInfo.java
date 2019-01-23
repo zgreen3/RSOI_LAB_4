@@ -19,6 +19,8 @@ public class AuthorizationCodeInfo {
 
     private String clientID;
 
+    private String clientSecret;
+
     private String redirectionURI;
 
     public AuthorizationCodeInfo() {
@@ -40,6 +42,18 @@ public class AuthorizationCodeInfo {
     public AuthorizationCodeInfo(String authCodeUuid, String clientID) {
         this.authCodeUuid = UUID.fromString(authCodeUuid);
         this.clientID = clientID;
+    }
+
+    public AuthorizationCodeInfo(UUID authCodeUuid, String clientID, String clientSecret) {
+        this.authCodeUuid = authCodeUuid;
+        this.clientID = clientID;
+        this.clientSecret = clientSecret;
+    }
+
+    public AuthorizationCodeInfo(String authCodeUuid, String clientID, String clientSecret) {
+        this.authCodeUuid = UUID.fromString(authCodeUuid);
+        this.clientID = clientID;
+        this.clientSecret = clientSecret;
     }
 
     public Integer getAuthCodeId() {
@@ -104,5 +118,13 @@ public class AuthorizationCodeInfo {
 
     public void setRedirectionURI(String redirectionURI) {
         this.redirectionURI = redirectionURI;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }
