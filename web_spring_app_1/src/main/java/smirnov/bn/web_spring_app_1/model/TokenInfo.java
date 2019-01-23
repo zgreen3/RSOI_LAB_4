@@ -32,6 +32,15 @@ public class TokenInfo {
         this.clientID = clientID;
     }
 
+    public TokenInfo(UUID refreshTokenUuid) {
+        this.refreshTokenUuid = refreshTokenUuid;
+    }
+
+    public TokenInfo(UUID accessTokenUuid, String clientID) {
+        this.accessTokenUuid = accessTokenUuid;
+        this.clientID = clientID;
+    }
+
     public Integer getTokenId() {
         return tokenId;
     }

@@ -79,4 +79,13 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
             return false;
         }
     }
+
+    public UUID getRefreshTokenUuid(UUID accessTokenUuid) {
+        Token accessTokenRequired = tokenRepository.findByUuid(accessTokenUuid);
+        if (accessTokenRequired != null) {
+            return accessTokenRequired.getRefreshTokenUuid();
+        } else {
+            return UUID.fromString("0");
+        }
+    }
 }

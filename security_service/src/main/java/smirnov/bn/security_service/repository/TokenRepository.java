@@ -22,6 +22,12 @@ public interface TokenRepository
                 nativeQuery = true)
         Token findByUuid(@Param("accessTokenUuid") UUID accessTokenUuid);
 
+        /*
+        @Query(value = "SELECT t.* FROM tokens t WHERE t.refresh_token_uuid = :refreshTokenUuid",
+                nativeQuery = true)
+        Token findByRefreshTokenUuid(@Param("refreshTokenUuid") UUID refreshTokenUuid);
+        //*/
+
         @Transactional
         @Modifying
         @Query(value = "UPDATE tokens SET is_invalidated = :isInvalidated, is_expired = :isExpired, last_used_date_time = :lastUsedDateTime WHERE access_token_uuid = :accessTokenUuid",

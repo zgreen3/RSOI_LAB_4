@@ -87,6 +87,8 @@ public interface WebAppService {
 
     String createAccessToken(String clientId);
 
+    void createAndSaveNewAccessTokenUsingRefreshToken(UUID refreshTokenUuid, String clientID);
+
     void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response);
 
     String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, String clientSecret, HttpServletResponse response);

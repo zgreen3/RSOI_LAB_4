@@ -12,4 +12,5 @@ public interface AuthAndTokenService {
 
     Boolean checkAccessTokenValidity(UUID accessTokenUuid);
 
+    UUID getRefreshTokenUuid(UUID accessTokenUuid);
 }

@@ -150,7 +150,7 @@ public class LogInController {
                     //*/
                             UriComponentsBuilder.newInstance()
                                     //.scheme("http").host("localhost").port(8201).path(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
-                                    .fragment(URLDecoder.decode(afterSigningInRedirectionUriString + "/" + clientIdFromRequestParam, "UTF-8"))
+                                    .fromUriString(URLDecoder.decode(afterSigningInRedirectionUriString + "/" + clientIdFromRequestParam, "UTF-8"))
                                     .queryParam("code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))
                                     .build().toString();
                 } catch (UnsupportedEncodingException e) {

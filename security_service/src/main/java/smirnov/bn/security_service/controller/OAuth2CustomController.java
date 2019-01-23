@@ -53,13 +53,30 @@ public class OAuth2CustomController {
     public String createAccessToken(@RequestBody TokenInfo tokenInfo) {
         try {
             UUID newAccessTokenUuid = authAndTokenService.createAccessToken(tokenInfo.getClientID());
-            logger.info("/security_service/authorization : /create-access-token, createAccessToken() - CREATING" + "\n" + "uuid param: " + String.valueOf(newAccessTokenUuid));
+            logger.info("/security_service/authorization : /create-access-token, createAccessToken() - CREATING" + "\n" + "uuid param: " +
+                    String.valueOf(newAccessTokenUuid));
             return newAccessTokenUuid.toString();
         } catch (Exception e) {
             logger.error("Error in createAccessToken(...)", e);
             return null;
         }
     }
+
+    /*
+    @RequestMapping(value = {"/create-access-by-refresh-token"}, method = RequestMethod.POST)
+    @ResponseBody
+    public String createAccessTokenUsingRefreshToken(@RequestBody TokenInfo tokenInfo) {
+        try {
+            UUID newAccessTokenUuid = authAndTokenService.createAccessToken(tokenInfo.getClientID());
+            logger.info("/security_service/authorization : /create-access-by-refresh-token, createAccessTokenUsingRefreshToken() - CREATING" +
+                    "\n" + "uuid param: " + String.valueOf(newAccessTokenUuid));
+            return newAccessTokenUuid.toString();
+        } catch (Exception e) {
+            logger.error("Error in createAccessTokenUsingRefreshToken(...)", e);
+            return null;
+        }
+    }
+    //*/
 
     @RequestMapping(value = {"/access-token-validation"}, method = RequestMethod.POST)
     @ResponseBody
@@ -71,6 +88,18 @@ public class OAuth2CustomController {
         } catch (Exception e) {
             logger.error("Error in isAuthCodeValid(...)", e);
             return null;
+        }
+    }
+
+    @RequestMapping(value = {"/get-refresh-token"}, method = RequestMethod.GET)
+    public ResponseEntity<String> getRefreshToken(@RequestBody UUID accessTokenUuid) {
+        try {
+            UUID refreshTokenUuid = authAndTokenService.getRefreshTokenUuid(accessTokenUuid);
+            logger.info("/security_service/authorization : /get-refresh-token, getRefreshToken() - SEARCHING" + "\n" + "uuid param: " + String.valueOf(refreshTokenUuid));
+            return new ResponseEntity<>(refreshTokenUuid.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error in getRefreshToken(...)", e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }

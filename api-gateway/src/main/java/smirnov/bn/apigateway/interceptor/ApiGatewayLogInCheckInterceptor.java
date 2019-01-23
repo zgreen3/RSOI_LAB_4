@@ -78,7 +78,11 @@ public class ApiGatewayLogInCheckInterceptor extends HandlerInterceptorAdapter {
                 logger.info("check Access Token() in api-gateway class in preHandle() interceptor - START");
 
                 //проверяем наличие валидного корректного токена, отбрасываем значение "Bearer":
-                String accessTokenUuidAsString = request.getHeader("Authorization").split(" ")[1];
+                String[] accessTokenArray = request.getHeader("Authorization").split(" ");
+                String accessTokenUuidAsString = "0";
+                if (accessTokenArray.length > 1) {
+                    accessTokenUuidAsString = accessTokenArray[1];
+                }
                 String boolCheckValStr = "false";
                 if (!accessTokenUuidAsString.equals("0")) {
                     TokenInfo tokenInfo = new TokenInfo(accessTokenUuidAsString);

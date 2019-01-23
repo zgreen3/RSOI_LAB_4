@@ -17,7 +17,7 @@ public class RestTemplateCustomAccessTokenSettingInterceptor implements ClientHt
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-
+        /*
         //получаем access token из cookies-"хранилища" (в ОЗУ / in JVM memory):
         String accessTokenUuidStr = "0";
         //https://stackoverflow.com/questions/33690741/httpservletrequest-getcookies-or-getheader (:)
@@ -33,13 +33,11 @@ public class RestTemplateCustomAccessTokenSettingInterceptor implements ClientHt
                 }
             }
 
-            /*
-            accessTokenUuidStr = Arrays.stream(rawCookieParams)
-                    .filter(c -> c.getName().equals("AccessTokenID"))
-                    .findFirst()
-                    .map(Cookie::getValue)
-                    .orElse(null);
-            //*/
+//            accessTokenUuidStr = Arrays.stream(rawCookieParams)
+//                    .filter(c -> c.getName().equals("AccessTokenID"))
+//                    .findFirst()
+//                    .map(Cookie::getValue)
+//                    .orElse(null);
         }
         //https://stackoverflow.com/questions/2811769/adding-an-http-header-to-the-request-in-a-servlet-filter (:)
         HttpHeaders headers = request.getHeaders();
@@ -50,6 +48,7 @@ public class RestTemplateCustomAccessTokenSettingInterceptor implements ClientHt
         //response.getHeaders().add("Foo", "bar");
         //return response;
 
+        //*/
         return execution.execute(request, body);
     }
 }

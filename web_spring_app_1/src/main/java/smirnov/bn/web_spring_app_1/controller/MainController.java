@@ -4,17 +4,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.springframework.web.client.HttpStatusCodeException;
 
 import smirnov.bn.web_spring_app_1.form.EmployeeForm;
@@ -43,15 +47,11 @@ public class MainController {
     ////@Autowired
     //private RestTemplate restTemplate = new RestTemplate();
 
+    private String tokenUuidStringSavedLocally;
+
     private WebAppServiceImpl service = new WebAppServiceImpl();
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
-    private String tokenUuidStringSavedLocally;
-
-    public String getTokenUuidStringSavedLocally() {
-        return tokenUuidStringSavedLocally;
-    }
 
     //private static List<EmployeeInfo> employees = new ArrayList<EmployeeInfo>();
 
@@ -215,7 +215,9 @@ public class MainController {
             // сервера/сервиса, для путри "/gateway_API", в виде String-представления его UUID-а)
             //для авторизованной работы с rest api данной микросервисной системы:
             tokenUuidStringSavedLocally = service.oAuth2GetAndSaveAccessTokenFromSecurityServer(
-                        URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING, THIS_CLIENT_SERVICE_SECRET_STRING, response);
+                    URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING,
+                    THIS_CLIENT_SERVICE_SECRET_STRING, response);
+            service.setTokenUuidStringSavedLocallyInService(tokenUuidStringSavedLocally);
         } catch (UnsupportedEncodingException e) {
             return "UnsupportedEncodingException: " + e.toString();
         }
@@ -233,13 +235,22 @@ public class MainController {
     }
 
     @ExceptionHandler(HttpStatusCodeException.class)
-    public String handleHttpUnauthorizedStatusCodeException(HttpStatusCodeException e)
-    {
+    public String handleHttpUnauthorizedStatusCodeException(HttpStatusCodeException e) {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
-                    CALLBACK_REDIRECT_URL_HARDCODED, THIS_CLIENT_SERVICE_ID_STRING//, THIS_CLIENT_SERVICE_SECRET_STRING
-            );
+            //если у клиентского приложения уже есть выданный токен, но он "невалиден", то используем refresh token
+            //для получения нового access token-а:
+            String currentAccessTokenAsString = service.getTokenUuidStringSavedLocallyInService();
+            if (!currentAccessTokenAsString.equals("")) {
+                UUID refreshTokenUuid =
+                        service.getRefreshTokenByAccessTokenUuid(UUID.fromString(currentAccessTokenAsString));
+                service.createAndSaveNewAccessTokenUsingRefreshToken(refreshTokenUuid, THIS_CLIENT_SERVICE_ID_STRING);
+                return "redirect:"  + "/index";
+            } else {
+                return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,
+                        CALLBACK_REDIRECT_URL_HARDCODED, THIS_CLIENT_SERVICE_ID_STRING//, THIS_CLIENT_SERVICE_SECRET_STRING
+                );
+            }
         } else {
             return "error";
         }

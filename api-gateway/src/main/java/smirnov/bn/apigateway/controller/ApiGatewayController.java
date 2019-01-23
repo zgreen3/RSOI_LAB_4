@@ -97,7 +97,9 @@ public class ApiGatewayController {
     private static final String CREATE_AUTH_CODE_POST_URI_STRING = "/create-auth-code";
     private static final String CHECK_AUTH_CODE_POST_URI_STRING = "/auth-code-validation";
     private static final String CREATE_ACCESS_TOKEN_POST_URI_STRING = "/create-access-token";
+    private static final String CREATE_ACS_BY_REF_TOKEN_POST_URI_STR = "/create-access-by-refresh-token";
     private static final String CHECK_ACCESS_TOKEN_POST_URI_STRING = "/access-token-validation";
+    private static final String REFRESH_TOKEN_GET_URI_STRING = "/get-refresh-token";
     //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
     private static final String READ_BY_USR_UUID_USER_GET_URI_STRING = "/read-by-usr-uuid-";
     private static final String READ_BY_LGN_EML_USER_GET_URI_STRING = "/read-by-usr-login-";
@@ -110,7 +112,9 @@ public class ApiGatewayController {
     private static final String CREATE_AUTH_CODE_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_AUTH_CODE_POST_URI_STRING;
     private static final String CHECK_AUTH_CODE_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_AUTH_CODE_POST_URI_STRING;
     private static final String CREATE_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING;
+    private static final String CREATE_ACS_BY_REF_TOKEN_POST_URI_TMPLT = CREATE_ACCESS_TOKEN_POST_URI_TMPLT; //SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACS_BY_REF_TOKEN_POST_URI_STR;
     private static final String CHECK_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_ACCESS_TOKEN_POST_URI_STRING;
+    private static final String REFRESH_TOKEN_GET_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + REFRESH_TOKEN_GET_URI_STRING;
     private static final String READ_BY_USR_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_USR_UUID_USER_GET_URI_STRING;
     private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
     private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
@@ -652,6 +656,16 @@ public class ApiGatewayController {
         return tokenAsString;
     }
 
+    @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CREATE_ACS_BY_REF_TOKEN_POST_URI_STR}, method = RequestMethod.POST)
+    @ResponseBody
+    public String createAccessTokenUsingRefreshToken(HttpServletRequest request, @RequestBody TokenInfo tokenInfo)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller createAccessTokenUsingRefreshToken() - START");
+        String tokenAsString = this.proxingExternalRequests(tokenInfo, HttpMethod.POST, request,
+                CREATE_ACS_BY_REF_TOKEN_POST_URI_TMPLT).getBody();
+        return tokenAsString;
+    }
+
     @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CHECK_ACCESS_TOKEN_POST_URI_STRING}, method = RequestMethod.POST)
     @ResponseBody
     public String checkAccessTokenValidity(HttpServletRequest request, @RequestBody TokenInfo tokenInfo)
@@ -660,6 +674,20 @@ public class ApiGatewayController {
         String boolCheckValStr = this.proxingExternalRequests(tokenInfo, HttpMethod.POST, request,
                 CHECK_ACCESS_TOKEN_POST_URI_TMPLT).getBody();
         return boolCheckValStr;
+    }
+
+    @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + REFRESH_TOKEN_GET_URI_STRING}, method = RequestMethod.GET)
+    public ResponseEntity<String> getRefreshToken(HttpServletRequest request, @RequestBody UUID accessTokenUuid)
+            throws URISyntaxException {
+        logger.info("API_Gateway_controller getRefreshToken() - START");
+        try {
+            String refreshTokenAsString = this.proxingExternalRequests(accessTokenUuid, HttpMethod.GET, request,
+                    REFRESH_TOKEN_GET_URI_TMPLT).getBody();
+            return new ResponseEntity<>(refreshTokenAsString, HttpStatus.FOUND);
+        } catch (Exception e) {
+            logger.error("Error in getRefreshToken(...)", e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
 }
