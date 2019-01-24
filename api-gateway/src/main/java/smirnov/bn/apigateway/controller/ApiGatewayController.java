@@ -381,7 +381,12 @@ public class ApiGatewayController {
                     restTemplate.exchange(READ_ALL_EMP_GET_URI_TMPLT, //"http://localhost:8193/employees/read-all",
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<EmployeeInfo>>() {
                             });
-            List<EmployeeInfo> employeeInfoList = employeeInfoResponse.getBody();
+            List<EmployeeInfo> employeeInfoList;
+            if (employeeInfoResponse != null) {
+                employeeInfoList = employeeInfoResponse.getBody();
+            } else {
+                employeeInfoList = null;
+            }
 
             //Наконец, для каждой Лингвистической переменной получаем информацию об использовавшем её Сотруднике,
             //технчески осуществляя INNER JOIN Лингвистических переменных и Сотрудниках
