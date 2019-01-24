@@ -216,7 +216,7 @@ public class MainController {
 
         try {
             //Получение access token-а от Security Service-а (с сохранением в переменные / ОЗУ //cookies-коллекции
-            // сервера/сервиса, для путри "/gateway_API", в виде String-представления его UUID-а)
+            // сервера/сервиса, для пути "/gateway_API", в виде String-представления его UUID-а)
             //для авторизованной работы с rest api данной микросервисной системы:
             tokenUuidStringSavedLocally = service.oAuth2GetAndSaveAccessTokenFromSecurityServer(
                     URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING,
