@@ -37,6 +37,12 @@ public interface TokenRepository
 
         @Transactional
         @Modifying
+        @Query(value = "UPDATE tokens SET is_invalidated = true, is_expired = true WHERE access_token_uuid = :accessTokenUuid AND ((current_timestamp > t.last_used_date_time + interval '1' HOUR * (30/60)) OR (current_timestamp > t.created_date_time + interval '1' HOUR * (2)))",
+                nativeQuery = true)
+        void updateTokenValidity(@Param("accessTokenUuid") UUID accessTokenUuid);
+
+        @Transactional
+        @Modifying
         @Query(value = "DELETE FROM tokens t WHERE t.access_token_uuid = :accessTokenUuid",
                 nativeQuery = true)
         void deleteByUuid(@Param("accessTokenUuid") UUID accessTokenUuid);

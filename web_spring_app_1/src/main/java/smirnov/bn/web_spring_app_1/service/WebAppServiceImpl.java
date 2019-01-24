@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import smirnov.bn.web_spring_app_1.interceptor.RestTemplateCustomAccessTokenSettingInterceptor;
 import smirnov.bn.web_spring_app_1.model.AuthorizationCodeInfo;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
+import smirnov.bn.web_spring_app_1.model.LingVarWithEmployeeInfo;
 import smirnov.bn.web_spring_app_1.model.TokenInfo;
 
 public class WebAppServiceImpl implements WebAppService {
@@ -182,6 +183,17 @@ public class WebAppServiceImpl implements WebAppService {
         return restTemplate.exchange(READ_ALL_EMP_GET_URI_TMPLT, //http://localhost:8194/gateway_API/employees/read-all/ //"http://localhost:8193/employees/read-all",
                 //"http://localhost:8194/gateway_API/employees/read-all",
                 HttpMethod.GET, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                }).getBody();
+    }
+
+    @Nullable
+    public List<LingVarWithEmployeeInfo> findAllLingVarForEmployeeData() {
+        logger.info("findAllLingVarForEmployeeData() in WebAppServiceImpl class in web_spring_app_1 module - START");
+        HttpHeaders lingVarWithEmployeeInfoHeaders = new HttpHeaders();
+        lingVarWithEmployeeInfoHeaders.add("Authorization", "Bearer " + tokenUuidStringSavedLocallyInService);
+        HttpEntity<EmployeeInfo> requestLingVarWithEmployeeInfoEntity = new HttpEntity<>(null, lingVarWithEmployeeInfoHeaders);
+        return restTemplate.exchange("http://localhost:8194/gateway_API/ling_var_and_employee/read-all",
+                HttpMethod.GET, requestLingVarWithEmployeeInfoEntity, new ParameterizedTypeReference<List<LingVarWithEmployeeInfo>>() {
                 }).getBody();
     }
 

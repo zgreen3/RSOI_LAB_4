@@ -71,6 +71,7 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
     }
 
     public Boolean checkAccessTokenValidity(UUID accessTokenUuid) {
+        tokenRepository.updateTokenValidity(accessTokenUuid);
         Token accessTokenToCheck = tokenRepository.findByUuid(accessTokenUuid);
         if ((accessTokenToCheck != null) && accessTokenToCheck.getInvalidated().equals(false)
                 && accessTokenToCheck.getExpired().equals(false)) {

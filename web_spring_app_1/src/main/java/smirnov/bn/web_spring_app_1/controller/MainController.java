@@ -21,6 +21,7 @@ import javax.validation.Valid;
 
 import org.springframework.web.client.HttpStatusCodeException;
 
+import org.springframework.web.server.ResponseStatusException;
 import smirnov.bn.web_spring_app_1.form.EmployeeForm;
 import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
 import smirnov.bn.web_spring_app_1.service.WebAppServiceImpl;
@@ -81,7 +82,7 @@ public class MainController {
     public String employeeList(Model model) {
 
         logger.info("MainController web_spring_app_1 showemployeeInfoPage() request API_Gateway_controller findAllEmployees() - START");
-        model.addAttribute("employees", service.findAllEmployees());
+        model.addAttribute("employees", service.findAllLingVarForEmployeeData()); //service.findAllEmployees());
         /*
         try {
             model.addAttribute("employees", service.findAllEmployees());
@@ -160,6 +161,9 @@ public class MainController {
             }
             return "redirect:/employeeList";
         } else {
+            if (employeeName.equals("Test")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request: invalid employee Name!");
+            }
             if (employeeLogin == null || employeeLogin.length() == 0) {
                 String customErrorMessage = "Employee's login should be filled!";
                 model.addAttribute("errorMessageAttr", customErrorMessage);
