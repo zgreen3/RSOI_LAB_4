@@ -27,6 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Nonnull
     private EmployeeInfo buildlingEmployeeInfo(Employee employee) {
         EmployeeInfo info = new EmployeeInfo();
+        info.setEmployeeId(employee.getEmployeeId());
         info.setEmployeeName(employee.getEmployeeName());
         info.setEmployeeEmail(employee.getEmployeeEmail());
         info.setEmployeeLogin(employee.getEmployeeLogin());
