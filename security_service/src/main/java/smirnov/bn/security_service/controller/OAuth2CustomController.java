@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import smirnov.bn.security_service.model.AuthorizationCodeInfo;
 import smirnov.bn.security_service.model.TokenInfo;
+import smirnov.bn.security_service.model.TokenInfoWithCustomAuthCode;
 import smirnov.bn.security_service.service.AuthAndTokenServiceImpl;
 
 import java.util.UUID;
@@ -16,6 +17,8 @@ import java.util.UUID;
 @RestController //@Controller
 @RequestMapping("/security_service/authorization")
 public class OAuth2CustomController {
+    private static final String WEB_SRVC_APP_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
+    private static final String WEB_SRVC_APP_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
 
     @Autowired
     private AuthAndTokenServiceImpl authAndTokenService; //= new AuthAndTokenServiceImpl();
@@ -50,15 +53,41 @@ public class OAuth2CustomController {
 
     @RequestMapping(value = {"/create-access-token"}, method = RequestMethod.POST)
     @ResponseBody
-    public String createAccessToken(@RequestBody TokenInfo tokenInfo) {
+    public ResponseEntity<TokenInfo> createAccessToken(@RequestBody TokenInfoWithCustomAuthCode tokenInfoWithCustomAuthCode) {
+        TokenInfo tokenInfo = new TokenInfo();
         try {
-            UUID newAccessTokenUuid = authAndTokenService.createAccessToken(tokenInfo.getClientID());
-            logger.info("/security_service/authorization : /create-access-token, createAccessToken() - CREATING" + "\n" + "uuid param: " +
-                    String.valueOf(newAccessTokenUuid));
-            return newAccessTokenUuid.toString();
+            UUID newAccessTokenUuid;
+            UUID refreshTokenForNewAccesTokenUUID;
+            Boolean isClientIdAndSecretValidBoolVar;
+            Boolean isAuthCodeValidBoolVar;
+            UUID authCodeUuid = tokenInfoWithCustomAuthCode.getCustomAuthCodeUuid();
+            String clientIdString = tokenInfoWithCustomAuthCode.getClientID();
+            String clientSecretString = tokenInfoWithCustomAuthCode.getClientSecret();
+            UUID refreshTokenUuid = tokenInfoWithCustomAuthCode.getRefreshTokenUuid();
+
+            if (authCodeUuid != null) {
+                isClientIdAndSecretValidBoolVar = authAndTokenService.checkClientIdAndSecretValidity(clientIdString, WEB_SRVC_APP_ID_STRING,
+                        clientSecretString, WEB_SRVC_APP_SECRET_STRING);
+                isAuthCodeValidBoolVar = authAndTokenService.checkAuthCodeValidity(authCodeUuid);
+                if (isClientIdAndSecretValidBoolVar && isAuthCodeValidBoolVar) {
+                    newAccessTokenUuid = authAndTokenService.createAccessToken(tokenInfoWithCustomAuthCode.getClientID());
+                    logger.info("/security_service/authorization : /create-access-token, createAccessToken() - CREATING based on authCode + Client ID & Secret" +
+                            "\n" + "uuid param: " + String.valueOf(newAccessTokenUuid));
+                } else {
+                    return new ResponseEntity<>(tokenInfo, HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                newAccessTokenUuid = authAndTokenService.getNewAccessTokenUuidByRefreshTokenUuid(refreshTokenUuid, tokenInfoWithCustomAuthCode.getClientID());
+                logger.info("/security_service/authorization : /create-access-token, createAccessToken() - CREATING based on refreshToken" + "\n" + "uuid param: " +
+                        String.valueOf(newAccessTokenUuid));
+            }
+            tokenInfo.setAccessTokenUuid(newAccessTokenUuid);
+            refreshTokenForNewAccesTokenUUID = authAndTokenService.getRefreshTokenUuid(newAccessTokenUuid);
+            tokenInfo.setRefreshTokenUuid(refreshTokenForNewAccesTokenUUID);
+            return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in createAccessToken(...)", e);
-            return null;
+            return new ResponseEntity<>(tokenInfo, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

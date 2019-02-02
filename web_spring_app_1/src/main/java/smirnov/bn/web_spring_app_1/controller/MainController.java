@@ -48,8 +48,6 @@ public class MainController {
     ////@Autowired
     //private RestTemplate restTemplate = new RestTemplate();
 
-    private String tokenUuidStringSavedLocally;
-
     private WebAppServiceImpl service = new WebAppServiceImpl();
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
@@ -213,15 +211,13 @@ public class MainController {
             model.addAttribute("message", customErrorMessage);
             return "error";
         }
-
         try {
-            //Получение access token-а от Security Service-а (с сохранением в переменные / ОЗУ //cookies-коллекции
+            //Получение access token-а [а также refreshToken-а] от Security Service-а (с сохранением в переменные / ОЗУ //cookies-коллекции
             // сервера/сервиса, для пути "/gateway_API", в виде String-представления его UUID-а)
             //для авторизованной работы с rest api данной микросервисной системы:
-            tokenUuidStringSavedLocally = service.oAuth2GetAndSaveAccessTokenFromSecurityServer(
+            service.getAndSaveLocallyAccRefTokensByAuthCodeClientIdSecret(
                     URLDecoder.decode(authorizationCode, "UTF-8"), THIS_CLIENT_SERVICE_ID_STRING,
                     THIS_CLIENT_SERVICE_SECRET_STRING, response);
-            service.setTokenUuidStringSavedLocallyInService(tokenUuidStringSavedLocally);
         } catch (UnsupportedEncodingException e) {
             return "UnsupportedEncodingException: " + e.toString();
         }
@@ -242,13 +238,15 @@ public class MainController {
     public String handleHttpUnauthorizedStatusCodeException(HttpStatusCodeException e) {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            //если у клиентского приложения уже есть выданный токен, но он "невалиден", то используем refresh token
-            //для получения нового access token-а:
+            //если у клиентского приложения уже есть выданный токен, но он "невалиден" и при этом имеется refresh token,
+            // то используем refresh token для получения нового access token-а:
             String currentAccessTokenAsString = service.getTokenUuidStringSavedLocallyInService();
-            if (!currentAccessTokenAsString.equals("")) {
-                UUID refreshTokenUuid =
-                        service.getRefreshTokenByAccessTokenUuid(UUID.fromString(currentAccessTokenAsString));
-                service.createAndSaveNewAccessTokenUsingRefreshToken(refreshTokenUuid, THIS_CLIENT_SERVICE_ID_STRING);
+            String currentRefreshTokenAsString = service.getRefreshTokenUuidStringSavedLocallyInService();
+            if (!currentAccessTokenAsString.equals("") && !currentRefreshTokenAsString.equals("")) {
+                //UUID refreshTokenUuid =
+                //        service.getRefreshTokenByAccessTokenUuid(UUID.fromString(currentAccessTokenAsString));
+                service.getAndSaveLocallyAccRefTokensByRefreshToken(//UUID.fromString(currentAccessTokenAsString),
+                            UUID.fromString(currentRefreshTokenAsString), THIS_CLIENT_SERVICE_ID_STRING);
                 return "redirect:"  + "/index";
             } else {
                 return "redirect:" + service.buildOAuth2FirstAuthorizationUri(LOGIN_STANDALONE_SERVICE_URI_HARDCODED,

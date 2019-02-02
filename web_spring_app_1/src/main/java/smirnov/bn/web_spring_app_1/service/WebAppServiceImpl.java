@@ -18,10 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import smirnov.bn.web_spring_app_1.interceptor.RestTemplateCustomAccessTokenSettingInterceptor;
-import smirnov.bn.web_spring_app_1.model.AuthorizationCodeInfo;
-import smirnov.bn.web_spring_app_1.model.EmployeeInfo;
-import smirnov.bn.web_spring_app_1.model.LingVarWithEmployeeInfo;
-import smirnov.bn.web_spring_app_1.model.TokenInfo;
+import smirnov.bn.web_spring_app_1.model.*;
 
 public class WebAppServiceImpl implements WebAppService {
 
@@ -143,18 +140,29 @@ public class WebAppServiceImpl implements WebAppService {
 
     private String tokenUuidStringSavedLocallyInService = "";
 
+    public void setTokenUuidStringSavedLocallyInService(String tokenUuidStringSavedLocallyInService) {
+        this.tokenUuidStringSavedLocallyInService = tokenUuidStringSavedLocallyInService;
+    }
+
     public String getTokenUuidStringSavedLocallyInService() {
         return tokenUuidStringSavedLocallyInService;
     }
 
-    public void setTokenUuidStringSavedLocallyInService(String tokenUuidStringSavedLocallyInService) {
-        this.tokenUuidStringSavedLocallyInService = tokenUuidStringSavedLocallyInService;
+    private String refreshTokenUuidStringSavedLocallyInService = "";
+
+    public String getRefreshTokenUuidStringSavedLocallyInService() {
+        return refreshTokenUuidStringSavedLocallyInService;
+    }
+
+    public void setRefreshTokenUuidStringSavedLocallyInService(String refreshTokenUuidStringSavedLocallyInService) {
+        this.refreshTokenUuidStringSavedLocallyInService = refreshTokenUuidStringSavedLocallyInService;
     }
 
     /*
      @Nullable
      void createEmployee(String employeeName, String employeeEmail, String employeeLogin);
      //*/
+
     public UUID createEmployee(EmployeeInfo employeeInfo) {
         logger.info("createEmployee() in WebAppServiceImpl class in web_spring_app_1 module - START");
 
@@ -276,11 +284,12 @@ public class WebAppServiceImpl implements WebAppService {
         return ultimateUrl;
     }
 
+    /*
     public String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString, String afterSigningInRedirectionUriString) {
         String uriForRedirectionAsString;
         try {
             uriForRedirectionAsString =
-                    UriComponentsBuilder.newInstance()
+                    UriComponentsBuilder//.newInstance()
                             //.scheme("http").host("localhost").port(8201).path(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
                             .fromUriString(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
                             .queryParam("Authorization: Bearer", URLEncoder.encode(tokenUuidAsString, "UTF-8"))
@@ -290,6 +299,7 @@ public class WebAppServiceImpl implements WebAppService {
         }
         return "redirect:" + uriForRedirectionAsString;
     }
+    //*/
 
     public Boolean checkAuthorizationCode(String authorizationCode, String clientId, String clientSecret) {
         logger.info("checkAuthorizationCode() in WebAppServiceImpl class in web_spring_app_1 module - START");
@@ -307,56 +317,72 @@ public class WebAppServiceImpl implements WebAppService {
         return Boolean.valueOf(boolCheckValStr);
     }
 
-    public String createAccessToken(String clientId) {
-        logger.info("createAccessToken() in WebAppServiceImpl class in web_spring_app_1 module - START");
+    public void getAndSaveLocallyAccRefTokensByAuthCodeClientIdSecret(String authorizationCodeString, String clientId, String clientSecret, HttpServletResponse response) {
+        logger.info("getAndSaveLocallyAccRefTokensByAuthCodeClientIdSecret() in WebAppServiceImpl class in web_spring_app_1 module - START");
+
+        /*
+        String tokenUuidAsString = "0";
+        //***********check Authorization code (:)***********
+        //Только, если код авторизации валиден, выдаём токен доступа (и сохраняем его как cookie):
+        //if (Boolean.TRUE.equals(checkAuthorizationCode(authorizationCode, clientId, clientSecret))) {
+            //***********create Access Token (:)***********
+            //tokenUuidAsString =
+            createAccessToken(clientId, authorizationCode);
+            ////***********(+)save token as cookie [for session with GatewayAPI - with path "/gateway_API"] (:)***********
+            //saveTokenAsCookie(tokenUuidAsString, response);
+        }
+
+        return tokenUuidAsString;
+        //*/
+
         //[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html] [:]
         //localhost:8194/gateway_API/security_service/authorization/create-auth-code (:)
-        TokenInfo tokenInfo = new TokenInfo(clientId);
+        TokenInfoWithCustomAuthCode tokenInfoWithCustomAuthCode = new TokenInfoWithCustomAuthCode(UUID.fromString(authorizationCodeString), clientId, clientSecret);
         HttpHeaders tokenInfoHeaders = new HttpHeaders();
         tokenInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
-            /*
-            //https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
-            String encodedAuthentication = "Bearer " +
-                    Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
-            tokenInfoHeaders.set("Authorization", encodedAuthentication);
-            //*/
-        //tokenInfoHeaders.add("Authorization", "Bearer " + tokenUuidStringSavedLocallyInService); //N.B.(!)
-        HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, tokenInfoHeaders);
-        ResponseEntity<String> tokenUuidResponseString =
+        HttpEntity<TokenInfoWithCustomAuthCode> requestTokenInfoEntity = new HttpEntity<>(tokenInfoWithCustomAuthCode, tokenInfoHeaders);
+        ResponseEntity<TokenInfo> tokenInfoResponseEntity =
                 restTemplate.exchange(CREATE_ACCESS_TOKEN_POST_URI_TMPLT, //create Access Token
-                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
+                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<TokenInfo>() {
                         });
         String tokenUuidAsString;
-        if (tokenUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
-            tokenUuidAsString = tokenUuidResponseString.getBody();
+        String refreshTokenUuidAsString;
+        if (tokenInfoResponseEntity.getStatusCode() != HttpStatus.NO_CONTENT) {
+            tokenUuidAsString = tokenInfoResponseEntity.getBody().getAccessTokenUuid().toString();
+            refreshTokenUuidAsString = tokenInfoResponseEntity.getBody().getRefreshTokenUuid().toString();
         } else {
             tokenUuidAsString = "";
+            refreshTokenUuidAsString = "";
         }
-        return tokenUuidAsString;
+        setTokenUuidStringSavedLocallyInService(tokenUuidAsString);
+        setRefreshTokenUuidStringSavedLocallyInService(refreshTokenUuidAsString);
     }
 
-    public void createAndSaveNewAccessTokenUsingRefreshToken(UUID refreshTokenUuid, String clientID) {
-        logger.info("createAndSaveNewAccessTokenUsingRefreshToken() in WebAppServiceImpl class in web_spring_app_1 module - START");
+    public void getAndSaveLocallyAccRefTokensByRefreshToken(UUID refreshTokenUuid, String clientId) {
+        logger.info("getAndSaveLocallyAccRefTokensByRefreshToken() in WebAppServiceImpl class in web_spring_app_1 module - START");
         //[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html] [:]
         //localhost:8194/gateway_API/security_service/authorization/create-auth-code (:)
-        TokenInfo tokenInfo = new TokenInfo(refreshTokenUuid);
+        TokenInfo tokenInfo = new TokenInfo(clientId, refreshTokenUuid);
         HttpHeaders tokenInfoHeaders = new HttpHeaders();
         tokenInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, tokenInfoHeaders);
-        ResponseEntity<String> newAccessTokenUuidResponseString =
+        ResponseEntity<TokenInfo> newAccessTokenInfoResponseEntity =
                 restTemplate.exchange(CREATE_ACS_BY_REF_TOKEN_POST_URI_TMPLT, //create Access Token based on Refresh Token
-                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
+                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<TokenInfo>() {
                         });
-        if (newAccessTokenUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
-            tokenUuidStringSavedLocallyInService = newAccessTokenUuidResponseString.getBody();
+        if (newAccessTokenInfoResponseEntity.getStatusCode() != HttpStatus.NO_CONTENT) {
+            tokenUuidStringSavedLocallyInService = newAccessTokenInfoResponseEntity.getBody().getAccessTokenUuid().toString();
+            refreshTokenUuidStringSavedLocallyInService = newAccessTokenInfoResponseEntity.getBody().getRefreshTokenUuid().toString();
         } else {
-            tokenUuidStringSavedLocallyInService = "";
+            //иначе ничего не меняем в текущих сохранённых в ОЗУ данных авторизации (:)
+            //tokenUuidStringSavedLocallyInService = "";
+            //refreshTokenUuidStringSavedLocallyInService = "";
         }
     }
 
+    /*
     public void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response) {
         logger.info("saveTokenAsCookie() in WebAppServiceImpl class in web_spring_app_1 module - START");
-        /*
         //https://stackoverflow.com/questions/8889679/how-to-create-a-cookie-and-add-to-http-response-from-inside-my-service-layer (,)
         //https://stackoverflow.com/questions/3342140/cross-domain-cookies (:)
         Cookie cookie = new Cookie("AccessTokenID", tokenUuidAsString);
@@ -372,25 +398,42 @@ public class WebAppServiceImpl implements WebAppService {
         cookie.setSecure(false); //(true);
         //[https://docs.microsoft.com/ru-ru/dotnet/api/system.web.httpresponse.cookies?view=netframework-4.7.2]
         response.addCookie(cookie);
-        //*/
     }
+    //*/
 
-    public String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, String clientSecret, HttpServletResponse response) {
-        logger.info("oAuth2GetAndSaveAccessTokenFromSecurityServer() in WebAppServiceImpl class in web_spring_app_1 module - START");
+    /*
+    public String createAccessToken(String clientId, String authorizationCode) {
+        logger.info("createAccessToken() in WebAppServiceImpl class in web_spring_app_1 module - START");
+        //[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html] [:]
+        //localhost:8194/gateway_API/security_service/authorization/create-auth-code (:)
+        TokenInfo tokenInfo = new TokenInfo(clientId);
+        HttpHeaders tokenInfoHeaders = new HttpHeaders();
+        tokenInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        String tokenUuidAsString = "0";
-        //***********check Authorization code (:)***********
-        //Только, если код авторизации валиден, выдаём токен доступа (и сохраняем его как cookie):
-        if (Boolean.TRUE.equals(checkAuthorizationCode(authorizationCode, clientId, clientSecret))) {
-            //***********create Access Token (:)***********
-            tokenUuidAsString = createAccessToken(clientId);
-            ////***********(+)save token as cookie [for session with GatewayAPI - with path "/gateway_API"] (:)***********
-            //saveTokenAsCookie(tokenUuidAsString, response);
+            ////https://stackoverflow.com/questions/21101250/sending-get-request-with-authentication-headers-using-resttemplate (:)
+            //String encodedAuthentication = "Bearer " +
+            //        Base64.getEncoder().encodeToString((REST_API_FRONTEND_ID_STRING + ":" + REST_API_FRONTEND_SECRET_STRING).getBytes());
+            //tokenInfoHeaders.set("Authorization", encodedAuthentication);
+
+        //tokenInfoHeaders.add("Authorization", "Bearer " + tokenUuidStringSavedLocallyInService); //N.B.(!)
+        HttpEntity<TokenInfo> requestTokenInfoEntity = new HttpEntity<>(tokenInfo, tokenInfoHeaders);
+        ResponseEntity<String> tokenUuidResponseString =
+                restTemplate.exchange(CREATE_ACCESS_TOKEN_POST_URI_TMPLT, //create Access Token
+                        HttpMethod.POST, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
+                        });
+        String tokenUuidAsString;
+        if (tokenUuidResponseString.getStatusCode() != HttpStatus.NO_CONTENT) {
+            tokenUuidAsString = tokenUuidResponseString.getBody();
+        } else {
+            tokenUuidAsString = "";
         }
-
+        //setTokenUuidStringSavedLocallyInService();
+        //setRefreshTokenUuidStringSavedLocallyInService();
         return tokenUuidAsString;
     }
+    //*/
 
+    /*
     @Nullable
     public UUID getRefreshTokenByAccessTokenUuid(UUID accessTokenUuid) {
         logger.info("getRefreshTokenByAccessTokenUuid() in WebAppServiceImpl class in web_spring_app_1 module - START");
@@ -401,8 +444,6 @@ public class WebAppServiceImpl implements WebAppService {
                 HttpMethod.GET, requestTokenInfoEntity, new ParameterizedTypeReference<String>() {
                 }).getBody();
         return UUID.fromString(refreshTokenUuidAsString);
-
-
     }
-
+    //*/
 }

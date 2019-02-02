@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.ParameterizedType;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
@@ -99,7 +101,7 @@ public class ApiGatewayController {
     private static final String CREATE_ACCESS_TOKEN_POST_URI_STRING = "/create-access-token";
     private static final String CREATE_ACS_BY_REF_TOKEN_POST_URI_STR = "/create-access-by-refresh-token";
     private static final String CHECK_ACCESS_TOKEN_POST_URI_STRING = "/access-token-validation";
-    private static final String REFRESH_TOKEN_GET_URI_STRING = "/get-refresh-token";
+    //private static final String REFRESH_TOKEN_GET_URI_STRING = "/get-refresh-token";
     //private static final String READ_BY_ID_USER_GET_URI_STRING = "/read-";
     private static final String READ_BY_USR_UUID_USER_GET_URI_STRING = "/read-by-usr-uuid-";
     private static final String READ_BY_LGN_EML_USER_GET_URI_STRING = "/read-by-usr-login-";
@@ -114,7 +116,7 @@ public class ApiGatewayController {
     private static final String CREATE_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING;
     private static final String CREATE_ACS_BY_REF_TOKEN_POST_URI_TMPLT = CREATE_ACCESS_TOKEN_POST_URI_TMPLT; //SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CREATE_ACS_BY_REF_TOKEN_POST_URI_STR;
     private static final String CHECK_ACCESS_TOKEN_POST_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + CHECK_ACCESS_TOKEN_POST_URI_STRING;
-    private static final String REFRESH_TOKEN_GET_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + REFRESH_TOKEN_GET_URI_STRING;
+    //private static final String REFRESH_TOKEN_GET_URI_TMPLT = SCRT_AUTH_SERVICE_ABS_URI_COMMON_STRING + REFRESH_TOKEN_GET_URI_STRING;
     private static final String READ_BY_USR_UUID_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_USR_UUID_USER_GET_URI_STRING;
     private static final String READ_BY_LGN_EML_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING;
     private static final String READ_ALL_USER_GET_URI_TMPLT = SCRT_SERVICE_ABS_URI_COMMON_STRING + READ_ALL_USER_GET_URI_STRING;
@@ -652,13 +654,39 @@ public class ApiGatewayController {
     }
 
     @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING}, method = RequestMethod.POST)
-    @ResponseBody
-    public String createAccessToken(HttpServletRequest request, @RequestBody TokenInfo tokenInfo)
+    //@ResponseBody //this annotation is redundant, as @RestController is used at the head of the whole class
+                    //+my return value will be in a form of a POJO and translated to JSON by Jakson API automatically,
+                    //see: https://stackoverflow.com/questions/44839753/returning-json-object-as-response-in-spring-boot
+    public ResponseEntity<TokenInfo> createAccessToken(HttpServletRequest request, @RequestBody TokenInfoWithCustomAuthCode tokenInfoWithCustomAuthCode)
             throws URISyntaxException {
         logger.info("API_Gateway_controller createAccessToken() - START");
-        String tokenAsString = this.proxingExternalRequests(tokenInfo, HttpMethod.POST, request,
-                CREATE_ACCESS_TOKEN_POST_URI_TMPLT).getBody();
-        return tokenAsString;
+        //String tokenAsString
+        //tokenInfo = this.proxingExternalRequests(tokenInfo, HttpMethod.POST, request,
+        //        CREATE_ACCESS_TOKEN_POST_URI_TMPLT);
+
+        URI uri = new URI(CREATE_ACCESS_TOKEN_POST_URI_TMPLT);
+        HttpHeaders headers = new HttpHeaders();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headers.set(headerName, request.getHeader(headerName));
+        }
+        HttpEntity<TokenInfoWithCustomAuthCode> httpEntity = new HttpEntity<>(tokenInfoWithCustomAuthCode, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<TokenInfo> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, httpEntity, TokenInfo.class);
+            if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+                return responseEntity;
+            } else {
+                throw new HttpServerErrorException(responseEntity.getStatusCode());
+            }
+        } catch (HttpStatusCodeException e) {
+            //https://stackoverflow.com/questions/38117717/what-is-the-best-way-to-return-different-types-of-responseentity-in-spring-mvc-o
+            //https://docs.oracle.com/javase/tutorial/extra/generics/wildcards.html
+            //+/- https://stackoverflow.com/questions/5395222/spring-mvc-returning-jsons-and-exception-handling (:)
+            logger.error("API_Gateway_controller createAccessToken() - HttpStatusCodeException: " + e.getRawStatusCode() + " " + e.getStatusText() + " |", e);
+            return new ResponseEntity<TokenInfo>(new TokenInfo(), HttpStatus.resolve(e.getRawStatusCode()));
+        }
     }
 
     @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CREATE_ACS_BY_REF_TOKEN_POST_URI_STR}, method = RequestMethod.POST)
@@ -681,6 +709,7 @@ public class ApiGatewayController {
         return boolCheckValStr;
     }
 
+    /*
     @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + REFRESH_TOKEN_GET_URI_STRING}, method = RequestMethod.GET)
     public ResponseEntity<String> getRefreshToken(HttpServletRequest request, @RequestBody UUID accessTokenUuid)
             throws URISyntaxException {
@@ -694,6 +723,6 @@ public class ApiGatewayController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
-
+    //*/
 }
 

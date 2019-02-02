@@ -1,9 +1,9 @@
-package smirnov.bn.web_spring_app_1.model;
+package smirnov.bn.security_service.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class TokenInfo {
+public class TokenInfoWithCustomAuthCode {
 
     private Integer tokenId;
 
@@ -23,27 +23,27 @@ public class TokenInfo {
 
     private String clientID;
 
+    private String clientSecret;
+
     private UUID refreshTokenUuid;
 
-    public TokenInfo() {
+    private UUID customAuthCodeUuid;
+
+    public TokenInfoWithCustomAuthCode() {
     }
 
-    public TokenInfo(String clientID) {
-        this.clientID = clientID;
-    }
-
-    public TokenInfo(UUID refreshTokenUuid) {
-        this.refreshTokenUuid = refreshTokenUuid;
-    }
-
-    public TokenInfo(UUID accessTokenUuid, String clientID) {
+    public TokenInfoWithCustomAuthCode(UUID accessTokenUuid) {
         this.accessTokenUuid = accessTokenUuid;
-        this.clientID = clientID;
     }
 
-    public TokenInfo(String clientID, UUID refreshTokenUuid) {
+    public TokenInfoWithCustomAuthCode(String accessTokenUuidAsString) {
+        this.accessTokenUuid = UUID.fromString(accessTokenUuidAsString);
+    }
+
+    public TokenInfoWithCustomAuthCode(UUID customAuthCodeUuid, String clientID, String clientSecret) {
+        this.customAuthCodeUuid = customAuthCodeUuid;
         this.clientID = clientID;
-        this.refreshTokenUuid = refreshTokenUuid;
+        this.clientSecret = clientSecret;
     }
 
     public Integer getTokenId() {
@@ -118,6 +118,14 @@ public class TokenInfo {
         this.clientID = clientID;
     }
 
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
+
     public UUID getRefreshTokenUuid() {
         return refreshTokenUuid;
     }
@@ -125,4 +133,13 @@ public class TokenInfo {
     public void setRefreshTokenUuid(UUID refreshTokenUuid) {
         this.refreshTokenUuid = refreshTokenUuid;
     }
+
+    public UUID getCustomAuthCodeUuid() {
+        return customAuthCodeUuid;
+    }
+
+    public void setCustomAuthCodeUuid(UUID customAuthCodeUuid) {
+        this.customAuthCodeUuid = customAuthCodeUuid;
+    }
+
 }

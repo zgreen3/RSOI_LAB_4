@@ -45,6 +45,17 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
         return authorizationCode.getAuthCodeUuid();
     }
 
+    public Boolean checkClientIdAndSecretValidity(String clientIdString, String benchmarkClientIdString,
+                                                  String clientSecretString, String  benchmarkClientSecretString) {
+        if ((clientIdString != null) && clientIdString.equals(benchmarkClientIdString)
+                && (clientSecretString != null)
+                && clientSecretString.equals(benchmarkClientSecretString)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public Boolean checkAuthCodeValidity(UUID authenticationCodeUuid) {
         AuthorizationCode authorizationCodeToCheck = authRepository.findByUuid(authenticationCodeUuid);
         if ((authorizationCodeToCheck != null) && authorizationCodeToCheck.getUsed().equals(false)
@@ -85,6 +96,21 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
         Token accessTokenRequired = tokenRepository.findByUuid(accessTokenUuid);
         if (accessTokenRequired != null) {
             return accessTokenRequired.getRefreshTokenUuid();
+        } else {
+            return UUID.fromString("0");
+        }
+    }
+
+    public UUID getNewAccessTokenUuidByRefreshTokenUuid(UUID refreshTokenUuid, String clientId) {
+        Token accessTokenOld = tokenRepository.findByRefreshTokenUuid(refreshTokenUuid);
+        if (accessTokenOld != null) {
+            //если только найденный для refreshTokenUuid accessTokenOld НЕ валиден, то имеет смысл
+            //создавать новый accessToken, иначе возвращаем accessTokenUuid для accessTokenOld (:)
+            if (!(this.checkAccessTokenValidity(accessTokenOld.getAccessTokenUuid()))) {
+                return this.createAccessToken(clientId);
+            } else {
+                return accessTokenOld.getAccessTokenUuid();
+            }
         } else {
             return UUID.fromString("0");
         }

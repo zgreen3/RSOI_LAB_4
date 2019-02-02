@@ -81,16 +81,15 @@ public interface WebAppService {
     String buildOAuth2FirstAuthorizationUri(String authorizationServerLoginPageUri, String callBackRedirectUri, String clientId//, String clientSecret
     );
 
-    String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString, String afterSigningInRedirectionUriString);
+    //String buildOAuth2UriWithTokenGetMethodParam(String tokenUuidAsString, String afterSigningInRedirectionUriString);
 
     Boolean checkAuthorizationCode(String authorizationCode, String clientId, String clientSecret);
 
-    String createAccessToken(String clientId);
+    void getAndSaveLocallyAccRefTokensByRefreshToken(UUID refreshTokenUuid, String clientID);
 
-    void createAndSaveNewAccessTokenUsingRefreshToken(UUID refreshTokenUuid, String clientID);
+    void getAndSaveLocallyAccRefTokensByAuthCodeClientIdSecret(String authorizationCode, String clientId, String clientSecret, HttpServletResponse response);
 
-    void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response);
+    //void saveTokenAsCookie(String tokenUuidAsString, HttpServletResponse response);
 
-    String oAuth2GetAndSaveAccessTokenFromSecurityServer(String authorizationCode, String clientId, String clientSecret, HttpServletResponse response);
-
+    //String createAccessToken(String clientId);
 }
