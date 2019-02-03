@@ -1,5 +1,6 @@
 package smirnov.bn.apigateway.controller;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -18,9 +19,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import smirnov.bn.apigateway.info_model_patterns.*;
 
 @RestController
@@ -40,6 +43,7 @@ public class ApiGatewayController {
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_STRING = "/read-all-paginated";
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_STRING = "/update-ling_var";
     private static final String DELETE_LNG_VR_DELETE_URI_STRING = "/delete-";
+    private static final String GET_TOKEN_LNG_VR_GET_URI_STRING = "/get-token";
 
     private static final String CREATE_LNG_VR_POST_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + CREATE_LNG_VR_POST_URI_STRING;
     private static final String READ_BY_ID_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_BY_ID_LNG_VR_GET_URI_STRING;
@@ -48,6 +52,7 @@ public class ApiGatewayController {
     private static final String READ_ALL_PGNTD_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_LNG_VR_GET_URI_STRING;
     private static final String UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + UPDATE_BY_ID_LNG_VR_PUT_URI_STRING;
     private static final String DELETE_LNG_VR_DELETE_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + DELETE_LNG_VR_DELETE_URI_STRING;
+    private static final String GET_TOKEN_LNG_VR_GET_URI_TMPLT = SERVICE_1_ABS_URI_COMMON_STRING + GET_TOKEN_LNG_VR_GET_URI_STRING;
 
     private static final String SERVICE_2_PORT_STRING = "8192";
     private static final String SERVICE_2_URI_COMMON_DIR_STRING = "/biz_proc_desc/";
@@ -60,6 +65,7 @@ public class ApiGatewayController {
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_STRING = "update-biz_proc_desc";
     private static final String DELETE_BP_DSC_DELETE_URI_STRING = "delete-";
+    private static final String GET_TOKEN_BP_DSC_GET_URI_STRING = "/get-token";
 
     private static final String CREATE_BP_DSC_POST_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + CREATE_BP_DSC_POST_URI_STRING;
     private static final String READ_BY_ID_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_BY_ID_BP_DSC_GET_URI_STRING;
@@ -68,6 +74,7 @@ public class ApiGatewayController {
     private static final String READ_ALL_PGNTD_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_BP_DSC_GET_URI_STRING;
     private static final String UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + UPDATE_BY_ID_BP_DSC_PUT_URI_STRING;
     private static final String DELETE_BP_DSC_DELETE_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + DELETE_BP_DSC_DELETE_URI_STRING;
+    private static final String GET_TOKEN_BP_DSC_GET_URI_TMPLT = SERVICE_2_ABS_URI_COMMON_STRING + GET_TOKEN_BP_DSC_GET_URI_STRING;
 
     private static final String SERVICE_3_PORT_STRING = "8193";
     private static final String SERVICE_3_URI_COMMON_DIR_STRING = "/employees/";
@@ -80,6 +87,7 @@ public class ApiGatewayController {
     private static final String READ_ALL_PGNTD_EMP_GET_URI_STRING = "read-all-paginated";
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_STRING = "update-employee";
     private static final String DELETE_EMP_DELETE_URI_STRING = "delete-";
+    private static final String GET_TOKEN_EMP_GET_URI_STRING = "/get-token";
 
     private static final String CREATE_EMP_POST_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + CREATE_EMP_POST_URI_STRING;
     private static final String READ_BY_UUID_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_BY_EMP_UUID_EMP_GET_URI_STRING; //READ_BY_UUID_EMP_GET_URI_STRING;
@@ -87,6 +95,7 @@ public class ApiGatewayController {
     private static final String READ_ALL_PGNTD_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + READ_ALL_PGNTD_EMP_GET_URI_STRING;
     private static final String UPDATE_BY_UUID_EMP_PUT_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + UPDATE_BY_UUID_EMP_PUT_URI_STRING;
     private static final String DELETE_EMP_DELETE_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + DELETE_EMP_DELETE_URI_STRING;
+    private static final String GET_TOKEN_EMP_GET_URI_TMPLT = SERVICE_3_ABS_URI_COMMON_STRING + GET_TOKEN_EMP_GET_URI_STRING;
 
     private static final String SCRT_SERVICE_PORT_STRING = "8202";
     private static final String SCRT_SERVICE_URI_COMMON_DIR_STRING = "/security_service";
@@ -126,6 +135,37 @@ public class ApiGatewayController {
 
     private static final String WEB_SRVC_APP_ID_STRING = "WEB_SPR_APP_1_CLT_ID0_000_1";
     private static final String WEB_SRVC_APP_SECRET_STRING = "WEB_SPR_APP_1_CLT_0SECRET0STRING0_000_1";
+
+    private static final String API_GATEWAY_KEY_STRING = "API_GATEWAY_APP_KEY0_000_1";
+    private static final String API_GATEWAY_SECRET_STRING = "API_GATEWAY_APP_0SECRET0STRING0_000_1";
+
+    private String tokenUuidStringService_1_SavedLocally;
+    private String tokenUuidStringService_2_SavedLocally;
+    private String tokenUuidStringService_3_SavedLocally;
+
+    public String getTokenUuidStringService_1_SavedLocally() {
+        return tokenUuidStringService_1_SavedLocally;
+    }
+
+    public void setTokenUuidStringService_1_SavedLocally(String tokenUuidStringService_1_SavedLocally) {
+        this.tokenUuidStringService_1_SavedLocally = tokenUuidStringService_1_SavedLocally;
+    }
+
+    public String getTokenUuidStringService_2_SavedLocally() {
+        return tokenUuidStringService_2_SavedLocally;
+    }
+
+    public void setTokenUuidStringService_2_SavedLocally(String tokenUuidStringService_2_SavedLocally) {
+        this.tokenUuidStringService_2_SavedLocally = tokenUuidStringService_2_SavedLocally;
+    }
+
+    public String getTokenUuidStringService_3_SavedLocally() {
+        return tokenUuidStringService_3_SavedLocally;
+    }
+
+    public void setTokenUuidStringService_3_SavedLocally(String tokenUuidStringService_3_SavedLocally) {
+        this.tokenUuidStringService_3_SavedLocally = tokenUuidStringService_3_SavedLocally;
+    }
 
     //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
     //@Autowired
@@ -362,9 +402,14 @@ public class ApiGatewayController {
     //**********************************************************************************************************************
     ///ling_var AND employee's info read-all (:)
     @GetMapping("/ling_var_and_employee/read-all")
-    public ResponseEntity<List<LingVarWithEmployeeInfo>> findAllLingVarWithEmployeeData() {
+    public ResponseEntity<List<LingVarWithEmployeeInfo>> findAllLingVarWithEmployeeData(HttpSession session) {
         try {
             logger.info("findAllLingVarWithEmployeeData() - START");
+            logger.info("requestMappingPath is " + ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
+
+            //https://stackoverflow.com/questions/3796545/how-do-i-get-the-requestmapping-value-in-the-controller
+            //https://stackoverflow.com/questions/18791645/how-to-use-session-attributes-in-spring-mvc (:)
+            session.setAttribute("lastMethodRequestMappingValueBuffered", ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
 
             //Сначала получаем данные по всем Лингвистическим переменным:
             //[
@@ -372,16 +417,28 @@ public class ApiGatewayController {
             //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
             //https://stackoverflow.com/questions/15218462/how-to-aggregate-jax-rs-responses-from-multiple-services
             //]
+            HttpHeaders tokenInfoForService_1_Headers = new HttpHeaders();
+            tokenInfoForService_1_Headers.setContentType(MediaType.APPLICATION_JSON);
+            tokenInfoForService_1_Headers.add("Authorization", "Bearer " + tokenUuidStringService_1_SavedLocally);
+            HttpEntity<String> requestService_1_TokenInfoEntity = new HttpEntity<>(tokenInfoForService_1_Headers);
+            session.setAttribute("lastServiceTokenRequestPathBuffered", GET_TOKEN_LNG_VR_GET_URI_TMPLT);
+
             ResponseEntity<List<LingVarInfo>> lingVarInfoResponse =
                     restTemplate.exchange(READ_ALL_LNG_VR_GET_URI_TMPLT, //"http://localhost:8191/ling_var_dict/read-all",
-                            HttpMethod.GET, null, new ParameterizedTypeReference<List<LingVarInfo>>() {
+                            HttpMethod.GET, requestService_1_TokenInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
                             });
             List<LingVarInfo> lingVarInfoList = lingVarInfoResponse.getBody();
 
             //Затем получаем данные по всем Сотрудникам:
+            HttpHeaders tokenInfoForService_3_Headers = new HttpHeaders();
+            tokenInfoForService_3_Headers.setContentType(MediaType.APPLICATION_JSON);
+            tokenInfoForService_3_Headers.add("Authorization", "Bearer " + tokenUuidStringService_3_SavedLocally);
+            HttpEntity<String> requestService_3_TokenInfoEntity = new HttpEntity<>(tokenInfoForService_3_Headers);
+            session.setAttribute("lastServiceTokenRequestPathBuffered", GET_TOKEN_EMP_GET_URI_TMPLT);
+
             ResponseEntity<List<EmployeeInfo>> employeeInfoResponse =
                     restTemplate.exchange(READ_ALL_EMP_GET_URI_TMPLT, //"http://localhost:8193/employees/read-all",
-                            HttpMethod.GET, null, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                            HttpMethod.GET, requestService_3_TokenInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
                             });
             List<EmployeeInfo> employeeInfoList;
             if (employeeInfoResponse != null) {
@@ -655,8 +712,8 @@ public class ApiGatewayController {
 
     @RequestMapping(value = {SCRT_SERVICE_AUTH_URI_COMMON_DIR_STRING + CREATE_ACCESS_TOKEN_POST_URI_STRING}, method = RequestMethod.POST)
     //@ResponseBody //this annotation is redundant, as @RestController is used at the head of the whole class
-                    //+my return value will be in a form of a POJO and translated to JSON by Jakson API automatically,
-                    //see: https://stackoverflow.com/questions/44839753/returning-json-object-as-response-in-spring-boot
+    //+my return value will be in a form of a POJO and translated to JSON by Jakson API automatically,
+    //see: https://stackoverflow.com/questions/44839753/returning-json-object-as-response-in-spring-boot
     public ResponseEntity<TokenInfo> createAccessToken(HttpServletRequest request, @RequestBody TokenInfoWithCustomAuthCode tokenInfoWithCustomAuthCode)
             throws URISyntaxException {
         logger.info("API_Gateway_controller createAccessToken() - START");
@@ -724,5 +781,55 @@ public class ApiGatewayController {
         }
     }
     //*/
+
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public String handleHttpUnauthorizedStatusCodeException(HttpSession session, HttpStatusCodeException e) {
+        logger.info("API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException() - START");
+        String lastServiceRequestTokenRequestPath = (String) session.getAttribute("lastServiceTokenRequestPathBuffered");
+        if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+            TokenInfoWithAppKeyAndSecret tokenInfoWithAppKeyAndSecret = new TokenInfoWithAppKeyAndSecret(API_GATEWAY_KEY_STRING, API_GATEWAY_SECRET_STRING);
+            HttpHeaders tokenInfoHeaders = new HttpHeaders();
+            tokenInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+            //https://stackoverflow.com/questions/3538021/why-do-we-use-base64
+            //https://stackoverflow.com/questions/21920268/basic-authentication-for-rest-api-using-spring-resttemplate (:)
+            String appKeyAndSecretColonSeparated = API_GATEWAY_KEY_STRING + ":" + API_GATEWAY_SECRET_STRING;
+            String base64AppKeyAndSecretColonSeparated = Base64.encodeBase64(appKeyAndSecretColonSeparated.getBytes()).toString();
+            tokenInfoHeaders.add("Authorization", "Basic " + base64AppKeyAndSecretColonSeparated);
+            HttpEntity<String> requestEntityWIthAppKeyAndSecretHeaders = new HttpEntity<>(tokenInfoHeaders);
+            //HttpEntity<TokenInfoWithAppKeyAndSecret> requestTokenInfoEntity = new HttpEntity<>(tokenInfoWithAppKeyAndSecret, tokenInfoHeaders);
+            ResponseEntity<TokenInfo> tokenInfoResponseEntity =
+                    restTemplate.exchange(
+                            //https://stackoverflow.com/questions/18791645/how-to-use-session-attributes-in-spring-mvc
+                            //https://stackoverflow.com/questions/31616546/adding-parameters-to-exceptionhandler-for-methodargumentnotvalidexception-in-sp (:)
+                            lastServiceRequestTokenRequestPath, //CREATE_ACCESS_TOKEN_POST_URI_TMPLT, //create Access Token
+                            HttpMethod.POST,
+                            requestEntityWIthAppKeyAndSecretHeaders, //requestTokenInfoEntity,
+                            new ParameterizedTypeReference<TokenInfo>() {
+                            });
+            String tokenUuidAsString;
+            if (tokenInfoResponseEntity.getStatusCode() != HttpStatus.NO_CONTENT) {
+                tokenUuidAsString = tokenInfoResponseEntity.getBody().getAccessTokenUuid().toString();
+            } else {
+                tokenUuidAsString = "";
+            }
+
+            //проверяем, к какому сервису относится выданный токен (исходя из того, у какого сервиса мы его запросили),
+            //и сохраняем его в соответствующую локальную переменную:
+            if (lastServiceRequestTokenRequestPath.contains(SERVICE_1_URI_COMMON_DIR_STRING)) {
+                setTokenUuidStringService_1_SavedLocally(tokenUuidAsString);
+            } else if (lastServiceRequestTokenRequestPath.contains(SERVICE_2_URI_COMMON_DIR_STRING)) {
+                setTokenUuidStringService_2_SavedLocally(tokenUuidAsString);
+            } else if (lastServiceRequestTokenRequestPath.contains(SERVICE_3_URI_COMMON_DIR_STRING)) {
+                setTokenUuidStringService_3_SavedLocally(tokenUuidAsString);
+            } else { //по умолчанию считаем, что это был сервис обработки данных по сотрудникам:
+                setTokenUuidStringService_1_SavedLocally(tokenUuidAsString);
+            }
+
+            return "redirect:" + session.getAttribute("lastMethodRequestMappingValueBuffered");
+        } else {
+            return "error";
+        }
+    }
+
 }
 
