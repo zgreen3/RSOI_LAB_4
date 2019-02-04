@@ -1,26 +1,19 @@
-package smirnov.bn.service_1.interceptor;
+package smirnov.bn.service_2.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import javax.servlet.http.Cookie;
+import smirnov.bn.service_2.service.TokenService;
+import smirnov.bn.service_2.service.TokenServiceImpl;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.UUID;
 
 import static java.lang.Boolean.TRUE;
-
-import smirnov.bn.service_1.model.TokenInfo;
-import smirnov.bn.service_1.service.TokenService;
-import smirnov.bn.service_1.service.TokenServiceImpl;
 
 @Component
 public class TokenCheckInterceptor extends HandlerInterceptorAdapter {
@@ -33,7 +26,7 @@ public class TokenCheckInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        logger.info("TokenCheckInterceptor service_1 preHandle() - START");
+        logger.info("TokenCheckInterceptor service_2 preHandle() - START");
 
         String requestAuthHeaderValueString = request.getHeader("Authorization");
 
@@ -41,7 +34,7 @@ public class TokenCheckInterceptor extends HandlerInterceptorAdapter {
                 (!requestAuthHeaderValueString.isEmpty()) &&
                 (requestAuthHeaderValueString.contains("Bearer"))) {
             //**********проверка валидности / корректности token-а:**********
-            logger.info("check [AppKey & AppSecret] Token() in service_1 class in preHandle() interceptor - START");
+            logger.info("check [AppKey & AppSecret] Token() in service_2 class in preHandle() interceptor - START");
 
             //проверяем наличие валидного корректного токена, отбрасываем из значения заголовка строку "Bearer ":
             String[] tokenArray = requestAuthHeaderValueString.split(" ");

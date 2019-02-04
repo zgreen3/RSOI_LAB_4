@@ -13,8 +13,8 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tokenId;
 
-    @Column(name = "access_token_uuid", unique = true)
-    private UUID accessTokenUuid;
+    @Column(name = "token_uuid", unique = true)
+    private UUID tokenUuid;
 
     @Column(name = "is_invalidated", columnDefinition = "boolean default false", nullable = false)
     private Boolean isInvalidated;
@@ -26,23 +26,24 @@ public class Token {
     private String tokenType;
 
     //@Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_date_time")
+    @Column(name = "created_date_time")
     private LocalDateTime createdDateTime;
 
-    @Column(name="expires_in_seconds", columnDefinition = "BIGINT")
+    @Column(name = "expires_in_seconds", columnDefinition = "BIGINT")
     private Long expiresInSeconds;
 
     //@Temporal(TemporalType.TIMESTAMP)
-    @Column(name="last_used_date_time")
+    @Column(name = "last_used_date_time")
     private LocalDateTime lastUsedDateTime;
 
     @Column(name = "client_id", length = 255)
     private String clientID;
 
-    @Column(name = "refresh_token_uuid", unique = true)
-    private UUID refreshTokenUuid;
+    //@Column(name = "refresh_token_uuid", unique = true)
+    //private UUID refreshTokenUuid;
 
-    public Token() {}
+    public Token() {
+    }
 
     public Token(Boolean isInvalidated, Boolean isExpired, String tokenType, LocalDateTime createdDateTime, Long expiresInSeconds, LocalDateTime lastUsedDateTime, String clientID) {
         this.isInvalidated = isInvalidated;
@@ -62,12 +63,12 @@ public class Token {
         this.tokenId = tokenId;
     }
 
-    public UUID getAccessTokenUuid() {
-        return accessTokenUuid;
+    public UUID getTokenUuid() {
+        return tokenUuid;
     }
 
-    public void setAccessTokenUuid(UUID accessTokenUuid) {
-        this.accessTokenUuid = accessTokenUuid;
+    public void setTokenUuid(UUID accessTokenUuid) {
+        this.tokenUuid = accessTokenUuid;
     }
 
     public Boolean getInvalidated() {
@@ -126,6 +127,7 @@ public class Token {
         this.clientID = clientID;
     }
 
+    /*
     public UUID getRefreshTokenUuid() {
         return refreshTokenUuid;
     }
@@ -133,6 +135,7 @@ public class Token {
     public void setRefreshTokenUuid(UUID refreshTokenUuid) {
         this.refreshTokenUuid = refreshTokenUuid;
     }
+    //*/
 
     @Override
     public boolean equals(Object o) {
@@ -140,28 +143,31 @@ public class Token {
         if (o == null || getClass() != o.getClass()) return false;
         Token token = (Token) o;
         return Objects.equals(tokenId, token.tokenId) &&
-                Objects.equals(accessTokenUuid, token.accessTokenUuid) &&
+                Objects.equals(tokenUuid, token.tokenUuid) &&
                 Objects.equals(isInvalidated, token.isInvalidated) &&
                 Objects.equals(isExpired, token.isExpired) &&
                 Objects.equals(tokenType, token.tokenType) &&
                 Objects.equals(createdDateTime, token.createdDateTime) &&
                 Objects.equals(expiresInSeconds, token.expiresInSeconds) &&
                 Objects.equals(lastUsedDateTime, token.lastUsedDateTime) &&
-                Objects.equals(clientID, token.clientID) &&
-                Objects.equals(refreshTokenUuid, token.refreshTokenUuid);
+                Objects.equals(clientID, token.clientID) //&&
+                //Objects.equals(refreshTokenUuid, token.refreshTokenUuid)
+                ;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(tokenId, accessTokenUuid, isInvalidated, isExpired, tokenType, createdDateTime, expiresInSeconds, lastUsedDateTime, clientID, refreshTokenUuid);
+        return Objects.hash(tokenId, tokenUuid, isInvalidated, isExpired, tokenType, createdDateTime, expiresInSeconds,
+                lastUsedDateTime, clientID//, refreshTokenUuid
+        );
     }
 
     @Override
     public String toString() {
         return "Token{" +
                 "tokenId=" + tokenId +
-                ", accessTokenUuid=" + accessTokenUuid +
+                ", tokenUuid=" + tokenUuid +
                 ", isInvalidated=" + isInvalidated +
                 ", isExpired=" + isExpired +
                 ", tokenType='" + tokenType + '\'' +
@@ -169,7 +175,7 @@ public class Token {
                 ", expiresInSeconds=" + expiresInSeconds +
                 ", lastUsedDateTime=" + lastUsedDateTime +
                 ", clientID='" + clientID + '\'' +
-                ", refreshTokenUuid=" + refreshTokenUuid +
+                //", refreshTokenUuid=" + refreshTokenUuid +
                 '}';
     }
 }

@@ -67,6 +67,7 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
     }
 
     public UUID createAccessToken(String clientId) {
+        tokenRepository.updateAllFilteredTokensValidity();
         Token accessToken = new Token();
         accessToken.setAccessTokenUuid(UUID.randomUUID());
         accessToken.setTokenType("code"); //"authorisation code [flow]"
@@ -82,7 +83,8 @@ public class AuthAndTokenServiceImpl implements AuthAndTokenService {
     }
 
     public Boolean checkAccessTokenValidity(UUID accessTokenUuid) {
-        tokenRepository.updateTokenValidity(accessTokenUuid);
+        //tokenRepository.updateTokenValidity(accessTokenUuid);
+        tokenRepository.updateAllFilteredTokensValidity();
         Token accessTokenToCheck = tokenRepository.findByUuid(accessTokenUuid);
         if ((accessTokenToCheck != null) && accessTokenToCheck.getInvalidated().equals(false)
                 && accessTokenToCheck.getExpired().equals(false)) {

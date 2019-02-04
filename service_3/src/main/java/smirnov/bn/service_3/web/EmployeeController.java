@@ -68,7 +68,7 @@ public class EmployeeController {
             logger.info("findAllEmployees() - START");
             List<EmployeeInfo> employeesInfo = employeeService.findAllEmployees();
 
-            if (employeesInfo != null && employeesInfo.isEmpty()) {
+            if ((employeesInfo == null) && employeesInfo.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity<>(employeesInfo, HttpStatus.OK);

@@ -51,7 +51,7 @@ public class OAuth2CustomController {
         }
     }
 
-    @RequestMapping(value = {"/create-access-token"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/create-access-token", "/create-access-by-refresh-token"}, method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<TokenInfo> createAccessToken(@RequestBody TokenInfoWithCustomAuthCode tokenInfoWithCustomAuthCode) {
         TokenInfo tokenInfo = new TokenInfo();

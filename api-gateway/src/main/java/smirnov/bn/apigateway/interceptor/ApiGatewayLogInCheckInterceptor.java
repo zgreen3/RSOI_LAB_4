@@ -2,6 +2,7 @@ package smirnov.bn.apigateway.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -42,7 +43,14 @@ public class ApiGatewayLogInCheckInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayLogInCheckInterceptor.class);
 
+    //@Autowired
     private RestTemplate restTemplate = new RestTemplate();
+
+    /*
+    public ApiGatewayLogInCheckInterceptor(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+    //*/
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -84,7 +92,7 @@ public class ApiGatewayLogInCheckInterceptor extends HandlerInterceptorAdapter {
                     accessTokenUuidAsString = accessTokenArray[1];
                 }
                 String boolCheckValStr = "false";
-                if (!accessTokenUuidAsString.equals("0")) {
+                if ((accessTokenUuidAsString != null) && (!accessTokenUuidAsString.equals("null")) && (!accessTokenUuidAsString.equals("0"))) {
                     TokenInfo tokenInfo = new TokenInfo(accessTokenUuidAsString);
                     HttpHeaders authCodeInfoHeaders = new HttpHeaders();
                     authCodeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);

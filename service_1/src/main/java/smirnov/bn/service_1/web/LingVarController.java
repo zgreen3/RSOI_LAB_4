@@ -76,7 +76,7 @@ public class LingVarController {
             logger.info("findAllLingVars() - START");
             List<LingVarInfo> lingVarsInfo = lingVarService.findAllLingVars();
 
-            if (lingVarsInfo != null && lingVarsInfo.isEmpty()) {
+            if ((lingVarsInfo == null) && lingVarsInfo.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity<>(lingVarsInfo, HttpStatus.OK);

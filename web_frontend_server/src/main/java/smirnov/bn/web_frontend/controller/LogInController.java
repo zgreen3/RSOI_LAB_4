@@ -183,7 +183,7 @@ public class LogInController {
     }
 
     ///*
-    //curl -X POST --data "{\"userLogin\":\"Tester_2\",\"userEmail\":\"tester_2@example.com\",\"userPassword\":\"123\"}" http://localhost:8201/user-backdoor-create --header "Content-Type:application/json"
+    //curl -X POST --data "{\"userLogin\":\"Tester_2\",\"userEmail\":\"tester_2@example.com\",\"userPassword\":\"12345\"}" http://localhost:8202/security_service/create-user --header "Content-Type:application/json"
     @RequestMapping(value = {"/user-backdoor-create"}, method = RequestMethod.POST)
     public String registerUser(@RequestBody UserForm userForm) {
         try {

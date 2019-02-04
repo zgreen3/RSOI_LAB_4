@@ -71,7 +71,7 @@ public class BusinessProcDescController {
             logger.info("findAllBusinessProcDescs() - START");
             List<BusinessProcDescInfo> businessProcDescInfo = businessProcDescService.findAllBusinessProcDescs();
 
-            if (businessProcDescInfo != null && businessProcDescInfo.isEmpty()) {
+            if ((businessProcDescInfo == null) && businessProcDescInfo.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity<>(businessProcDescInfo, HttpStatus.OK);

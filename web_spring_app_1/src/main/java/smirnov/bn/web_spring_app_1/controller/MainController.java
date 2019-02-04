@@ -238,11 +238,12 @@ public class MainController {
     public String handleHttpUnauthorizedStatusCodeException(HttpStatusCodeException e) {
         logger.info("MainController web_spring_app_1 handleHttpUnauthorizedStatusCodeException() - START");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            //если у клиентского приложения уже есть выданный токен, но он "невалиден" и при этом имеется refresh token,
-            // то используем refresh token для получения нового access token-а:
+            //если у клиентского приложения уже есть выданный токен
+            //(но "сервер безопсности" выдаёт "ошибку" HttpStatus.UNAUTHORIZED, что означает, что он "невалиден")
+            //и при этом имеется refresh token, то используем refresh token для получения нового access token-а:
             String currentAccessTokenAsString = service.getTokenUuidStringSavedLocallyInService();
             String currentRefreshTokenAsString = service.getRefreshTokenUuidStringSavedLocallyInService();
-            if (!currentAccessTokenAsString.equals("") && !currentRefreshTokenAsString.equals("")) {
+            if ((currentAccessTokenAsString != null) && !currentAccessTokenAsString.isEmpty() && (currentRefreshTokenAsString != null) && !currentRefreshTokenAsString.isEmpty()) {
                 //UUID refreshTokenUuid =
                 //        service.getRefreshTokenByAccessTokenUuid(UUID.fromString(currentAccessTokenAsString));
                 service.getAndSaveLocallyAccRefTokensByRefreshToken(//UUID.fromString(currentAccessTokenAsString),
