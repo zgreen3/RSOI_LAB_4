@@ -647,7 +647,7 @@ public class ApiGatewayController {
     }
 
     //"http:/localhost:8194/gateway_API/security_service/read-by-usr-login-{userLogin}-email-{userEmail}" (:)
-    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING + "{userLogin}" + "-email-" + "{userEmail}")
+    @GetMapping(SCRT_SERVICE_URI_COMMON_DIR_STRING + READ_BY_LGN_EML_USER_GET_URI_STRING + "{userLogin}" + "-email-" + "{userEmail:.+}")
     public ResponseEntity<String> findUserByLoginEmail(HttpServletRequest request, @PathVariable String userLogin, @PathVariable String userEmail)
             throws URISyntaxException {
         logger.info("API_Gateway_controller findUserByLoginEmail() - START" + "\n" + " userLogin: " + userLogin + " userEmail: " + userEmail);

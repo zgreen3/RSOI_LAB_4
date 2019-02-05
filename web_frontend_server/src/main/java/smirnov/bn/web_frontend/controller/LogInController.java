@@ -148,7 +148,7 @@ public class LogInController {
                                     .queryParam("code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))
                                     .build().encode().toUriString();
                     //*/
-                            UriComponentsBuilder.newInstance()
+                            UriComponentsBuilder//.newInstance()
                                     //.scheme("http").host("localhost").port(8201).path(URLDecoder.decode(afterSigningInRedirectionUriString, "UTF-8"))
                                     .fromUriString(URLDecoder.decode(afterSigningInRedirectionUriString + "/" + clientIdFromRequestParam, "UTF-8"))
                                     .queryParam("code", URLEncoder.encode(authorizationCodeUuid.toString(), "UTF-8"))

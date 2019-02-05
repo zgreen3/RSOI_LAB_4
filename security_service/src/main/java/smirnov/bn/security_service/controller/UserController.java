@@ -165,7 +165,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/read-by-usr-login-{userLogin}-email-{userEmail}")
+    @GetMapping("/read-by-usr-login-{userLogin}-email-{userEmail:.+}")
     public ResponseEntity<UserInfo> findUserByLoginEmail(@PathVariable String userLogin, @PathVariable String userEmail) {
         try {
             logger.info("/security_service : findUserByLoginEmail() - START" + "\n" + "userLogin: " + userLogin + " userEmail " + userEmail);
