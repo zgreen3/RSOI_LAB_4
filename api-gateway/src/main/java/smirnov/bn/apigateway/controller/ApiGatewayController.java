@@ -496,13 +496,32 @@ public class ApiGatewayController {
             employeeInfo.setEmployeeLogin(lingVarWithEmployeeInfo.getEmployeeLogin());
             employeeInfo.setEmployeeUuid(UUID.fromString(lingVarWithEmployeeInfo.getEmployeeUuid()));
 
-            // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
-            HttpHeaders employeeInfoHeaders = new HttpHeaders();
-            employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfo, employeeInfoHeaders);
-            restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
-                    HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
-                    });
+            //запоминаем для возможного roll-back-а данные по сотруднику до текущего update-а:
+            EmployeeInfo employeeInfoBeforeUpdateForRollBack = new EmployeeInfo();
+            try {
+                ResponseEntity<EmployeeInfo> employeeInfoResponse =
+                        restTemplate.exchange(READ_BY_UUID_EMP_GET_URI_TMPLT
+                                        + String.valueOf(employeeInfo.getEmployeeUuid()), //"http://localhost:8193/employees/read-by-emp-uuid-{employeeUuid}",
+                                HttpMethod.GET, null, new ParameterizedTypeReference<EmployeeInfo>() {
+                                });
+                employeeInfoBeforeUpdateForRollBack = employeeInfoResponse.getBody();
+            } catch (Exception e) {
+                logger.error("Error in updateEmployeeWithLingVarData(...) during employee info roll-back saving", e);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            try {
+                // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+                HttpHeaders employeeInfoHeaders = new HttpHeaders();
+                employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfo, employeeInfoHeaders);
+                restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
+                        HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                        });
+            } catch (Exception e) {
+                logger.error("Error in updateEmployeeWithLingVarData(...) during employee info update", e);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
 
             //Затем получаем и потом изменяем данные по всем Лингвистическим переменным (на одинаковые данные, передаваемые в lingVarWithEmployeeInfo),
             //связанным с данным сотрудником по UUID, который также передаётся в lingVarWithEmployeeInfo (:)
@@ -531,20 +550,31 @@ public class ApiGatewayController {
                 lingVarInfo.setLingVarTermMedVal(lingVarWithEmployeeInfo.getLingVarTermMedVal());
                 lingVarInfo.setLingVarTermHighVal(lingVarWithEmployeeInfo.getLingVarTermHighVal());
 
-                // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
-                HttpHeaders lingVarInfoHeaders = new HttpHeaders();
-                lingVarInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<LingVarInfo> requestLingVarInfoEntity = new HttpEntity<>(lingVarInfo, lingVarInfoHeaders);
-                restTemplate.exchange(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT,
-                        HttpMethod.PUT, requestLingVarInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
-                        });
-
+                try {
+                    // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html (:)
+                    HttpHeaders lingVarInfoHeaders = new HttpHeaders();
+                    lingVarInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    HttpEntity<LingVarInfo> requestLingVarInfoEntity = new HttpEntity<>(lingVarInfo, lingVarInfoHeaders);
+                    restTemplate.exchange(UPDATE_BY_ID_LNG_VR_PUT_URI_TMPLT,
+                            HttpMethod.PUT, requestLingVarInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
+                            });
+                } catch (Exception e) {
+                    logger.error("Error in updateEmployeeWithLingVarData(...) during ling var info update", e);
+                    //осуществляем rollback ("полный откат операции" - см. п. 4 ЛР_5):
+                    HttpHeaders employeeInfoHeaders = new HttpHeaders();
+                    employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfoBeforeUpdateForRollBack, employeeInfoHeaders);
+                    restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
+                            HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                            });
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
                 logger.info("Another lingVarInfo in lingVarInfoList in updateEmployeeWithLingVarData() UPDATED");
             }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in updateEmployeeWithLingVarData(...)", e);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
