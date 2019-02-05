@@ -13,7 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import smirnov.bn.apigateway.interceptor.ApiGatewayLogInCheckInterceptor;
 
-@EnableWebMvc
+//https://stackoverflow.com/questions/40649177/jackson-is-ignoring-spring-jackson-properties-in-my-spring-boot-application (:)
+//@EnableWebMvc
 @Configuration
 public class CustomConfigForInterceptors extends WebMvcConfigurerAdapter  {
     //https://www.tutorialspoint.com/spring_boot/spring_boot_interceptor.htm (:)

@@ -32,6 +32,7 @@ import smirnov.bn.apigateway.info_model_patterns.*;
 public class ApiGatewayController {
 
     private static final String MAIN_WEB_SERVER_HOST_STRING = "http://localhost:";
+    private static final String API_SERVICE_PORT_STRING = "8194";
 
     private static final String SERVICE_1_PORT_STRING = "8191";
     private static final String SERVICE_1_URI_COMMON_DIR_STRING = "/ling_var_dict";
@@ -403,7 +404,10 @@ public class ApiGatewayController {
     //**********************************************************************************************************************
     ///ling_var AND employee's info read-all (:)
     @GetMapping("/ling_var_and_employee/read-all")
-    public ResponseEntity<List<LingVarWithEmployeeInfo>> findAllLingVarWithEmployeeData(HttpSession session) {
+    public ResponseEntity<List<LingVarWithEmployeeInfo>> findAllLingVarWithEmployeeData(HttpSession session,
+                                                                                        //@RequestBody HttpEntity<Object> requestBody,
+                                                                                        HttpServletRequest request
+    ) {
         try {
             logger.info("findAllLingVarWithEmployeeData() - START");
             logger.info("requestMappingPath is " + ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
@@ -411,6 +415,11 @@ public class ApiGatewayController {
             //https://stackoverflow.com/questions/3796545/how-do-i-get-the-requestmapping-value-in-the-controller
             //https://stackoverflow.com/questions/18791645/how-to-use-session-attributes-in-spring-mvc (:)
             session.setAttribute("lastMethodRequestMappingValueBuffered", ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
+
+            //https://stackoverflow.com/questions/52523173/get-request-values-from-exceptionhandler-using-spring-mvc (:)
+            logger.info("for a HttpMethod.GET type method requestBody is null");
+            request.setAttribute("requestBodyCustom", null);
+            session.setAttribute("httpRequestType", HttpMethod.GET);
 
             //Сначала получаем данные по всем Лингвистическим переменным:
             //[
@@ -828,7 +837,8 @@ public class ApiGatewayController {
     //*/
 
     @ExceptionHandler(HttpStatusCodeException.class)
-    public String handleHttpUnauthorizedStatusCodeException(HttpSession session, HttpStatusCodeException e) {
+    public //ResponseEntity<Object>
+    String handleHttpUnauthorizedStatusCodeException(HttpSession session, HttpStatusCodeException e, HttpServletRequest request) {
         logger.info("API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException() - START");
         String lastServiceTokenRequestPath = (String) session.getAttribute("lastServiceTokenRequestPathBuffered");
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
@@ -874,10 +884,56 @@ public class ApiGatewayController {
                 setTokenUuidStringService_1_SavedLocally(tokenUuidAsString);
             }
             logger.info("API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException() - lastMethodRequestMappingValueBuffered: " +
-                    session.getAttribute("lastMethodRequestMappingValueBuffered"));
-            return "redirect:" + session.getAttribute("lastMethodRequestMappingValueBuffered");
+                    MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered"));
+            /*
+            URI uri;
+            try {
+                uri = new URI(MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered"));
+            } catch (URISyntaxException uriEx) {
+                logger.error("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()", uriEx);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException(): "
+                        + uriEx.getMessage()).getBody();
+            }
+            HttpMethod httpMethod = (HttpMethod) session.getAttribute("httpRequestType");
+            HttpHeaders headers = new HttpHeaders();
+            Enumeration<String> headerNames = request.getHeaderNames();
+            while (headerNames.hasMoreElements()) {
+                String headerName = headerNames.nextElement();
+                headers.set(headerName, request.getHeader(headerName));
+            }
+            //https://stackoverflow.com/questions/52523173/get-request-values-from-exceptionhandler-using-spring-mvc (:)
+            HttpEntity<Object> httpEntity = new HttpEntity<>(request.getAttribute("requestBodyCustom"), headers);
+            try {
+                return restTemplate.exchange(uri, httpMethod, httpEntity, Object.class).getBody().toString();
+            } catch (HttpStatusCodeException sce) {
+                logger.error("HttpStatusCodeException error in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()");
+                return ResponseEntity.status(sce.getRawStatusCode())
+                        .headers(sce.getResponseHeaders())
+                        .body(sce.getResponseBodyAsString()).getBody();
+            }
+            //*/
+            /*
+            try {
+                return this.proxingExternalRequests(request.getAttribute("requestBodyCustom"), (HttpMethod) session.getAttribute("httpRequestType"), request,
+                        MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered"));//.getBody();
+            } catch (URISyntaxException uriEx) {
+                //logger.error("URISyntaxException", uriEx);
+                //return "URISyntaxException";
+                logger.error("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()", uriEx);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException(): "
+                        + uriEx.getMessage());
+            }
+            //*/
+            //return "redirect:" + MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered");
+            logger.info("NOT_ALL_SERVICE_TOKENS_ARE_GIVEN exception in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()");
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            //        .headers(null)
+            //        .body("NOT_ALL_SERVICE_TOKENS_ARE_GIVEN").getBody();
+            return "NOT_ALL_SERVICE_TOKENS_ARE_GIVEN";
         } else {
-            return "error";
+            //return "error";
+            logger.error("Other error in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Other error in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException().").getBody();
         }
     }
 

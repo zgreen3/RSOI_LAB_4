@@ -200,9 +200,15 @@ public class WebAppServiceImpl implements WebAppService {
         HttpHeaders lingVarWithEmployeeInfoHeaders = new HttpHeaders();
         lingVarWithEmployeeInfoHeaders.add("Authorization", "Bearer " + tokenUuidStringSavedLocallyInService);
         HttpEntity<LingVarWithEmployeeInfo> requestLingVarWithEmployeeInfoEntity = new HttpEntity<>(null, lingVarWithEmployeeInfoHeaders);
-        return restTemplate.exchange("http://localhost:8194/gateway_API/ling_var_and_employee/read-all",
-                HttpMethod.GET, requestLingVarWithEmployeeInfoEntity, new ParameterizedTypeReference<List<LingVarWithEmployeeInfo>>() {
-                }).getBody();
+        ResponseEntity responseEntity;
+        do {
+            responseEntity = restTemplate.exchange("http://localhost:8194/gateway_API/ling_var_and_employee/read-all",
+                    HttpMethod.GET, requestLingVarWithEmployeeInfoEntity, new ParameterizedTypeReference<List<LingVarWithEmployeeInfo>>() {
+                    });
+        }
+        while (responseEntity.getBody().toString().contains("NOT_ALL_SERVICE_TOKENS_ARE_GIVEN"));
+
+        return (List<LingVarWithEmployeeInfo>) responseEntity.getBody();
     }
 
     @Nullable
