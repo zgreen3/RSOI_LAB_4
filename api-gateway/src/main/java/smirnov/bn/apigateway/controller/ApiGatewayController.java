@@ -18,6 +18,9 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -140,6 +143,21 @@ public class ApiGatewayController {
 
     private static final String API_GATEWAY_KEY_STRING = "API_GATEWAY_APP_KEY0_000_1";
     private static final String API_GATEWAY_SECRET_STRING = "API_GATEWAY_APP_0SECRET0STRING0_000_1";
+    private static final int SERVICES_DML_BLOCKING_QUEUE_SIZE = 100;
+
+    private static BlockingQueue<BlockingQueueMessageElementsInfo> servicesDmlBblockingQueue;
+
+    static {
+        servicesDmlBblockingQueue = new ArrayBlockingQueue<>(SERVICES_DML_BLOCKING_QUEUE_SIZE);
+    }
+
+    public static BlockingQueue<BlockingQueueMessageElementsInfo> getServicesDmlBblockingQueue() {
+        return servicesDmlBblockingQueue;
+    }
+
+    public static void setServicesDmlBblockingQueue(BlockingQueue<BlockingQueueMessageElementsInfo> servicesDmlBblockingQueue) {
+        ApiGatewayController.servicesDmlBblockingQueue = servicesDmlBblockingQueue;
+    }
 
     private String tokenUuidStringService_1_SavedLocally;
     private String tokenUuidStringService_2_SavedLocally;
@@ -606,10 +624,18 @@ public class ApiGatewayController {
             HttpHeaders employeeInfoHeaders = new HttpHeaders();
             employeeInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<EmployeeInfo> requestEmployeeInfoEntity = new HttpEntity<>(employeeInfo, employeeInfoHeaders);
-            restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
-                    HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
-                    });
-
+            try {
+                restTemplate.exchange(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT,
+                        HttpMethod.PUT, requestEmployeeInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
+                        });
+            } catch (Exception e) {
+                logger.error("Exception during Employee info update", e);
+                this.servicesDmlBblockingQueue.put(//offer(
+                        new BlockingQueueMessageElementsInfo(new URI(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT), HttpMethod.PUT,
+                                requestEmployeeInfoEntity)
+                        //, 30L, TimeUnit.SECONDS
+                        );
+            }
             //Затем получаем и потом изменяем данные по всем Описаниям Бизнес-процессов
             //(на одинаковые данные, передаваемые в businessProcDescInfo),
             //связанным с данным сотрудником по UUID, который также передаётся в businessProcDescInfo (:)
@@ -640,16 +666,25 @@ public class ApiGatewayController {
                 businessProcDescInfoHeaders.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<BusinessProcDescInfo> requestBusinessProcDescInfoEntity =
                         new HttpEntity<>(businessProcDescInfo, businessProcDescInfoHeaders);
-                restTemplate.exchange(UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT,
-                        HttpMethod.PUT, requestBusinessProcDescInfoEntity, new ParameterizedTypeReference<List<BusinessProcDescInfo>>() {
-                        });
+                try {
+                    restTemplate.exchange(UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT,
+                            HttpMethod.PUT, requestBusinessProcDescInfoEntity, new ParameterizedTypeReference<List<BusinessProcDescInfo>>() {
+                            });
+                } catch (Exception e) {
+                    logger.error("Exception during Business processes info update", e);
+                    this.servicesDmlBblockingQueue.put(//offer(
+                            new BlockingQueueMessageElementsInfo(new URI(UPDATE_BY_ID_BP_DSC_PUT_URI_TMPLT), HttpMethod.PUT,
+                                    requestBusinessProcDescInfoEntity)
+                            //, 30L, TimeUnit.SECONDS
+                    );
+                }
 
                 logger.info("Another businessProcDescInfo in businessProcDescInfoList in updateEmployeeWithBizDescData() UPDATED");
             }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in updateEmployeeWithBizDescData(...)", e);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
