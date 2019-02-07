@@ -423,28 +423,17 @@ public class ApiGatewayController {
     ///ling_var AND employee's info read-all (:)
     @GetMapping("/ling_var_and_employee/read-all")
     public ResponseEntity<List<LingVarWithEmployeeInfo>> findAllLingVarWithEmployeeData(HttpSession session,
-                                                                                        //@RequestBody HttpEntity<Object> requestBody,
                                                                                         HttpServletRequest request
     ) {
         try {
             logger.info("findAllLingVarWithEmployeeData() - START");
             logger.info("requestMappingPath is " + ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
-
-            //https://stackoverflow.com/questions/3796545/how-do-i-get-the-requestmapping-value-in-the-controller
-            //https://stackoverflow.com/questions/18791645/how-to-use-session-attributes-in-spring-mvc (:)
             session.setAttribute("lastMethodRequestMappingValueBuffered", ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
-
-            //https://stackoverflow.com/questions/52523173/get-request-values-from-exceptionhandler-using-spring-mvc (:)
             logger.info("for a HttpMethod.GET type method requestBody is null");
             request.setAttribute("requestBodyCustom", null);
             session.setAttribute("httpRequestType", HttpMethod.GET);
 
             //Сначала получаем данные по всем Лингвистическим переменным:
-            //[
-            //https://www.baeldung.com/spring-rest-template-list
-            //https://stackoverflow.com/questions/14432167/make-a-rest-url-call-to-another-service-by-filling-the-details-from-the-form
-            //https://stackoverflow.com/questions/15218462/how-to-aggregate-jax-rs-responses-from-multiple-services
-            //]
             HttpHeaders tokenInfoForService_1_Headers = new HttpHeaders();
             tokenInfoForService_1_Headers.setContentType(MediaType.APPLICATION_JSON);
             tokenInfoForService_1_Headers.add("Authorization", "Bearer " + tokenUuidStringService_1_SavedLocally);
