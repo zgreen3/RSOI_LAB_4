@@ -145,11 +145,9 @@ public class ApiGatewayController {
     private static final String API_GATEWAY_SECRET_STRING = "API_GATEWAY_APP_0SECRET0STRING0_000_1";
     private static final int SERVICES_DML_BLOCKING_QUEUE_SIZE = 100;
 
-    private static BlockingQueue<BlockingQueueMessageElementsInfo> servicesDmlBblockingQueue;
+    private static BlockingQueue<BlockingQueueMessageElementsInfo> servicesDmlBblockingQueue
+            = new ArrayBlockingQueue<>(SERVICES_DML_BLOCKING_QUEUE_SIZE);
 
-    static {
-        servicesDmlBblockingQueue = new ArrayBlockingQueue<>(SERVICES_DML_BLOCKING_QUEUE_SIZE);
-    }
 
     public static BlockingQueue<BlockingQueueMessageElementsInfo> getServicesDmlBblockingQueue() {
         return servicesDmlBblockingQueue;

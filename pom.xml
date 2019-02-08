@@ -74,7 +74,7 @@
 		<module>service_3</module>
 		<module>web_spring_app_1</module>
         <module>security_service</module>
-        <module>REST_API-resource-server-frontend</module>
+        <module>web_frontend_server</module>
     </modules>
 
 </project>
