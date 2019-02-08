@@ -3,6 +3,7 @@ package smirnov.bn.apigateway.controller;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import smirnov.bn.apigateway.info_model_patterns.*;
+import smirnov.bn.apigateway.service.InterServicesRequestImpl;
 
 @RestController
 @RequestMapping("/gateway_API")
@@ -192,6 +194,9 @@ public class ApiGatewayController {
     private RestTemplate restTemplate = new RestTemplate();
 
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
+
+    @Autowired
+    private InterServicesRequestImpl interServicesRequest;
 
     //https://stackoverflow.com/questions/14726082/spring-mvc-rest-service-redirect-forward-proxy (:)
     @ResponseBody
@@ -423,8 +428,7 @@ public class ApiGatewayController {
     ///ling_var AND employee's info read-all (:)
     @GetMapping("/ling_var_and_employee/read-all")
     public ResponseEntity<List<LingVarWithEmployeeInfo>> findAllLingVarWithEmployeeData(HttpSession session,
-                                                                                        HttpServletRequest request
-    ) {
+                                                                                        HttpServletRequest request) {
         try {
             logger.info("findAllLingVarWithEmployeeData() - START");
             logger.info("requestMappingPath is " + ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().getPath());
@@ -434,40 +438,29 @@ public class ApiGatewayController {
             session.setAttribute("httpRequestType", HttpMethod.GET);
 
             //Сначала получаем данные по всем Лингвистическим переменным:
-            HttpHeaders tokenInfoForService_1_Headers = new HttpHeaders();
-            tokenInfoForService_1_Headers.setContentType(MediaType.APPLICATION_JSON);
-            tokenInfoForService_1_Headers.add("Authorization", "Bearer " + tokenUuidStringService_1_SavedLocally);
-            HttpEntity<String> requestService_1_TokenInfoEntity = new HttpEntity<>(tokenInfoForService_1_Headers);
-            session.setAttribute("lastServiceTokenRequestPathBuffered", GET_TOKEN_LNG_VR_GET_URI_TMPLT);
             ResponseEntity<List<LingVarInfo>> lingVarInfoResponse;
             try {
                 lingVarInfoResponse =
-                        restTemplate.exchange(READ_ALL_LNG_VR_GET_URI_TMPLT, //"http://localhost:8191/ling_var_dict/read-all",
-                                HttpMethod.GET, requestService_1_TokenInfoEntity, new ParameterizedTypeReference<List<LingVarInfo>>() {
-                                });
+                        interServicesRequest.execute(READ_ALL_LNG_VR_GET_URI_TMPLT, //"http://localhost:8191/ling_var_dict/read-all",
+                                HttpMethod.GET, "service_1", new ParameterizedTypeReference<List<LingVarInfo>>() {});
             } catch (HttpClientErrorException ce) {
                 logger.error("HttpClientErrorException in findAllLingVarWithEmployeeData(...) in lingVarInfoResponse", ce);
                 throw ce;
             }
+
             List<LingVarInfo> lingVarInfoList = lingVarInfoResponse.getBody();
 
             //Затем получаем данные по всем Сотрудникам:
-            HttpHeaders tokenInfoForService_3_Headers = new HttpHeaders();
-            tokenInfoForService_3_Headers.setContentType(MediaType.APPLICATION_JSON);
-            tokenInfoForService_3_Headers.add("Authorization", "Bearer " + tokenUuidStringService_3_SavedLocally);
-            HttpEntity<String> requestService_3_TokenInfoEntity = new HttpEntity<>(tokenInfoForService_3_Headers);
-            session.setAttribute("lastServiceTokenRequestPathBuffered", GET_TOKEN_EMP_GET_URI_TMPLT);
-
             ResponseEntity<List<EmployeeInfo>> employeeInfoResponse;
             try {
                 employeeInfoResponse =
-                        restTemplate.exchange(READ_ALL_EMP_GET_URI_TMPLT, //"http://localhost:8193/employees/read-all",
-                                HttpMethod.GET, requestService_3_TokenInfoEntity, new ParameterizedTypeReference<List<EmployeeInfo>>() {
-                                });
+                        interServicesRequest.execute(READ_ALL_EMP_GET_URI_TMPLT, //"http://localhost:8193/employees/read-all",
+                                HttpMethod.GET, "service_3", new ParameterizedTypeReference<List<EmployeeInfo>>() {});
             } catch (HttpClientErrorException ce) {
-                logger.error("HttpClientErrorException in findAllLingVarWithEmployeeData(...) in employeeInfoResponse", ce);
+                logger.error("HttpClientErrorException in findAllLingVarWithEmployeeData(...) in lingVarInfoResponse", ce);
                 throw ce;
             }
+
             List<EmployeeInfo> employeeInfoList;
             if (employeeInfoResponse != null) {
                 employeeInfoList = employeeInfoResponse.getBody();
@@ -623,7 +616,7 @@ public class ApiGatewayController {
                         new BlockingQueueMessageElementsInfo(new URI(UPDATE_BY_UUID_EMP_PUT_URI_TMPLT), HttpMethod.PUT,
                                 requestEmployeeInfoEntity)
                         //, 30L, TimeUnit.SECONDS
-                        );
+                );
             }
             //Затем получаем и потом изменяем данные по всем Описаниям Бизнес-процессов
             //(на одинаковые данные, передаваемые в businessProcDescInfo),
@@ -860,6 +853,7 @@ public class ApiGatewayController {
     }
     //*/
 
+    /*
     @ExceptionHandler(HttpStatusCodeException.class)
     public //ResponseEntity<Object>
     String handleHttpUnauthorizedStatusCodeException(HttpSession session, HttpStatusCodeException e, HttpServletRequest request) {
@@ -909,45 +903,7 @@ public class ApiGatewayController {
             }
             logger.info("API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException() - lastMethodRequestMappingValueBuffered: " +
                     MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered"));
-            /*
-            URI uri;
-            try {
-                uri = new URI(MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered"));
-            } catch (URISyntaxException uriEx) {
-                logger.error("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()", uriEx);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException(): "
-                        + uriEx.getMessage()).getBody();
-            }
-            HttpMethod httpMethod = (HttpMethod) session.getAttribute("httpRequestType");
-            HttpHeaders headers = new HttpHeaders();
-            Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                headers.set(headerName, request.getHeader(headerName));
-            }
-            //https://stackoverflow.com/questions/52523173/get-request-values-from-exceptionhandler-using-spring-mvc (:)
-            HttpEntity<Object> httpEntity = new HttpEntity<>(request.getAttribute("requestBodyCustom"), headers);
-            try {
-                return restTemplate.exchange(uri, httpMethod, httpEntity, Object.class).getBody().toString();
-            } catch (HttpStatusCodeException sce) {
-                logger.error("HttpStatusCodeException error in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()");
-                return ResponseEntity.status(sce.getRawStatusCode())
-                        .headers(sce.getResponseHeaders())
-                        .body(sce.getResponseBodyAsString()).getBody();
-            }
-            //*/
-            /*
-            try {
-                return this.proxingExternalRequests(request.getAttribute("requestBodyCustom"), (HttpMethod) session.getAttribute("httpRequestType"), request,
-                        MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered"));//.getBody();
-            } catch (URISyntaxException uriEx) {
-                //logger.error("URISyntaxException", uriEx);
-                //return "URISyntaxException";
-                logger.error("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()", uriEx);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URISyntaxException in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException(): "
-                        + uriEx.getMessage());
-            }
-            //*/
+
             //return "redirect:" + MAIN_WEB_SERVER_HOST_STRING + API_SERVICE_PORT_STRING + session.getAttribute("lastMethodRequestMappingValueBuffered");
             logger.info("NOT_ALL_SERVICE_TOKENS_ARE_GIVEN exception in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException()");
             //return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -960,6 +916,7 @@ public class ApiGatewayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Other error in API_Gateway_controller api-gateway handleHttpUnauthorizedStatusCodeException().").getBody();
         }
     }
+    //*/
 
 }
 

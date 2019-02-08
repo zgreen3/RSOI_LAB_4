@@ -80,19 +80,7 @@ public class MainController {
     public String employeeList(Model model) {
 
         logger.info("MainController web_spring_app_1 showemployeeInfoPage() request API_Gateway_controller findAllEmployees() - START");
-        model.addAttribute("employees", service.findAllLingVarForEmployeeData()); //service.findAllEmployees());
-        /*
-        try {
-            model.addAttribute("employees", service.findAllEmployees());
-        } catch (HttpStatusCodeException  e) {
-            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                return "redirect:http://localhost:8203/loginUser";
-            } else {
-                return "error";
-            }
-
-        }
-        //*/
+        model.addAttribute("employees", service.findAllLingVarForEmployeeData());
 
         return "employeeList";
     }
